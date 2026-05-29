@@ -195,8 +195,9 @@ function authGo(dest){
   if(!user){document.getElementById('login').dataset.dest=dest;showPage('login');return;}
   showPage(dest);
   if(dest==='tracker')renderTracker();
-  
+  else if(dest==='credit')renderCredit();
   else if(dest==='shift')renderShift();
+  else if(dest==='analyzer')renderAnalyzer();
 }
 function updHome(){
   const nb=document.getElementById('hnb'),hu=document.getElementById('huser');
