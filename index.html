@@ -51,7 +51,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="home" class="page active">
 <div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8 0%,#7C3AED 40%,#166534 100%);display:flex;flex-direction:column;">
 <nav style="padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
-<div style="display:flex;align-items:center;gap:10px;"><svg width="36" height="36" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:16px;font-weight:900;color:#fff;">هلا تمويل — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;"><svg width="36" height="36" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:16px;font-weight:900;color:#fff;">هلا — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div>
 <div id="hnb"><button onclick="showPage('login')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;padding:8px 18px;color:#fff;font-size:13px;font-weight:700;">دخول</button></div>
 </nav>
 <div style="flex:1;padding:32px 24px 48px;display:flex;flex-direction:column;align-items:flex-end;">
@@ -61,10 +61,9 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
-
+<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
 <button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
 <button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
-<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
@@ -85,7 +84,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="login" class="page">
 <div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;padding:20px;">
 <div style="width:100%;max-width:380px;">
-<div style="display:flex;justify-content:center;margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;"><svg width="44" height="44" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:18px;font-weight:900;color:#fff;">هلا تمويل — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div></div>
+<div style="display:flex;justify-content:center;margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;"><svg width="44" height="44" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:18px;font-weight:900;color:#fff;">هلا — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div></div>
 <div style="background:rgba(255,255,255,0.97);border-radius:20px;padding:32px 28px;box-shadow:0 24px 64px rgba(107,33,168,0.35);">
 <div style="font-size:20px;font-weight:800;text-align:center;margin-bottom:4px;">تسجيل الدخول</div>
 <div style="font-size:12px;color:#4B5563;text-align:center;margin-bottom:20px;">أدخل كودك ثم كلمة المرور</div>
@@ -118,8 +117,15 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 // ── DATA ─────────────────────────────────────────
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
-const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','W3-V':'1111','W4-V':'1111','W5-V':'1111','W6-V':'1111','W7-V':'1111','W9-V':'1111','W11-V':'1111','W13-V':'1111'};
-const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'W3-V':0,'W4-V':0,'W5-V':0,'W6-V':0,'W7-V':0,'W9-V':0,'W11-V':0,'W13-V':0};
+const EMP_PINS={
+  'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151',
+  'W3-V':'1111','W4-V':'1111','W5-V':'1111','W6-V':'1111',
+  'W7-V':'1111','W9-V':'1111','W11-V':'1111','W13-V':'1111'
+};
+const FIN_INIT={
+  'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,
+  'W3-V':0,'W4-V':0,'W5-V':0,'W6-V':0,'W7-V':0,'W9-V':0,'W11-V':0,'W13-V':0
+};
 const EMP_TGT=583333, RGN_TGT=7000000;
 
 const TEAMS={
@@ -197,7 +203,6 @@ function authGo(dest){
   if(dest==='tracker')renderTracker();
   else if(dest==='credit')renderCredit();
   else if(dest==='shift')renderShift();
-  else if(dest==='analyzer')renderAnalyzer();
 }
 function updHome(){
   const nb=document.getElementById('hnb'),hu=document.getElementById('huser');
@@ -255,8 +260,7 @@ async function loadNH(){try{const d=await dbGet('nonhala_clients','?order=create
 
 function renderTracker(){
   if(!user){document.getElementById('tracker').innerHTML=nlH('tracker');return;}
-  document.getElementById('tracker').innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
-  Promise.all([loadEntries(),loadFinLog()]).then(()=>renderTDash()).catch(e=>renderTDash());
+  Promise.all([loadEntries(),loadFinLog()]).then(()=>renderTDash());
 }
 
 function finBanner(code){
@@ -555,15 +559,7 @@ function renderTDetail(code){
 // CREDIT
 // ══════════════════════════════════════════════════
 async function loadCredit(){try{const d=await dbGet('credit_requests','?region=eq.west&order=submitted_at.desc');cReqs=Array.isArray(d)?d:[];}catch(e){}}
-function renderCredit(){
-  if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}
-  const el=document.getElementById('credit');
-  el.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
-  loadCredit().then(renderCType).catch(e=>{
-    el.innerHTML='<div style="padding:20px;"><div style="background:#fff;border-radius:16px;padding:20px;text-align:center;"><div style="font-size:13px;font-weight:700;margin-bottom:16px;color:#6B21A8;">📋 طلبات التمويل</div><button class="btn-purple" onclick="renderCType()" style="margin-bottom:10px;">فتح الطلبات</button><br><button class="btn-outline" onclick="showPage('home')">رجوع</button></div></div>';
-    renderCType();
-  });
-}
+function renderCredit(){if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}loadCredit().then(renderCType);}
 function rTitle(type){const t=gCT(type);return t.icon+' '+t.label;}
 
 function renderCType(){
@@ -708,7 +704,6 @@ async function loadShiftRec(){try{const d=await dbGet('shift_logs','?agent_code=
 
 function renderShift(){
   if(!user){document.getElementById('shift').innerHTML=nlH('shift');return;}
-  document.getElementById('shift').innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
   loadShiftRec().then(()=>{
     const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
     if(isSup)renderShiftSup();else renderShiftEmp();
