@@ -100,7 +100,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 </div>
 
 <div id="tracker" class="page"></div>
-<div id="credit" class="page" style="display:none!important;"></div>
+<div id="credit" class="page"></div>
 <div id="shift" class="page"></div>
 <div id="analyzer" class="page"></div>
 
@@ -230,7 +230,7 @@ function doLogin(){
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -238,7 +238,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
   }
   lErr('الكود غير صحيح');
 }
@@ -551,7 +551,7 @@ function renderTDetail(code){
 // ══════════════════════════════════════════════════
 // CREDIT
 // ══════════════════════════════════════════════════
-async function loadCredit(){try{const d=await dbGet('credit_requests','?order=submitted_at.desc');cReqs=Array.isArray(d)?d:[];}catch(e){}}
+async function loadCredit(){try{const d=await dbGet('credit_requests','?region=eq.west&order=submitted_at.desc');cReqs=Array.isArray(d)?d:[];}catch(e){}}
 function renderCredit(){if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}loadCredit().then(renderCType);}
 function rTitle(type){const t=gCT(type);return t.icon+' '+t.label;}
 
@@ -600,7 +600,7 @@ function renderCPreview(){
 }
 async function doSubC(){
   const tc=gCT(cType);document.querySelectorAll('#credit button').forEach(b=>b.disabled=true);
-  try{await dbIns('credit_requests',{id:'REQ-'+Date.now(),agent_code:user.code,agent_name:user.name,client_type:cType,client_type_label:tc.label,data:cFD,status:'pending',sup_note:'',entry_date:tod()});await loadCredit();renderCDone();}
+  try{await dbIns('credit_requests',{id:'REQ-W-'+Date.now(),agent_code:user.code,agent_name:user.name,client_type:cType,client_type_label:tc.label,data:cFD,status:'pending',sup_note:'',entry_date:tod(),region:'west'});await loadCredit();renderCDone();}
   catch(err){document.querySelectorAll('#credit button').forEach(b=>b.disabled=false);alert('خطأ: '+(err?.message||''));}
 }
 function renderCDone(){
