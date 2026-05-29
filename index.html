@@ -278,7 +278,7 @@ function finBanner(code){
 
 function renderTDash(){
   const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
-  const tks=user.role==='region'?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
+  const tks=(user.role==='region'||user.role==='owner')?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
   const showM=user.role==='employee'?[user.code]:tks.flatMap(tk=>Object.keys(TEAMS[tk].members));
   const d=wdPassed(),wd=wdTotal();
   let h=tbH('متابعة الأداء','📊',null,'showPage(\'home\')');
@@ -293,7 +293,7 @@ function renderTDash(){
     h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:700;">📅 أيام العمل هذا الشهر</div><div style="font-size:11px;color:#9CA3AF;">(باستثناء الجمعة والسبت)</div></div><div style="font-size:28px;font-weight:900;color:#6B21A8;">'+d+'<span style="font-size:14px;color:#9CA3AF;">/'+wd+'</span></div></div>';
     const e=gE(user.code);
     if(e){h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">📅 أداؤك اليوم</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'+PF.map(f=>{const v=e[f.key]||0,p=pct(v,f.target);return'<div class="card-sm" style="text-align:center;"><div>'+f.icon+'</div><div style="font-size:20px;font-weight:900;color:'+(p>=100?'#166534':'#6B21A8')+'">'+v+'</div><div style="font-size:9px;color:#9CA3AF;">/'+f.target+' '+f.unit+'</div></div>';}).join('')+'</div></div>';}
-  } else if(user.role==='region'){
+  } else if(user.role==='region'||user.role==='owner'){
     h+=renderRegion(d,wd);
   } else {
     h+=renderSupSection(showM,d,wd);
@@ -814,7 +814,7 @@ async function doApproveReset(shiftId){
 }
 
 async function renderShiftSup(){
-  const tks=user.role==='region'?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
+  const tks=(user.role==='region'||user.role==='owner')?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
   const showM=tks.flatMap(tk=>Object.keys(TEAMS[tk].members));
   let shifts=[];try{shifts=await dbGet('shift_logs','?shift_date=eq.'+tod());}catch(e){}
   let h=tbH('ساعات العمل','⏱️',null,'showPage(\'home\')');
