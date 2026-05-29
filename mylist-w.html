@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هلا تمويل — My List (غربية)</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<script src="mylist-w.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
+.topbar{background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
+.content{max-width:700px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:12px;}
+.card{background:#fff;border-radius:16px;padding:16px;box-shadow:0 4px 16px rgba(107,33,168,0.10);}
+.client-card{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(107,33,168,0.10);border-right:4px solid #6B21A8;margin-bottom:10px;}
+.client-card.interested{border-right-color:#22C55E;background:#F0FDF4;}
+.client-card.later{border-right-color:#D97706;background:#FFFBEB;}
+.client-card.deposited{border-right-color:#166534;background:#DCFCE7;}
+.cc-top{padding:12px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+.cc-name{font-size:14px;font-weight:700;color:#1A1A2E;margin-bottom:3px;}
+.cc-filter{font-size:10px;padding:2px 8px;border-radius:8px;font-weight:700;}
+.cc-amount{font-size:16px;font-weight:900;color:#6B21A8;}
+.cc-period{font-size:10px;color:#9CA3AF;}
+.cc-actions{padding:10px 16px;display:flex;gap:6px;flex-wrap:wrap;border-top:1px solid #E5E7EB;}
+.cc-meta{padding:6px 16px 10px;display:flex;gap:12px;font-size:11px;color:#9CA3AF;}
+.btn-action{padding:7px 12px;border:none;border-radius:8px;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;white-space:nowrap;}
+.btn-interested{background:#F0FDF4;color:#166534;border:1px solid #BBF7D0;}
+.btn-interested.active{background:#166534;color:#fff;}
+.btn-not{background:#FEF2F2;color:#DC2626;border:1px solid #FECACA;}
+.btn-not.active{background:#DC2626;color:#fff;}
+.btn-later{background:#FFFBEB;color:#D97706;border:1px solid #FDE68A;}
+.btn-later.active{background:#D97706;color:#fff;}
+.btn-deposited{background:#DCFCE7;color:#166534;border:1px solid #86EFAC;}
+.btn-deposited.active{background:#166534;color:#fff;}
+.btn-call{padding:7px 10px;background:#166534;border:none;border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:3px;}
+.btn-wa{padding:7px 10px;background:#25D366;border:none;border-radius:8px;color:#fff;font-size:11px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;display:inline-flex;align-items:center;gap:3px;}
+.btn-call2{background:#6B21A8;}
+.filter-bar{display:flex;gap:8px;flex-wrap:wrap;}
+.fbtn{padding:6px 14px;border-radius:20px;border:1px solid #E5E7EB;background:#fff;font-size:12px;cursor:pointer;font-family:'Cairo',sans-serif;color:#4B5563;}
+.fbtn.active{background:#6B21A8;color:#fff;border-color:#6B21A8;}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;}
+.stat{background:#fff;border-radius:12px;padding:10px;text-align:center;box-shadow:0 2px 8px rgba(107,33,168,0.10);}
+.stat-n{font-size:20px;font-weight:900;}
+.stat-l{font-size:9px;color:#9CA3AF;}
+#no-auth{min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;}
+</style>
+</head>
+<body>
+
+<div id="no-auth" style="display:none;">
+  <div>
+    <div style="font-size:52px;margin-bottom:16px;">🔐</div>
+    <div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div>
+    <a href="index-w.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a>
+  </div>
+</div>
+
+<div id="main-content">
+<div class="topbar">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <svg width="30" height="30" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg>
+    <span style="color:#fff;font-size:14px;font-weight:700;">📋 My List — الغربية</span>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center;">
+    <span id="user-name" style="background:rgba(255,255,255,0.12);border-radius:20px;padding:3px 12px;font-size:11px;color:rgba(255,255,255,0.9);"></span>
+    <a href="index-w.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
+  </div>
+</div>
+
+<div class="content">
+  <!-- Stats -->
+  <div class="stats" id="stats-row">
+    <div class="stat"><div class="stat-n" id="s-total" style="color:#6B21A8;">0</div><div class="stat-l">إجمالي</div></div>
+    <div class="stat"><div class="stat-n" id="s-int" style="color:#166534;">0</div><div class="stat-l">مهتم ✅</div></div>
+    <div class="stat"><div class="stat-n" id="s-later" style="color:#D97706;">0</div><div class="stat-l">لاحقاً ⏳</div></div>
+    <div class="stat"><div class="stat-n" id="s-dep" style="color:#166534;">0</div><div class="stat-l">تم الإيداع 🏆</div></div>
+  </div>
+
+  <!-- Filter by Action -->
+  <div class="card" style="padding:12px 16px;">
+    <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:8px;letter-spacing:1px;">فلتر حسب الإجراء</div>
+    <div class="filter-bar" id="filter-bar">
+      <button class="fbtn active" onclick="setFilter('all')">الكل</button>
+      <button class="fbtn" onclick="setFilter('interested')" style="color:#166534;">✅ مهتم</button>
+      <button class="fbtn" onclick="setFilter('later')" style="color:#D97706;">⏳ لاحقاً</button>
+      <button class="fbtn" onclick="setFilter('deposited')" style="color:#166534;">🏆 تم الإيداع</button>
+      <button class="fbtn" onclick="setFilter('not')" style="color:#DC2626;">❌ غير مهتم</button>
+      <button class="fbtn" onclick="setFilter('pending')" style="color:#9CA3AF;">⬜ لم يُحدَّد</button>
+    </div>
+  </div>
+
+  <!-- Filter by Client Type -->
+  <div class="card" style="padding:12px 16px;">
+    <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:8px;letter-spacing:1px;">فلتر حسب نوع العميل</div>
+    <div class="filter-bar" id="type-filter-bar">
+      <button class="fbtn active" onclick="setTypeFilter('all')">الكل</button>
+      <button class="fbtn" onclick="setTypeFilter('Eligible before')" style="color:#6B21A8;">Eligible before</button>
+      <button class="fbtn" onclick="setTypeFilter('Financing P2')" style="color:#1D4ED8;">Financing P2</button>
+      <button class="fbtn" onclick="setTypeFilter('Eligible this month')" style="color:#065F46;">Eligible this month</button>
+      <button class="fbtn" onclick="setTypeFilter('Top-up/Early Settle')" style="color:#D97706;">Top-up/Early Settle</button>
+      <button class="fbtn" onclick="setTypeFilter('Disbursed before')" style="color:#9D174D;">Disbursed before</button>
+    </div>
+  </div>
+
+
+  <!-- Entity ID Search -->
+  <div class="card" style="padding:12px 16px;">
+    <div style="font-size:11px;color:#9CA3AF;font-weight:700;margin-bottom:8px;letter-spacing:1px;">🔍 بحث بالـ Entity ID</div>
+    <div style="display:flex;gap:8px;">
+      <input id="entity-search" type="text" placeholder="أدخل Entity ID..." 
+        style="flex:1;background:#FAFAFA;border:1.5px solid #DDD6FE;border-radius:10px;padding:10px 14px;font-size:14px;font-weight:700;font-family:monospace;letter-spacing:2px;color:#6B21A8;direction:ltr;outline:none;"
+        oninput="filterByEntity(this.value)" onkeydown="if(event.key==='Escape'){this.value='';filterByEntity('');}">
+      <button onclick="clearEntitySearch()" style="padding:10px 16px;background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:10px;color:#6B21A8;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">✕ مسح</button>
+    </div>
+    <div id="entity-search-result" style="font-size:12px;color:#9CA3AF;margin-top:6px;min-height:16px;"></div>
+  </div>
+
+  <!-- List -->
+  <div id="clients-list"></div>
+</div>
+</div>
+
+<script>
+// ── Auth ─────────────────────────────────
+let mlUser=null;
+try{const u=localStorage.getItem('hu5');if(u)mlUser=JSON.parse(u);}catch(e){}
+
+if(!mlUser){
+  document.getElementById('main-content').style.display='none';
+  document.getElementById('no-auth').style.display='flex';
+} else {
+  document.getElementById('user-name').textContent=mlUser.name;
+}
+
+const isSup=mlUser&&(mlUser.role==='supervisor'||mlUser.role==='region'||mlUser.role==='owner');
+const isEmp=mlUser&&mlUser.role==='employee';
+
+// الأسماء بالعربي
+const AR_NAMES={
+  'W1-JH':'جابر','W2-HM':'هيثم','W8-MA':'مصطفى',
+  'W10-AA':'عبدالله','W12-SF':'شادي',
+  'SUP-OS':'عثمان','WEST-MGR':'مدير'
+};
+function getFirstName(){
+  const code=mlUser?.code||'';
+  const arName=AR_NAMES[code];
+  if(arName)return arName.split(' ')[0];
+  return (mlUser?.name||'').split(' ')[0];
+}
+
+// ── State ─────────────────────────────────
+let currentFilter='all';
+let currentTypeFilter='all';
+let actions={};
+const STORAGE_KEY='mylist_w_actions_'+(mlUser?.code||'x');
+
+function loadActions(){try{const a=localStorage.getItem(STORAGE_KEY);return a?JSON.parse(a):{};}catch(e){return{};}}
+function saveActions(){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(actions));}catch(e){}}
+
+// ── Filter Colors ─────────────────────────
+const FILTER_COLORS={
+  'Eligible before':{bg:'#EDE9FE',color:'#6B21A8'},
+  'Financing P2':{bg:'#DBEAFE',color:'#1D4ED8'},
+  'Eligible this month':{bg:'#D1FAE5',color:'#065F46'},
+  'Top-up/Early Settle':{bg:'#FEF3C7',color:'#D97706'},
+  'Disbursed before':{bg:'#FCE7F3',color:'#9D174D'},
+};
+
+function getFilterStyle(f){const s=FILTER_COLORS[f]||{bg:'#F3F4F6',color:'#4B5563'};return`background:${s.bg};color:${s.color};`;}
+
+// ── Render ────────────────────────────────
+function getClients(){
+  if(!mlUser||!window.MY_LIST_W)return[];
+  if(isSup){
+    // المشرف يشوف كل الزونات
+    return Object.values(window.MY_LIST_W).flatMap(z=>z.clients);
+  }
+  // الموظف يشوف زونه فقط
+  const empData=window.MY_LIST_W[mlUser.code];
+  return empData?empData.clients:[];
+}
+
+function setTypeFilter(f){
+  currentTypeFilter=f;
+  document.querySelectorAll('#type-filter-bar .fbtn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderList();
+}
+
+function setFilter(f){
+  currentFilter=f;
+  document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));
+  event.target.classList.add('active');
+  renderList();
+}
+
+function getAction(cashier){return actions[cashier]||null;}
+
+function renderList(){
+  const all=getClients();
+  // Apply entity search filter
+  let filtered = entitySearchTerm ? all.filter(c =>
+    (c.cashier||'').toUpperCase().includes(entitySearchTerm) ||
+    (c.tid||'').toUpperCase().includes(entitySearchTerm) ||
+    (c.name||'').toUpperCase().includes(entitySearchTerm)
+  ) : all;
+
+  // Apply action filter (on already-filtered set)
+  let filteredByAction = filtered;
+  if(currentFilter==='interested')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='interested');
+  else if(currentFilter==='later')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='later');
+  else if(currentFilter==='deposited')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='deposited');
+  else if(currentFilter==='not')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='not');
+  else if(currentFilter==='pending')filteredByAction=filtered.filter(c=>!getAction(c.cashier));
+  // Apply type filter
+  let finalFiltered = filteredByAction;
+  if(currentTypeFilter!=='all')finalFiltered=filteredByAction.filter(c=>c.filter===currentTypeFilter);
+
+  // Stats
+  document.getElementById('s-total').textContent=all.length;
+  document.getElementById('s-int').textContent=all.filter(c=>getAction(c.cashier)==='interested').length;
+  document.getElementById('s-later').textContent=all.filter(c=>getAction(c.cashier)==='later').length;
+  document.getElementById('s-dep').textContent=all.filter(c=>getAction(c.cashier)==='deposited').length;
+
+  const filtered = finalFiltered;
+  const list=document.getElementById('clients-list');
+  if(!filtered.length){list.innerHTML='<div style="text-align:center;padding:40px;background:#fff;border-radius:14px;"><div style="font-size:36px;margin-bottom:8px;">📭</div><div style="color:#9CA3AF;">لا يوجد عملاء</div></div>';return;}
+
+  list.innerHTML=filtered.map(c=>{
+    const act=getAction(c.cashier);
+    const cardClass='client-card'+(act==='interested'?' interested':act==='later'?' later':act==='deposited'?' deposited':'');
+    const waMsg=encodeURIComponent('سلام عليكم معك '+getFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني');
+    return`<div class="${cardClass}" id="cc-${c.cashier}">
+      <div class="cc-top">
+        <div>
+          <div class="cc-name">${c.name}</div>
+          <div><span class="cc-filter" style="${getFilterStyle(c.filter)}">${c.filter}</span></div>
+          <div class="cc-meta" style="padding:6px 0 0;">
+            <span>🏪 ${c.cashier}</span>
+            <span>📋 TID: ${c.tid}</span>
+            <span>🗺️ ${c.zone}</span>
+          </div>
+        </div>
+        <div style="text-align:left;">
+          <div class="cc-amount">${c.amount.toLocaleString('ar-SA')} ريال</div>
+          <div class="cc-period">${c.period} شهر</div>
+          ${act?`<div style="font-size:10px;margin-top:4px;font-weight:700;color:${act==='interested'?'#166534':act==='later'?'#D97706':act==='deposited'?'#166534':'#DC2626'}">${act==='interested'?'✅ مهتم':act==='later'?'⏳ لاحقاً':act==='deposited'?'🏆 تم الإيداع':'❌ غير مهتم'}</div>`:''}
+        </div>
+      </div>
+      <div class="cc-actions">
+        <button class="btn-action btn-interested${act==='interested'?' active':''}" onclick="setAction('${c.cashier}','interested')">✅ مهتم</button>
+        <button class="btn-action btn-later${act==='later'?' active':''}" onclick="setAction('${c.cashier}','later')">⏳ لاحقاً</button>
+        <button class="btn-action btn-deposited${act==='deposited'?' active':''}" onclick="setAction('${c.cashier}','deposited')">🏆 تم الإيداع</button>
+        <button class="btn-action btn-not${act==='not'?' active':''}" onclick="setAction('${c.cashier}','not')">❌ غير مهتم</button>
+      </div>
+      <div class="cc-actions" style="padding-top:0;border-top:none;">
+        <a href="tel:${c.manager}" class="btn-call">📞 محاسب</a>
+        <a href="https://wa.me/966${c.manager.startsWith('0')?c.manager.slice(1):c.manager}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب محاسب</a>
+        <a href="tel:${c.owner}" class="btn-call btn-call2">📞 مدير</a>
+        <a href="https://wa.me/966${c.owner.startsWith('0')?c.owner.slice(1):c.owner}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب مدير</a>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function setAction(cashier, action){
+  // Toggle
+  if(actions[cashier]===action) delete actions[cashier];
+  else actions[cashier]=action;
+  saveActions();
+  renderList();
+}
+
+
+// ── Entity Search ─────────────────────────
+let entitySearchTerm = '';
+
+function filterByEntity(val) {
+  entitySearchTerm = val.trim().toUpperCase();
+  renderList();
+  const res = document.getElementById('entity-search-result');
+  if (entitySearchTerm) {
+    const all = getClients();
+    const found = all.filter(c => 
+      (c.cashier||'').toUpperCase().includes(entitySearchTerm) ||
+      (c.tid||'').toUpperCase().includes(entitySearchTerm) ||
+      (c.name||'').toUpperCase().includes(entitySearchTerm)
+    );
+    res.textContent = found.length > 0 ? `✅ وُجد ${found.length} نتيجة` : '❌ لا توجد نتائج';
+    res.style.color = found.length > 0 ? '#166534' : '#DC2626';
+  } else {
+    res.textContent = '';
+  }
+}
+
+function clearEntitySearch() {
+  document.getElementById('entity-search').value = '';
+  entitySearchTerm = '';
+  document.getElementById('entity-search-result').textContent = '';
+  renderList();
+}
+
+// ── Init ──────────────────────────────────
+actions=loadActions();
+if(window.MY_LIST_W){renderList();}
+else{document.getElementById('clients-list').innerHTML='<div style="text-align:center;padding:40px;"><div style="font-size:36px;">⏳</div><div>جاري التحميل...</div></div>';
+  const chk=setInterval(()=>{if(window.MY_LIST_W){clearInterval(chk);renderList();}},200);
+}
+</script>
+</body>
+</html>
+
