@@ -255,7 +255,8 @@ async function loadNH(){try{const d=await dbGet('nonhala_clients','?order=create
 
 function renderTracker(){
   if(!user){document.getElementById('tracker').innerHTML=nlH('tracker');return;}
-  Promise.all([loadEntries(),loadFinLog()]).then(()=>renderTDash());
+  document.getElementById('tracker').innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
+  Promise.all([loadEntries(),loadFinLog()]).then(()=>renderTDash()).catch(e=>renderTDash());
 }
 
 function finBanner(code){
@@ -554,7 +555,15 @@ function renderTDetail(code){
 // CREDIT
 // ══════════════════════════════════════════════════
 async function loadCredit(){try{const d=await dbGet('credit_requests','?region=eq.west&order=submitted_at.desc');cReqs=Array.isArray(d)?d:[];}catch(e){}}
-function renderCredit(){if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}loadCredit().then(renderCType);}
+function renderCredit(){
+  if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}
+  const el=document.getElementById('credit');
+  el.innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
+  loadCredit().then(renderCType).catch(e=>{
+    el.innerHTML='<div style="padding:20px;"><div style="background:#fff;border-radius:16px;padding:20px;text-align:center;"><div style="font-size:13px;font-weight:700;margin-bottom:16px;color:#6B21A8;">📋 طلبات التمويل</div><button class="btn-purple" onclick="renderCType()" style="margin-bottom:10px;">فتح الطلبات</button><br><button class="btn-outline" onclick="showPage('home')">رجوع</button></div></div>';
+    renderCType();
+  });
+}
 function rTitle(type){const t=gCT(type);return t.icon+' '+t.label;}
 
 function renderCType(){
@@ -699,6 +708,7 @@ async function loadShiftRec(){try{const d=await dbGet('shift_logs','?agent_code=
 
 function renderShift(){
   if(!user){document.getElementById('shift').innerHTML=nlH('shift');return;}
+  document.getElementById('shift').innerHTML='<div style="min-height:100vh;display:flex;align-items:center;justify-content:center;"><div style="text-align:center;"><div style="font-size:40px;">⏳</div><div style="font-size:14px;color:#6B21A8;font-weight:700;margin-top:8px;">جاري التحميل...</div></div></div>';
   loadShiftRec().then(()=>{
     const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
     if(isSup)renderShiftSup();else renderShiftEmp();
