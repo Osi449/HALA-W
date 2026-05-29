@@ -364,18 +364,13 @@ function renderRegion(d,wd){
   const sub=allM.filter(c=>gE(c)).length;
   const rAvg=sub?Math.round(allM.map(c=>{const e=gE(c);return e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((a,b)=>a+b,0)/sub):0;
   const totF=allM.reduce((s,c)=>s+getTF(c),0),rp=Math.round(totF/RGN_TGT*100);
-  const c1F=Object.keys(TEAMS.c1.members).reduce((s,c)=>s+getTF(c),0);
-  const c2F=Object.keys(TEAMS.c2.members).reduce((s,c)=>s+getTF(c),0);
 
-  let h='<div class="card" style="background:linear-gradient(135deg,#6B21A8,#166534);padding:20px;">';
-  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">🏢 تقدم المنطقة الوسطى — هدف 7,000,000 ريال</div>';
+  let h='<div class="card" style="background:linear-gradient(135deg,#15803D,#166534);padding:20px;">';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">🏢 تقدم المنطقة الغربية — هدف 7,000,000 ريال</div>';
   h+='<div style="font-size:32px;font-weight:900;color:#fff;margin-bottom:4px;">'+totF.toLocaleString('ar-SA')+'</div>';
   h+='<div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;">'+rp+'% من الهدف</div>';
   h+='<div style="background:rgba(255,255,255,0.2);border-radius:8px;height:12px;overflow:hidden;"><div style="height:100%;background:'+(rp>=100?'#22C55E':'#86EFAC')+';border-radius:8px;width:'+Math.min(rp,100)+'%;"></div></div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">';
-  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c1F.toLocaleString('ar-SA')+'</div></div>';
-  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c2F.toLocaleString('ar-SA')+'</div></div>';
-  h+='</div></div>';
+  h+='</div>';
 
   h+='<div class="card" style="background:rgba(107,33,168,0.08);border:1px solid #DDD6FE;">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:11px;color:#6B21A8;font-weight:700;">📊 أداء المنطقة اليوم</div><div style="font-size:38px;font-weight:900;color:'+(rAvg>=80?'#166534':'#D97706')+'">'+rAvg+'%</div></div>';
