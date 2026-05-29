@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>هلا تمويل — خريطة الغربية</title>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;direction:rtl;background:#1A1A2E;color:#fff;}
+#topbar{background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;}
+#map{height:calc(100vh - 106px);}
+#controls{background:rgba(107,33,168,0.97);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.1);}
+.ctrl-label{font-size:12px;color:rgba(255,255,255,0.7);white-space:nowrap;}
+select{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 12px;color:#fff;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;}
+select option{background:#3B0764;color:#fff;}
+#count-badge{background:rgba(255,255,255,0.15);border-radius:20px;padding:4px 14px;font-size:12px;color:#86EFAC;font-weight:700;}
+#loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,46,0.85);display:none;align-items:center;justify-content:center;z-index:2000;flex-direction:column;gap:12px;}
+#loading.show{display:flex;}
+.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid #A855F7;border-radius:50%;animation:spin 0.8s linear infinite;}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/* Action Modal */
+#action-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;}
+#action-modal.show{display:flex;}
+.modal-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;color:#1A1A2E;}
+.modal-title{font-size:16px;font-weight:800;margin-bottom:4px;}
+.modal-sub{font-size:11px;color:#9CA3AF;margin-bottom:20px;}
+.action-q{margin-bottom:16px;}
+.action-q-label{font-size:13px;font-weight:700;margin-bottom:8px;display:block;}
+.action-btns{display:flex;gap:8px;}
+.btn-yes{flex:1;padding:10px;background:#F0FDF4;border:2px solid #E5E7EB;border-radius:10px;color:#166534;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.btn-yes.active{background:#166534;color:#fff;border-color:#166534;}
+.btn-no{flex:1;padding:10px;background:#FEF2F2;border:2px solid #E5E7EB;border-radius:10px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
+.btn-no.active{background:#DC2626;color:#fff;border-color:#DC2626;}
+.btn-submit-action{width:100%;padding:13px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:16px;}
+.btn-cancel-modal{width:100%;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:12px;color:#4B5563;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:8px;}
+
+/* Popup */
+.cp{min-width:230px;direction:rtl;font-family:'Cairo',sans-serif;}
+.cp-name{font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:6px;line-height:1.4;}
+.cp-cat{font-size:10px;color:#6B21A8;background:#F5F3FF;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px;}
+.cp-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid #E5E7EB;gap:4px;}
+.cp-row:last-child{border:none;padding-bottom:0;}
+.cp-lbl{color:#9CA3AF;flex-shrink:0;}
+.cp-nums{display:flex;gap:4px;align-items:center;}
+.cp-val{font-weight:700;color:#1A1A2E;font-family:monospace;}
+.btn-call{padding:2px 7px;border-radius:6px;font-size:10px;text-decoration:none;font-weight:700;color:#fff;}
+.btn-cpy{padding:2px 6px;background:#E5E7EB;border:none;border-radius:6px;font-size:10px;cursor:pointer;color:#374151;font-family:'Cairo',sans-serif;}
+.btn-nav{width:100%;padding:8px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;display:block;text-align:center;margin-top:8px;}
+.btn-action{width:100%;padding:8px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:6px;}
+.done-badge{background:#F0FDF4;border:1px solid #22C55E;border-radius:8px;padding:6px 10px;font-size:11px;color:#166534;font-weight:700;text-align:center;margin-top:8px;}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div style="display:flex;align-items:center;gap:8px;">
+    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg>
+    <div style="font-size:14px;font-weight:900;color:#fff;">خريطة الغربية 🗺️</div>
+  </div>
+  <div style="display:flex;align-items:center;gap:8px;">
+    <span id="count-badge">اختر موظف</span>
+    <a href="index-w.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
+  </div>
+</div>
+<div id="controls">
+  <span class="ctrl-label">👤</span>
+  <select id="emp-select" onchange="onEmpChange()">
+    <option value="">-- اختر الموظف --</option>
+    <option value="W1-JH">W1 — Jabir Mohammed Hassan (Jeddah)</option>
+    <option value="W2-HM">W2 — Haitham Mahmoud (Jeddah)</option>
+    <option value="W8-MA">W8 — Mustafa Amanullah (Jeddah)</option>
+    <option value="W10-AA">W10 — Abdullah Abdulqayyum (Makkah)</option>
+    <option value="W12-SF">W12 — Shadi Fahad Alghamdi (Jeddah)</option>
+  </select>
+  <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
+  <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
+    <input id="map-entity-search" type="text" placeholder="بحث Entity ID / اسم..." 
+      style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;font-family:monospace;color:#fff;width:180px;outline:none;direction:ltr;"
+      oninput="mapEntitySearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';mapEntitySearch('');}">
+    <button onclick="clearMapSearch()" style="padding:6px 10px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:11px;cursor:pointer;">✕</button>
+    <span id="map-search-result" style="font-size:11px;color:#86EFAC;min-width:60px;"></span>
+  </div>
+</div>
+<div id="map"></div>
+
+<!-- Action Modal -->
+<div id="action-modal">
+  <div class="modal-box">
+    <div class="modal-title" id="modal-client-name">اسم العميل</div>
+    <div class="modal-sub" id="modal-client-id"></div>
+    <div class="action-q">
+      <span class="action-q-label">📞 هل تم التواصل مع العميل؟</span>
+      <div class="action-btns">
+        <button class="btn-yes" id="q1-yes" onclick="setQ(1,true)">✅ نعم</button>
+        <button class="btn-no" id="q1-no" onclick="setQ(1,false)">❌ لا</button>
+      </div>
+    </div>
+    <div class="action-q">
+      <span class="action-q-label">💚 هل العميل مهتم؟</span>
+      <div class="action-btns">
+        <button class="btn-yes" id="q2-yes" onclick="setQ(2,true)">✅ نعم</button>
+        <button class="btn-no" id="q2-no" onclick="setQ(2,false)">❌ لا</button>
+      </div>
+    </div>
+    <div class="action-q">
+      <span class="action-q-label">💬 هل تم إرسال رسالة واتساب؟</span>
+      <div class="action-btns">
+        <button class="btn-yes" id="q3-yes" onclick="setQ(3,true)">✅ نعم</button>
+        <button class="btn-no" id="q3-no" onclick="setQ(3,false)">❌ لا</button>
+      </div>
+    </div>
+    <button class="btn-submit-action" onclick="submitAction()">حفظ الإجراء ✓</button>
+    <button class="btn-cancel-modal" onclick="closeModal()">إلغاء</button>
+  </div>
+</div>
+
+<div id="loading"><div class="spinner"></div><div style="font-size:13px;color:#A855F7;">جاري تحميل البيانات...</div></div>
+
+<script>
+const AR_NAMES_MAP={
+  'C1-KR':'خليل','C2-SM':'سيد','C3-MQ':'محمد','C4-MN':'محمود',
+  'C5-MS':'محمد','C6-AS':'عبدالله','C7-AA':'عبدالمجيد','C8-AH':'عبدالله',
+  'C9-BJ':'برهان','C10-AR':'عبدالرحمن','C11-KS':'خالد','C12-FA':'فيصل',
+  'SUP-OS':'عثمان','SUP-AZ':'عبدالعزيز'
+};
+function getMapFirstName(){const code=mapUser?.code||'';return AR_NAMES_MAP[code]||(mapUser?.name||'').split(' ')[0];}
+
+const ZONE_CENTERS={
+  'W1-JH':[21.5433, 39.1728],
+  'W2-HM':[21.4858, 39.1925],
+  'W8-MA':[21.5200, 39.2100],
+  'W10-AA':[21.3891, 39.8579],
+  'W12-SF':[21.5600, 39.1500],
+};
+const BASE_URL=window.location.href.split('map-w.html')[0].split('?')[0];
+
+// ── Auth ─────────────────────────────────
+let mapUser=null;
+try{const u=localStorage.getItem('hu5');if(u)mapUser=JSON.parse(u);}catch(e){}
+
+// إذا ما في جلسة — وجّهه للرئيسية
+if(!mapUser){
+  document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index-w.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
+}
+
+const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region');
+const isEmp=mapUser&&mapUser.role==='employee';
+
+// خريطة الموظف لزونه فقط
+const EMP_ZONE_MAP={
+  'C1-KR':'C1-KR','C2-SM':'C2-SM','C3-MQ':'C3-MQ','C4-MN':'C4-MN',
+  'C5-MS':'C5-MS','C6-AS':'C6-AS','C7-AA':'C7-AA','C8-AH':'C8-AH',
+  'C9-BJ':'C9-BJ','C10-AR':'C10-AR','C11-KS':'C11-KS','C12-FA':'C12-FA'
+};
+
+const map=L.map('map').setView([24.68,46.72],11);
+L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
+let markers={};
+let layerGroup=L.layerGroup().addTo(map);
+let currentData=null;
+let currentEmp='';
+let actions={}; // {clientId: {q1,q2,q3}}
+let modalClientId='';
+let answers={1:null,2:null,3:null};
+
+// Load actions from localStorage
+function loadActions(emp){
+  try{const a=localStorage.getItem('map_actions_'+emp);return a?JSON.parse(a):{};}catch(e){return{};}
+}
+function saveActions(emp){
+  try{localStorage.setItem('map_actions_'+emp,JSON.stringify(actions));}catch(e){}
+}
+
+// ── Entity Search (Map) ───────────────────
+let mapSearchTerm = '';
+let allMapMarkers = [];
+
+function mapEntitySearch(val) {
+  mapSearchTerm = val.trim().toUpperCase();
+  applyMapSearch();
+}
+
+function clearMapSearch() {
+  document.getElementById('map-entity-search').value = '';
+  mapSearchTerm = '';
+  document.getElementById('map-search-result').textContent = '';
+  applyMapSearch();
+}
+
+function applyMapSearch() {
+  if (!currentData || !currentData.clients) return;
+  const res = document.getElementById('map-search-result');
+  
+  if (!mapSearchTerm) {
+    // Show all markers
+    if (window._allMarkers) {
+      window._allMarkers.forEach(m => {
+        if(!layerGroup.hasLayer(m.marker))layerGroup.addLayer(m.marker);
+      });
+    }
+    res.textContent = '';
+    return;
+  }
+  
+  let found = 0;
+  if (window._allMarkers) {
+    window._allMarkers.forEach(m => {
+      const c = m.client;
+      const match = (c.id||'').toUpperCase().includes(mapSearchTerm) ||
+                    (c.name||'').toUpperCase().includes(mapSearchTerm) ||
+                    (c.cashier||'').toUpperCase().includes(mapSearchTerm) ||
+                    (c.tid||'').toUpperCase().includes(mapSearchTerm);
+      if (match) {
+        if(!layerGroup.hasLayer(m.marker))layerGroup.addLayer(m.marker);
+        found++;
+        if (found === 1) map.setView(m.marker.getLatLng(), 15);
+      } else {
+        if(layerGroup.hasLayer(m.marker))layerGroup.removeLayer(m.marker);
+      }
+    });
+  }
+  res.textContent = found > 0 ? `${found} نتيجة` : 'لا نتائج';
+  res.style.color = found > 0 ? '#86EFAC' : '#FCA5A5';
+}
+
+function isDone(id){
+  const a=actions[id];
+  return a&&a.q1!==null&&a.q2!==null&&a.q3!==null;
+}
+function updateDoneCount(){
+  if(!currentData)return;
+  const done=currentData.clients.filter(c=>isDone(c.id)).length;
+  document.getElementById('done-count').textContent=done;
+}
+
+function loading(show){document.getElementById('loading').className=show?'show':'';}
+
+function makeIcon(id,color){
+  const done=isDone(id);
+  const c=done?'#22C55E':color||'#6B21A8';
+  const inner=done?'<text x="11" y="15" text-anchor="middle" font-size="9" fill="white">✓</text>':'';
+  return L.divIcon({
+    html:`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="30" viewBox="0 0 22 30">
+      <path d="M11 0C4.9 0 0 4.9 0 11c0 8.3 11 19 11 19S22 19.3 22 11C22 4.9 17.1 0 11 0z" fill="${c}" stroke="${done?'#166534':'rgba(0,0,0,0.2)'}" stroke-width="1"/>
+      <circle cx="11" cy="11" r="5" fill="white"/>${inner}
+    </svg>`,
+    className:'',iconSize:[22,30],iconAnchor:[11,30],popupAnchor:[0,-30]
+  });
+}
+
+function copyNum(n){
+  navigator.clipboard.writeText(n).then(()=>alert('تم نسخ: '+n)).catch(()=>prompt('انسخ الرقم:',n));
+}
+
+function openAction(id){
+  const c=currentData&&currentData.clients.find(x=>x.id===id);
+  if(!c)return;
+  modalClientId=id;
+  answers={1:null,2:null,3:null};
+  // Load existing answers
+  if(actions[id]){answers=Object.assign({1:null,2:null,3:null},actions[id]);}
+  document.getElementById('modal-client-name').textContent=c.name;
+  document.getElementById('modal-client-id').textContent='ID: '+c.id+' | TID: '+c.tid;
+  // Reset buttons
+  [1,2,3].forEach(q=>{
+    document.getElementById('q'+q+'-yes').className='btn-yes'+(answers[q]===true?' active':'');
+    document.getElementById('q'+q+'-no').className='btn-no'+(answers[q]===false?' active':'');
+  });
+  document.getElementById('action-modal').className='show';
+}
+
+function closeModal(){document.getElementById('action-modal').className='';}
+
+function setQ(q,val){
+  answers[q]=val;
+  document.getElementById('q'+q+'-yes').className='btn-yes'+(val===true?' active':'');
+  document.getElementById('q'+q+'-no').className='btn-no'+(val===false?' active':'');
+}
+
+function submitAction(){
+  if(answers[1]===null||answers[2]===null||answers[3]===null){alert('يرجى الإجابة على جميع الأسئلة');return;}
+  actions[modalClientId]={q1:answers[1],q2:answers[2],q3:answers[3]};
+  saveActions(currentEmp);
+  closeModal();
+  // Update marker color
+  updateMarker(modalClientId);
+  updateDoneCount();
+  // Refresh popup if open
+  map.closePopup();
+}
+
+function updateMarker(id){
+  if(!markers[id])return;
+  const c=currentData.clients.find(x=>x.id===id);
+  if(!c)return;
+  markers[id].setIcon(makeIcon(id,'#6B21A8'));
+}
+
+function buildPopup(c){
+  const done=isDone(c.id);
+  const a=actions[c.id]||{};
+  let h=`<div class="cp">
+    <div class="cp-name">${c.name}</div>
+    <div class="cp-cat">${c.category}</div>
+    <div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">${c.id}</span></div>
+    <div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">${c.tid||'—'}</span></div>
+    <div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">${c.zone}</span></div>
+    <div class="cp-row">
+      <span class="cp-lbl">📞 محاسب</span>
+      <span class="cp-nums">
+        <span class="cp-val">${c.cashier}</span>
+        <a href="tel:${c.cashier}" class="btn-call" style="background:#166534;">📞</a>
+        <button class="btn-cpy" onclick="copyNum('${c.cashier}')">نسخ</button>
+      </span>
+    </div>
+    <div class="cp-row">
+      <span class="cp-lbl">👔 مدير</span>
+      <span class="cp-nums">
+        <span class="cp-val">${c.owner}</span>
+        <a href="tel:${c.owner}" class="btn-call" style="background:#6B21A8;">📞</a>
+        <button class="btn-cpy" onclick="copyNum('${c.owner}')">نسخ</button>
+      </span>
+    </div>
+    <a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank">🗺️ توجيه Google Maps</a>
+    <div style="display:flex;gap:6px;margin-top:6px;">
+      <a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/966${c.cashier.startsWith('0')?c.cashier.slice(1):c.cashier}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب محاسب</a>
+      <a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/966${c.owner.startsWith('0')?c.owner.slice(1):c.owner}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب مدير</a>
+    </div>
+    <button class="btn-action" onclick="openAction('${c.id}')">⚡ Take Action</button>`;
+  if(done){
+    h+=`<div class="done-badge">✅ تم الإجراء — ${a.q1?'تواصل ✓':'لا تواصل'} · ${a.q2?'مهتم ✓':'غير مهتم'} · ${a.q3?'واتساب ✓':'لا واتساب'}</div>`;
+  }
+  h+='</div>';
+  return h;
+}
+
+function renderMarkers(){
+  if(!currentData)return;
+  layerGroup.clearLayers();
+  markers={};
+  window._allMarkers=[];
+  mapSearchTerm='';
+  const srchInput=document.getElementById('map-entity-search');
+  if(srchInput)srchInput.value='';
+  const srchRes=document.getElementById('map-search-result');
+  if(srchRes)srchRes.textContent='';
+  currentData.clients.forEach(c=>{
+    const m=L.marker([c.lat,c.lng],{icon:makeIcon(c.id,'#6B21A8')});
+    m.bindPopup(()=>buildPopup(c),{maxWidth:280,minWidth:240});
+    layerGroup.addLayer(m);
+    markers[c.id]=m;
+    window._allMarkers.push({marker:m,client:c});
+  });
+  document.getElementById('count-badge').textContent=currentData.clients.length.toLocaleString('ar-SA')+' عميل';
+  updateDoneCount();
+}
+
+function onEmpChange(){
+  const emp=document.getElementById('emp-select').value;
+  if(!emp)return;
+  currentEmp=emp;
+  actions=loadActions(emp);
+  loading(true);
+  const varName='EMP_DATA_'+emp.replace(/-/g,'_');
+  if(window[varName]){
+    currentData=window[varName];
+    finishLoad();return;
+  }
+  const fileCode=emp.replace('-','');
+  const script=document.createElement('script');
+  script.src=BASE_URL+'clients_'+fileCode+'.js';
+  script.onload=()=>{currentData=window[varName];finishLoad();};
+  script.onerror=()=>{loading(false);alert('خطأ في تحميل البيانات');};
+  document.head.appendChild(script);
+}
+
+function finishLoad(){
+  if(!currentData){loading(false);return;}
+  const center=ZONE_CENTERS[currentData.zone]||[24.68,46.72];
+  map.setView(center,13);
+  renderMarkers();
+  loading(false);
+}
+
+// ── تهيئة الصفحة حسب الدور ────────────────
+function initMapAccess(){
+  if(!mapUser)return;
+  
+  const sel=document.getElementById('emp-select');
+  const ctrl=document.getElementById('controls');
+  
+  if(isEmp){
+    // الموظف يشوف زونه فقط — أخفِ القائمة
+    const empCode=mapUser.code; // e.g. C5-MS
+    if(EMP_ZONE_MAP[empCode]){
+      // أخفِ كل الخيارات إلا خياره
+      Array.from(sel.options).forEach(opt=>{
+        if(opt.value && opt.value!==empCode) opt.style.display='none';
+      });
+      // حمّل بياناته تلقائياً
+      sel.value=empCode;
+      sel.style.display='none'; // أخفِ القائمة كلها
+      // أضف اسم الموظف بدلها
+      const nameSpan=document.createElement('span');
+      nameSpan.textContent='📍 '+mapUser.name+' — زونك فقط';
+      nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;';
+      ctrl.insertBefore(nameSpan, sel.nextSibling);
+      currentEmp=empCode;
+      actions=loadActions(empCode);
+      loading(true);
+      const varName='EMP_DATA_'+empCode.replace(/-/g,'_');
+      if(window[varName]){currentData=window[varName];finishLoad();return;}
+      const fileCode=empCode.replace('-','');
+      const script=document.createElement('script');
+      script.src=BASE_URL+'clients_'+fileCode+'.js';
+      script.onload=()=>{currentData=window[varName];finishLoad();};
+      script.onerror=()=>{loading(false);};
+      document.head.appendChild(script);
+    }
+  } else {
+    // المشرف والمدير يشوفون كل الخيارات
+    // أضف اسم المستخدم
+    const nameSpan=document.createElement('span');
+    nameSpan.textContent='👤 '+mapUser.name;
+    nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;margin-right:8px;';
+    ctrl.prepend(nameSpan);
+  }
+}
+
+// شغّل بعد تحميل الصفحة
+window.addEventListener('load', initMapAccess);
+</script>
+</body>
+</html>
+
