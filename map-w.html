@@ -71,9 +71,17 @@ select option{background:#3B0764;color:#fff;}
     <option value="">-- اختر الموظف --</option>
     <option value="W1-JH">W1 — Jabir Mohammed Hassan (Jeddah)</option>
     <option value="W2-HM">W2 — Haitham Mahmoud (Jeddah)</option>
+    <option value="W3-V">W3 — Vacant (Jeddah)</option>
+    <option value="W4-V">W4 — Vacant (Jeddah)</option>
+    <option value="W5-V">W5 — Vacant (Makkah)</option>
+    <option value="W6-V">W6 — Vacant (Makkah)</option>
+    <option value="W7-V">W7 — Vacant (Jeddah)</option>
     <option value="W8-MA">W8 — Mustafa Amanullah (Jeddah)</option>
+    <option value="W9-V">W9 — Vacant (Jeddah)</option>
     <option value="W10-AA">W10 — Abdullah Abdulqayyum (Makkah)</option>
+    <option value="W11-V">W11 — Vacant (Makkah)</option>
     <option value="W12-SF">W12 — Shadi Fahad Alghamdi (Jeddah)</option>
+    <option value="W13-V">W13 — Vacant (Jeddah)</option>
   </select>
   <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
   <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
@@ -129,11 +137,19 @@ const AR_NAMES_MAP={
 function getMapFirstName(){const code=mapUser?.code||'';return AR_NAMES_MAP[code]||(mapUser?.name||'').split(' ')[0];}
 
 const ZONE_CENTERS={
-  'W1-JH':[21.5433, 39.1728],
-  'W2-HM':[21.4858, 39.1925],
-  'W8-MA':[21.5200, 39.2100],
-  'W10-AA':[21.3891, 39.8579],
-  'W12-SF':[21.5600, 39.1500],
+  'W1-JH':[21.5433, 39.1728],   // Jeddah North
+  'W2-HM':[21.4858, 39.1925],   // Jeddah Central
+  'W3-V': [21.6200, 39.1100],   // Jeddah North-West
+  'W4-V': [21.4500, 39.2300],   // Jeddah East
+  'W5-V': [21.3800, 39.8700],   // Makkah West
+  'W6-V': [21.4200, 39.8200],   // Makkah Central
+  'W7-V': [21.5700, 39.1600],   // Jeddah North-East
+  'W8-MA':[21.5200, 39.2100],   // Jeddah East-Central
+  'W9-V': [21.4100, 39.1700],   // Jeddah South
+  'W10-AA':[21.3891, 39.8579],  // Makkah South
+  'W11-V':[21.3500, 39.9000],   // Makkah East
+  'W12-SF':[21.5600, 39.1500],  // Jeddah West
+  'W13-V':[21.5000, 39.2400],   // Jeddah South-East
 };
 const BASE_URL=window.location.href.split('map-w.html')[0].split('?')[0];
 
@@ -156,7 +172,7 @@ const EMP_ZONE_MAP={
   'C9-BJ':'C9-BJ','C10-AR':'C10-AR','C11-KS':'C11-KS','C12-FA':'C12-FA'
 };
 
-const map=L.map('map').setView([24.68,46.72],11);
+const map=L.map('map').setView([21.54,39.17],11);
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
 let markers={};
 let layerGroup=L.layerGroup().addTo(map);
@@ -379,7 +395,7 @@ function onEmpChange(){
 
 function finishLoad(){
   if(!currentData){loading(false);return;}
-  const center=ZONE_CENTERS[currentData.zone]||[24.68,46.72];
+  const center=ZONE_CENTERS[currentData.zone]||[21.54,39.17];
   map.setView(center,13);
   renderMarkers();
   loading(false);
