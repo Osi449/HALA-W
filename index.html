@@ -61,7 +61,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
-<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
+
 <button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
 <button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
 </div>
@@ -100,7 +100,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 </div>
 
 <div id="tracker" class="page"></div>
-<div id="credit" class="page"></div>
+<div id="credit" class="page" style="display:none!important;"></div>
 <div id="shift" class="page"></div>
 <div id="analyzer" class="page"></div>
 
@@ -116,19 +116,27 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 
 // ── DATA ─────────────────────────────────────────
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
-const SUPS=['SUP-OS',RGN];
-const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151'};
-const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0};
+const SUPS=[RGN];
+const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','W3-V':'1111','W4-V':'1111','W5-V':'1111','W6-V':'1111','W7-V':'1111','W9-V':'1111','W11-V':'1111','W13-V':'1111'};
+const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'W3-V':0,'W4-V':0,'W5-V':0,'W6-V':0,'W7-V':0,'W9-V':0,'W11-V':0,'W13-V':0};
 const EMP_TGT=583333, RGN_TGT=7000000;
 
 const TEAMS={
-  w1:{label:'Western',sup:{code:'SUP-OS',name:'Osman Baboor Khan',color:'#15803D'},
+  w1:{label:'Western',sup:{code:'WEST-MGR',name:'Osman Baboor',color:'#15803D'},
     members:{
       'W1-JH':{name:'Jabir Mohammed Hassan',short:'Jabir',color:'#15803D'},
       'W2-HM':{name:'Haitham Mahmoud Mohamed',short:'Haitham',color:'#166534'},
       'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',color:'#D97706'},
       'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',color:'#7C3AED'},
-      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'}
+      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'},
+      'W3-V':{name:'Vacant W3',short:'W3',color:'#9CA3AF'},
+      'W4-V':{name:'Vacant W4',short:'W4',color:'#9CA3AF'},
+      'W5-V':{name:'Vacant W5',short:'W5',color:'#9CA3AF'},
+      'W6-V':{name:'Vacant W6',short:'W6',color:'#9CA3AF'},
+      'W7-V':{name:'Vacant W7',short:'W7',color:'#9CA3AF'},
+      'W9-V':{name:'Vacant W9',short:'W9',color:'#9CA3AF'},
+      'W11-V':{name:'Vacant W11',short:'W11',color:'#9CA3AF'},
+      'W13-V':{name:'Vacant W13',short:'W13',color:'#9CA3AF'}
     }}
 };
 const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
@@ -186,7 +194,7 @@ function authGo(dest){
   if(!user){document.getElementById('login').dataset.dest=dest;showPage('login');return;}
   showPage(dest);
   if(dest==='tracker')renderTracker();
-  else if(dest==='credit')renderCredit();
+  
   else if(dest==='shift')renderShift();
 }
 function updHome(){
@@ -203,7 +211,7 @@ function setCode(k){const lc=document.getElementById('lcode');if(lc)lc.value=k;l
 function buildChips(){
   const mc=document.getElementById('mchips'),sc=document.getElementById('schips');
   if(mc)mc.innerHTML=Object.keys(ALL_M).map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid #DDD6FE;color:#6B21A8;background:#F5F3FF;font-family:monospace;display:inline-block;margin:2px;">'+k+'</span>').join('');
-  if(sc)sc.innerHTML=['SUP-OS',RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
+  if(sc)sc.innerHTML=[RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
 }
 function doLogin(){
   const code=(document.getElementById('lcode').value||'').trim().toUpperCase();lErr('');
@@ -218,11 +226,11 @@ function doLogin(){
   if(isSup){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
     if((document.getElementById('lpin').value||'')!==SPIN){lErr('رمز الدخول غير صحيح');return;}
-    const isR=code===RGN,tk=Object.keys(TEAMS).find(k=>TEAMS[k].sup.code===code),si=ALL_S[code]||{name:'مدير المنطقة الغربية',color:'#15803D'};
+    const isR=code===RGN,tk=Object.keys(TEAMS).find(k=>TEAMS[k].sup.code===code),si=ALL_S[code]||{name:'Osman Baboor',color:'#15803D'};
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='shift')renderShift();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -230,7 +238,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='shift')renderShift();return;
   }
   lErr('الكود غير صحيح');
 }
