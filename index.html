@@ -420,13 +420,16 @@ async function doSaveT(){
   const btn=document.getElementById('btsave');if(btn.disabled)return;
   btn.disabled=true;btn.textContent='⏳ جاري الحفظ...';
   try{
+    const gV=id=>{const el=document.getElementById(id);return el?parseInt(el.value)||0:0;};
     const p={agent_code:user.code,agent_name:user.name,entry_date:tod(),
-      visits:parseInt(document.getElementById('pf_visits').value)||0,
-      nonhala:parseInt(document.getElementById('pf_nonhala').value)||0,
-      cards:parseInt(document.getElementById('pf_cards').value)||0,
-      finance:parseInt(document.getElementById('pf_finance').value)||0,
-      sources:parseInt(document.getElementById('pf_sources').value)||0,
-      notes:document.getElementById('tnotes').value||''};
+      visits:gV('pf_visits'),
+      nonhala:gV('pf_nonhala'),
+      cards:gV('pf_cards'),
+      finance:gV('pf_finHala')+gV('pf_finNonHala'),
+      sources:0,
+      fin_hala:gV('pf_finHala'),
+      fin_nonhala:gV('pf_finNonHala'),
+      notes:document.getElementById('tnotes')?document.getElementById('tnotes').value||'':''};
     await dbUp('daily_entries',p,'agent_code,entry_date');
     await loadEntries();renderTDone(p);
   }catch(err){btn.disabled=false;btn.textContent='حفظ وإرسال ✓';alert('خطأ: '+(err?.message||'تأكد من الاتصال'));}
