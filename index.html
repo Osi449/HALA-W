@@ -144,8 +144,8 @@ const TEAMS={
       'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',zones:'N6+N7+N8',color:'#EF4444'}
     }}
 };
-const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
-const ALL_S={};Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
+const ALL_M=(()=>{const m={};Object.values(TEAMS).forEach(t=>Object.entries(t.members).forEach(([k,v])=>m[k]=v));return m;})();Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
+const ALL_S=(()=>{const s={};Object.values(TEAMS).forEach(t=>s[t.sup.code]=t.sup);return s;})();Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
 
 const PF=[
   {key:'visits',    label:'زيارة غير مزار', icon:'📍', target:10,  unit:'زيارة',  monthly:210},
@@ -216,7 +216,7 @@ function setCode(k){const lc=document.getElementById('lcode');if(lc)lc.value=k;l
 function buildChips(){
   const mc=document.getElementById('mchips'),sc=document.getElementById('schips');
   if(mc)mc.innerHTML=Object.keys(ALL_M).map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid #DDD6FE;color:#6B21A8;background:#F5F3FF;font-family:monospace;display:inline-block;margin:2px;">'+k+'</span>').join('');
-  if(sc)sc.innerHTML=[RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
+  if(sc)sc.innerHTML=['W1-JH','W2-HM','W8-MA','W10-AA','W12-SF','N6-AB',RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
 }
 function doLogin(){
   const code=(document.getElementById('lcode').value||'').trim().toUpperCase();lErr('');
@@ -235,7 +235,7 @@ function doLogin(){
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='analyzer')renderAnalyzer();else if(dest==='techissue')renderTechIssue();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -243,7 +243,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='analyzer')renderAnalyzer();else if(dest==='techissue')renderTechIssue();return;
   }
   lErr('الكود غير صحيح');
 }
