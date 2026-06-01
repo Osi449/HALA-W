@@ -941,6 +941,15 @@ try{const u=lLS('hu5',null);if(u){user=u;updHome();}}catch(e){}
 buildChips();
 function renderTechIssue(){
   if(!user){document.getElementById('techissue').innerHTML=nlH('techissue');return;}
+  const isMgr=user.role==='region'||user.role==='supervisor'||user.role==='owner';
+  if(isMgr){
+    renderTechDash();
+  } else {
+    renderTechForm();
+  }
+}
+
+function renderTechForm(){
   let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
   h+='<div class="content">';
   h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل</div>';
@@ -953,7 +962,7 @@ function renderTechIssue(){
   h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:120px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:Cairo,sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
   h+='</div>';
   h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة</div>';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة (اختياري)</div>';
   h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:12px;">ارفع الصورة على files.fm ثم ضع الرابط هنا</div>';
   h+='<button onclick="openFilesFM()" style="width:100%;padding:12px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;margin-bottom:10px;">📤 رفع صورة على files.fm</button>';
   h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
@@ -962,6 +971,95 @@ function renderTechIssue(){
   h+='</div>';
   document.getElementById('techissue').innerHTML=h;
 }
+
+let techIssues=[];
+async function renderTechDash(){
+  const el=document.getElementById('techissue');
+  let h=tbH('المشاكل التقنية — داشبورد','🔧',null,"showPage('home')");
+  h+='<div class="content">';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">';
+  h+='<div class="card-sm" style="text-align:center;background:#FEF2F2;border:1px solid #FECACA;"><div style="font-size:22px;font-weight:900;color:#DC2626;" id="ti_count_pending">—</div><div style="font-size:10px;color:#9CA3AF;">معلّق</div></div>';
+  h+='<div class="card-sm" style="text-align:center;background:#FEF3C7;border:1px solid #FCD34D;"><div style="font-size:22px;font-weight:900;color:#D97706;" id="ti_count_sv">—</div><div style="font-size:10px;color:#9CA3AF;">مع المشرف</div></div>';
+  h+='<div class="card-sm" style="text-align:center;background:#F0FDF4;border:1px solid #86EFAC;"><div style="font-size:22px;font-weight:900;color:#166534;" id="ti_count_resolved">—</div><div style="font-size:10px;color:#9CA3AF;">محلول</div></div>';
+  h+='</div>';
+  h+='<div id="ti_list"><div style="text-align:center;padding:20px;color:#9CA3AF;">⏳ جاري التحميل...</div></div>';
+  h+='</div>';
+  el.innerHTML=h;
+  await loadTechIssues();
+}
+
+async function loadTechIssues(){
+  try{
+    const d=await dbGet('tech_issues','?region=eq.west&order=submitted_at.desc');
+    techIssues=Array.isArray(d)?d:[];
+    renderTechList();
+  }catch(e){
+    document.getElementById('ti_list').innerHTML='<div style="text-align:center;color:#DC2626;padding:20px;">❌ خطأ في التحميل</div>';
+  }
+}
+
+function renderTechList(){
+  const pending=techIssues.filter(t=>t.status==='open');
+  const withSV=techIssues.filter(t=>t.status==='with_sv');
+  const resolved=techIssues.filter(t=>t.status==='resolved');
+  const el_p=document.getElementById('ti_count_pending');
+  const el_s=document.getElementById('ti_count_sv');
+  const el_r=document.getElementById('ti_count_resolved');
+  if(el_p)el_p.textContent=pending.length;
+  if(el_s)el_s.textContent=withSV.length;
+  if(el_r)el_r.textContent=resolved.length;
+
+  const STATUS_LABEL={open:'🔴 معلّق',with_sv:'🟡 مع المشرف',resolved:'🟢 محلول'};
+  const STATUS_COLOR={open:'#FEF2F2',with_sv:'#FFFBEB',resolved:'#F0FDF4'};
+  const STATUS_BORDER={open:'#FECACA',with_sv:'#FCD34D',resolved:'#86EFAC'};
+
+  let h='';
+  if(!techIssues.length){h='<div style="text-align:center;color:#9CA3AF;padding:30px;">✅ لا توجد بلاغات</div>';}
+  else{
+    techIssues.forEach(t=>{
+      const dt=t.submitted_at?new Date(t.submitted_at).toLocaleDateString('ar-SA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
+      h+=`<div class="card" style="padding:14px;border-right:4px solid ${STATUS_BORDER[t.status]||'#E5E7EB'};background:${STATUS_COLOR[t.status]||'#fff'};">`;
+      h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">`;
+      h+=`<div><div style="font-size:13px;font-weight:700;color:#111;">${t.agent_name||'—'} <span style="font-size:10px;color:#9CA3AF;">${t.agent_code||''}</span></div>`;
+      h+=`<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">🏪 ${t.cashier_id||'—'} · ${dt}</div></div>`;
+      h+=`<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${STATUS_BORDER[t.status]||'#E5E7EB'};color:#374151;">${STATUS_LABEL[t.status]||t.status}</span>`;
+      h+='</div>';
+      h+=`<div style="font-size:12px;color:#374151;margin-bottom:10px;line-height:1.6;">${t.description||'—'}</div>`;
+      if(t.attachment)h+=`<a href="${t.attachment}" target="_blank" style="font-size:11px;color:#6B21A8;font-weight:600;">📎 عرض المرفق</a>`;
+      h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">`;
+      if(t.status!=='with_sv')h+=`<button onclick="updateTI('${t.id}','with_sv')" style="padding:7px 14px;background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;font-size:11px;font-weight:700;color:#92400E;cursor:pointer;font-family:Cairo,sans-serif;">🟡 مع المشرف</button>`;
+      if(t.status!=='resolved')h+=`<button onclick="showTIResolve('${t.id}')" style="padding:7px 14px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;font-size:11px;font-weight:700;color:#166534;cursor:pointer;font-family:Cairo,sans-serif;">✅ تم الحل</button>`;
+      h+='</div>';
+      h+=`<div id="resolve_form_${t.id}" style="display:none;margin-top:10px;">`;
+      h+=`<textarea id="resolve_note_${t.id}" placeholder="ملاحظة الحل..." style="width:100%;padding:10px;border:1.5px solid #86EFAC;border-radius:8px;font-size:12px;font-family:Cairo,sans-serif;outline:none;direction:rtl;min-height:60px;"></textarea>`;
+      h+=`<button onclick="confirmResolve('${t.id}')" style="width:100%;margin-top:6px;padding:9px;background:#166534;border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;">حفظ الحل ✅</button>`;
+      h+='</div>';
+      h+='</div>';
+    });
+  }
+  const listEl=document.getElementById('ti_list');
+  if(listEl)listEl.innerHTML=h;
+}
+
+async function updateTI(id,status,note=''){
+  try{
+    const body={status};
+    if(note)body.sup_note=note;
+    await fetch(SB+'/rest/v1/tech_issues?id=eq.'+id,{method:'PATCH',headers:{...SH,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+    await loadTechIssues();
+  }catch(e){alert('❌ خطأ في التحديث');}
+}
+
+function showTIResolve(id){
+  const f=document.getElementById('resolve_form_'+id);
+  if(f)f.style.display=f.style.display==='none'?'block':'none';
+}
+
+async function confirmResolve(id){
+  const note=(document.getElementById('resolve_note_'+id).value||'').trim();
+  await updateTI(id,'resolved',note);
+}
+
 function openFilesFM(){window.open("https://files.fm/","_blank");}
 function selIT(i){
   _selIT=i;
