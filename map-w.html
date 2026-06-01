@@ -355,36 +355,36 @@ function confirmVisit(id, ans){
 function buildPopup(c){
   const done=isDone(c.id);
   const a=actions[c.id]||{};
-  let h='<div class="cp">';
+  // Store client id in a data attribute to avoid quote issues
+  const cid=c.id;
+  let h='<div class="cp" data-cid="'+cid+'">';
   h+='<div class="cp-name">'+(c.name||'—')+'</div>';
   h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
-  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+c.id+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+cid+'</span></div>';
   h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
   h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+c.zone+'</span></div>';
-  // نسخ ID
   h+='<div style="display:flex;gap:6px;margin:6px 0;">';
-  h+='<button class="btn-cpy" onclick="copyNum(\"'+c.id+'\")">📋 نسخ ID</button>';
+  h+='<button class="btn-cpy" data-copy="'+cid+'">📋 نسخ ID</button>';
   h+='</div>';
-  // Google Maps
   h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
-  // Take Action
   if(!done){
-    h+='<div style="margin-top:8px;padding:10px;background:#f7faf8;border-radius:10px;border:1px solid #e8e4dc;">';
+    h+='<div class="take-action-box" style="margin-top:8px;padding:10px;background:#f7faf8;border-radius:10px;border:1px solid #e8e4dc;">';
     h+='<div style="font-size:11px;font-weight:700;color:#1a6b3c;margin-bottom:8px;">⚡ Take Action</div>';
     h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل تم زيارة العميل فعلياً؟</div>';
     h+='<div style="display:flex;gap:6px;margin-bottom:6px;">';
-    h+='<button onclick="mapVisitYes(''+c.id+'')" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:11px;font-weight:700;color:#1a6b3c;cursor:pointer;">نعم ✅</button>';
-    h+='<button onclick="mapMarkDone(''+c.id+'','not-visited')" style="flex:1;padding:7px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:7px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">لا ❌</button>';
+    h+='<button class="ta-btn-yes" data-cid="'+cid+'" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:11px;font-weight:700;color:#1a6b3c;cursor:pointer;">نعم ✅</button>';
+    h+='<button class="ta-btn-no" data-cid="'+cid+'" style="flex:1;padding:7px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:7px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">لا ❌</button>';
     h+='</div>';
-    h+='<div id="map-q2-'+c.id+'" style="display:none;">';
+    h+='<div class="ta-q2" style="display:none;">';
     h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل العميل مهتم؟</div>';
     h+='<div style="display:flex;gap:4px;">';
-    h+='<button onclick="mapMarkDone(''+c.id+'','interested')" style="flex:1;padding:6px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:10px;font-weight:700;color:#1a6b3c;cursor:pointer;">مهتم 🤝</button>';
-    h+='<button onclick="mapMarkDone(''+c.id+'','later')" style="flex:1;padding:6px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:7px;font-size:10px;font-weight:700;color:#B45309;cursor:pointer;">لاحقاً ⏳</button>';
-    h+='<button onclick="mapMarkDone(''+c.id+'','not')" style="flex:1;padding:6px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:7px;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;">غير مهتم</button>';
+    h+='<button class="ta-interested" data-cid="'+cid+'" style="flex:1;padding:6px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:10px;font-weight:700;color:#1a6b3c;cursor:pointer;">مهتم 🤝</button>';
+    h+='<button class="ta-later" data-cid="'+cid+'" style="flex:1;padding:6px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:7px;font-size:10px;font-weight:700;color:#B45309;cursor:pointer;">لاحقاً ⏳</button>';
+    h+='<button class="ta-not" data-cid="'+cid+'" style="flex:1;padding:6px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:7px;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;">غير مهتم</button>';
     h+='</div></div></div>';
   } else {
-    h+='<div class="done-badge">✅ تم الإجراء — '+((a.result==='interested')?'مهتم':(a.result==='later')?'لاحقاً':'تم')+' </div>';
+    const label=a.result==='interested'?'مهتم 🤝':a.result==='later'?'لاحقاً ⏳':a.result==='not-visited'?'لم يُزار':'تم';
+    h+='<div class="done-badge">✅ '+label+'</div>';
   }
   h+='</div>';
   return h;
@@ -485,6 +485,39 @@ function initMapAccess(){
 
 // شغّل بعد تحميل الصفحة
 window.addEventListener('load', initMapAccess);
+
+// Event delegation for popup buttons
+document.addEventListener('click', function(e){
+  // Copy button
+  if(e.target.dataset.copy){
+    copyNum(e.target.dataset.copy);
+    return;
+  }
+  const cid=e.target.dataset.cid;
+  if(!cid) return;
+  // Visit Yes
+  if(e.target.classList.contains('ta-btn-yes')){
+    const box=e.target.closest('.take-action-box');
+    if(box){const q2=box.querySelector('.ta-q2');if(q2)q2.style.display='block';}
+    return;
+  }
+  // Visit No
+  if(e.target.classList.contains('ta-btn-no')){
+    mapMarkDone(cid,'not-visited');return;
+  }
+  // Interested
+  if(e.target.classList.contains('ta-interested')){
+    mapMarkDone(cid,'interested');return;
+  }
+  // Later
+  if(e.target.classList.contains('ta-later')){
+    mapMarkDone(cid,'later');return;
+  }
+  // Not interested
+  if(e.target.classList.contains('ta-not')){
+    mapMarkDone(cid,'not');return;
+  }
+});
 </script>
 </body>
 </html>
