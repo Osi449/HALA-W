@@ -69,12 +69,12 @@ select option{background:#3B0764;color:#fff;}
   <span class="ctrl-label">👤</span>
   <select id="emp-select" onchange="onEmpChange()">
     <option value="">— اختر موظف —</option>
-    <option value="W1-JH">W1+W13 — Jabir Mohammed Hassan (جدة)</option>
-    <option value="W2-HM">W2+W3 — Haitham Mahmoud (جدة)</option>
-    <option value="W8-MA">W8+W9 — Mustafa Amanullah (جدة)</option>
-    <option value="W10-AA">W10+W5+W11+W7 — Abdullah Abdulqayyum (مكة)</option>
-    <option value="W12-SF">W12+W4 — Shadi Fahad Alghamdi (جدة)</option>
-    <option value="N6-AB">N6+N7+N8 — Abdulaziz Abdulbaqi (ينبع)</option>
+    <option value="W1-JH">W1+W13 — Jabir Mohammed Hassan</option>
+    <option value="W2-HM">W2+W3 — Haitham Mahmoud</option>
+    <option value="W8-MA">W8+W9 — Mustafa Amanullah</option>
+    <option value="W10-AA">W10+W5+W11+W7 — Abdullah Abdulqayyum</option>
+    <option value="W12-SF">W12+W4 — Shadi Fahad Alghamdi</option>
+    <option value="N6-AB">N6+N7+N8 — Abdulaziz Abdulbaqi</option>
   </select>
   <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
   <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
@@ -92,6 +92,14 @@ select option{background:#3B0764;color:#fff;}
   <div class="modal-box">
     <div class="modal-title" id="modal-client-name">اسم العميل</div>
     <div class="modal-sub" id="modal-client-id"></div>
+    <div class="action-q" id="visit-q">
+      <span class="action-q-label">🚶 هل تم زيارة العميل فعلياً؟</span>
+      <div class="action-btns">
+        <button class="btn-yes" id="qv-yes" onclick="setVisit(true)">✅ نعم</button>
+        <button class="btn-no" id="qv-no" onclick="setVisit(false)">❌ لا</button>
+      </div>
+    </div>
+    <div id="contact-questions" style="display:none;">
     <div class="action-q">
       <span class="action-q-label">📞 هل تم التواصل مع العميل؟</span>
       <div class="action-btns">
@@ -148,7 +156,7 @@ if(!mapUser){
   document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
 }
 
-const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region'||mapUser.role==='owner');
+const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region');
 const isEmp=mapUser&&mapUser.role==='employee';
 
 // خريطة الموظف لزونه فقط
@@ -169,7 +177,10 @@ let currentData=null;
 let currentEmp='';
 let actions={}; // {clientId: {q1,q2,q3}}
 let modalClientId='';
-let answers={1:null,2:null,3:null};
+let answers={visit:null,1:null,2:null,3:null};
+  document.getElementById('contact-questions').style.display='none';
+  if(document.getElementById('qv-yes'))document.getElementById('qv-yes').className='btn-yes';
+  if(document.getElementById('qv-no'))document.getElementById('qv-no').className='btn-no';
 
 // Load actions from localStorage
 function loadActions(emp){
@@ -231,25 +242,6 @@ function applyMapSearch() {
   res.style.color = found > 0 ? '#86EFAC' : '#FCA5A5';
 }
 
-
-function mapVisitYes(id){
-  const q=document.getElementById('map-q2-'+id);
-  if(q)q.style.display='block';
-}
-function mapMarkDone(id, result){
-  const c=currentData&&currentData.clients.find(x=>x.id===id);
-  if(!c)return;
-  actions[id]={visited: result!=='not-visited', result: result, ts: Date.now()};
-  saveActions(currentEmp, actions);
-  updateMarker(id);
-  // Close popup
-  if(markers[id])markers[id].closePopup();
-  const badge=document.getElementById('count-badge');
-  if(badge){
-    const done=Object.keys(actions).filter(k=>actions[k]).length;
-    badge.textContent=done;
-  }
-}
 function isDone(id){
   const a=actions[id];
   return a&&a.q1!==null&&a.q2!==null&&a.q3!==null;
@@ -285,7 +277,9 @@ function openAction(id){
   modalClientId=id;
   answers={1:null,2:null,3:null};
   // Load existing answers
-  if(actions[id]){answers=Object.assign({1:null,2:null,3:null},actions[id]);}
+  if(actions[id]){answers=Object.assign({visit:null,1:null,2:null,3:null},actions[id]);
+    if(answers.visit!==null){setVisit(answers.visit);}
+  }
   document.getElementById('modal-client-name').textContent=c.name;
   document.getElementById('modal-client-id').textContent='ID: '+c.id+' | TID: '+c.tid;
   // Reset buttons
@@ -323,68 +317,39 @@ function updateMarker(id){
   markers[id].setIcon(makeIcon(id,'#6B21A8'));
 }
 
-function buildTakeAction(c){
-  const done=isDone(c.id);
-  return `<div style="padding:8px 0;">
-    <div style="font-size:13px;font-weight:700;color:#1a6b3c;margin-bottom:12px;">✅ اتخاذ إجراء</div>
-    <div style="margin-bottom:10px;">
-      <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:5px;">هل تم زيارة العميل فعلياً؟</label>
-      <div style="display:flex;gap:8px;">
-        <button onclick="confirmVisit('${c.id}','yes')" style="flex:1;padding:8px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:8px;font-size:12px;font-weight:600;color:#1a6b3c;cursor:pointer;font-family:'Cairo',sans-serif;">نعم ✅</button>
-        <button onclick="confirmVisit('${c.id}','no')" style="flex:1;padding:8px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:8px;font-size:12px;font-weight:600;color:#DC2626;cursor:pointer;font-family:'Cairo',sans-serif;">لا ❌</button>
-      </div>
-    </div>
-    <div id="visit-q2-${c.id}" style="display:none;margin-bottom:10px;">
-      <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:5px;">هل العميل مهتم بالتمويل؟</label>
-      <div style="display:flex;gap:8px;">
-        <button onclick="markDone('${c.id}','interested')" style="flex:1;padding:8px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:8px;font-size:12px;font-weight:600;color:#1a6b3c;cursor:pointer;font-family:'Cairo',sans-serif;">مهتم 🤝</button>
-        <button onclick="markDone('${c.id}','later')" style="flex:1;padding:8px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:8px;font-size:12px;font-weight:600;color:#B45309;cursor:pointer;font-family:'Cairo',sans-serif;">لاحقاً ⏳</button>
-        <button onclick="markDone('${c.id}','not')" style="flex:1;padding:8px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:8px;font-size:12px;font-weight:600;color:#6B7280;cursor:pointer;font-family:'Cairo',sans-serif;">غير مهتم</button>
-      </div>
-    </div>
-  </div>`;
-}
-function confirmVisit(id, ans){
-  if(ans==='yes'){
-    document.getElementById('visit-q2-'+id).style.display='block';
-  } else {
-    // لم يتم الزيارة — سجّل فقط
-    markDone(id,'not-visited');
-  }
-}
 function buildPopup(c){
   const done=isDone(c.id);
   const a=actions[c.id]||{};
-  // Store client id in a data attribute to avoid quote issues
-  const cid=c.id;
-  let h='<div class="cp" data-cid="'+cid+'">';
-  h+='<div class="cp-name">'+(c.name||'—')+'</div>';
-  h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
-  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+cid+'</span></div>';
-  h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
-  h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+c.zone+'</span></div>';
-  h+='<div style="display:flex;gap:6px;margin:6px 0;">';
-  h+='<button class="btn-cpy" data-copy="'+cid+'">📋 نسخ ID</button>';
-  h+='</div>';
-  h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
-  if(!done){
-    h+='<div class="take-action-box" style="margin-top:8px;padding:10px;background:#f7faf8;border-radius:10px;border:1px solid #e8e4dc;">';
-    h+='<div style="font-size:11px;font-weight:700;color:#1a6b3c;margin-bottom:8px;">⚡ Take Action</div>';
-    h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل تم زيارة العميل فعلياً؟</div>';
-    h+='<div style="display:flex;gap:6px;margin-bottom:6px;">';
-    h+='<button class="ta-btn-yes" data-cid="'+cid+'" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:11px;font-weight:700;color:#1a6b3c;cursor:pointer;">نعم ✅</button>';
-    h+='<button class="ta-btn-no" data-cid="'+cid+'" style="flex:1;padding:7px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:7px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">لا ❌</button>';
-    h+='</div>';
-    h+='<div class="ta-q2" style="display:none;">';
-    h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل العميل مهتم؟</div>';
-    h+='<div style="display:flex;gap:4px;">';
-    h+='<button class="ta-interested" data-cid="'+cid+'" style="flex:1;padding:6px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:10px;font-weight:700;color:#1a6b3c;cursor:pointer;">مهتم 🤝</button>';
-    h+='<button class="ta-later" data-cid="'+cid+'" style="flex:1;padding:6px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:7px;font-size:10px;font-weight:700;color:#B45309;cursor:pointer;">لاحقاً ⏳</button>';
-    h+='<button class="ta-not" data-cid="'+cid+'" style="flex:1;padding:6px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:7px;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;">غير مهتم</button>';
-    h+='</div></div></div>';
-  } else {
-    const label=a.result==='interested'?'مهتم 🤝':a.result==='later'?'لاحقاً ⏳':a.result==='not-visited'?'لم يُزار':'تم';
-    h+='<div class="done-badge">✅ '+label+'</div>';
+  let h=`<div class="cp">
+    <div class="cp-name">${c.name}</div>
+    <div class="cp-cat">${c.category}</div>
+    <div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">${c.id}</span></div>
+    <div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">${c.tid||'—'}</span></div>
+    <div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">${c.zone}</span></div>
+    <div class="cp-row">
+      <span class="cp-lbl">📞 محاسب</span>
+      <span class="cp-nums">
+        <span class="cp-val">${c.cashier}</span>
+        <a href="tel:${c.cashier}" class="btn-call" style="background:#166534;">📞</a>
+        <button class="btn-cpy" onclick="copyNum('${c.cashier}')">نسخ</button>
+      </span>
+    </div>
+    <div class="cp-row">
+      <span class="cp-lbl">👔 مدير</span>
+      <span class="cp-nums">
+        <span class="cp-val">${c.owner}</span>
+        <a href="tel:${c.owner}" class="btn-call" style="background:#6B21A8;">📞</a>
+        <button class="btn-cpy" onclick="copyNum('${c.owner}')">نسخ</button>
+      </span>
+    </div>
+    <a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank">🗺️ توجيه Google Maps</a>
+    <div style="display:flex;gap:6px;margin-top:6px;">
+      <a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/966${c.cashier.startsWith('0')?c.cashier.slice(1):c.cashier}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب محاسب</a>
+      <a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/966${c.owner.startsWith('0')?c.owner.slice(1):c.owner}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب مدير</a>
+    </div>
+    <button class="btn-action" onclick="openAction('${c.id}')">⚡ Take Action</button>`;
+  if(done){
+    h+=`<div class="done-badge">✅ تم الإجراء — ${a.q1?'تواصل ✓':'لا تواصل'} · ${a.q2?'مهتم ✓':'غير مهتم'} · ${a.q3?'واتساب ✓':'لا واتساب'}</div>`;
   }
   h+='</div>';
   return h;
@@ -443,16 +408,14 @@ function initMapAccess(){
   if(!mapUser)return;
   const sel=document.getElementById('emp-select');
   const ctrl=document.getElementById('controls');
-
   if(isEmp){
-    // الموظف — احذف كل الخيارات واستبدل بخياره فقط
     const empCode=mapUser.code;
     const empZone=EMP_ZONE_MAP[empCode];
     if(!empZone){
       document.body.innerHTML='<div style="padding:40px;text-align:center;color:#fff;background:#1a6b3c;min-height:100vh;"><h2>❌ لا توجد بيانات لهذا الكود</h2></div>';
       return;
     }
-    // امسح الـ select وضع خياره فقط
+    // حذف كل الخيارات وابقاء خياره فقط
     sel.innerHTML='';
     const opt=document.createElement('option');
     opt.value=empCode;
@@ -460,8 +423,7 @@ function initMapAccess(){
     sel.appendChild(opt);
     sel.value=empCode;
     sel.disabled=true;
-    sel.style.cssText='opacity:0.7;pointer-events:none;';
-    // حمّل بياناته تلقائياً
+    sel.style.cssText='opacity:0.85;pointer-events:none;';
     currentEmp=empCode;
     actions=loadActions(empCode);
     loading(true);
@@ -473,9 +435,7 @@ function initMapAccess(){
     script.onload=()=>{currentData=window[varName];finishLoad();};
     script.onerror=()=>{loading(false);};
     document.head.appendChild(script);
-
   } else {
-    // المدير والمشرف — يشوفون كل الخيارات
     const nameSpan=document.createElement('span');
     nameSpan.textContent='👤 '+mapUser.name;
     nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;margin-right:8px;';
@@ -485,39 +445,6 @@ function initMapAccess(){
 
 // شغّل بعد تحميل الصفحة
 window.addEventListener('load', initMapAccess);
-
-// Event delegation for popup buttons
-document.addEventListener('click', function(e){
-  // Copy button
-  if(e.target.dataset.copy){
-    copyNum(e.target.dataset.copy);
-    return;
-  }
-  const cid=e.target.dataset.cid;
-  if(!cid) return;
-  // Visit Yes
-  if(e.target.classList.contains('ta-btn-yes')){
-    const box=e.target.closest('.take-action-box');
-    if(box){const q2=box.querySelector('.ta-q2');if(q2)q2.style.display='block';}
-    return;
-  }
-  // Visit No
-  if(e.target.classList.contains('ta-btn-no')){
-    mapMarkDone(cid,'not-visited');return;
-  }
-  // Interested
-  if(e.target.classList.contains('ta-interested')){
-    mapMarkDone(cid,'interested');return;
-  }
-  // Later
-  if(e.target.classList.contains('ta-later')){
-    mapMarkDone(cid,'later');return;
-  }
-  // Not interested
-  if(e.target.classList.contains('ta-not')){
-    mapMarkDone(cid,'not');return;
-  }
-});
 </script>
 </body>
 </html>
