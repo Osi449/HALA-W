@@ -422,41 +422,41 @@ function finishLoad(){
 // ── تهيئة الصفحة حسب الدور ────────────────
 function initMapAccess(){
   if(!mapUser)return;
-  
   const sel=document.getElementById('emp-select');
   const ctrl=document.getElementById('controls');
-  
+
   if(isEmp){
-    // الموظف يشوف زونه فقط — أخفِ القائمة
-    const empCode=mapUser.code; // e.g. C5-MS
-    if(EMP_ZONE_MAP[empCode]){
-      // أخفِ كل الخيارات إلا خياره
-      Array.from(sel.options).forEach(opt=>{
-        if(opt.value && opt.value!==empCode) opt.style.display='none';
-      });
-      // حمّل بياناته تلقائياً
-      sel.value=empCode;
-      sel.style.display='none'; // أخفِ القائمة كلها
-      // أضف اسم الموظف بدلها
-      const nameSpan=document.createElement('span');
-      nameSpan.textContent='📍 '+mapUser.name+' — زونك فقط';
-      nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;';
-      ctrl.insertBefore(nameSpan, sel.nextSibling);
-      currentEmp=empCode;
-      actions=loadActions(empCode);
-      loading(true);
-      const varName='EMP_DATA_'+empCode.replace(/-/g,'_');
-      if(window[varName]){currentData=window[varName];finishLoad();return;}
-      const fileCode=empCode.replace('-','');
-      const script=document.createElement('script');
-      script.src=BASE_URL+'clients_'+fileCode+'.js';
-      script.onload=()=>{currentData=window[varName];finishLoad();};
-      script.onerror=()=>{loading(false);};
-      document.head.appendChild(script);
+    // الموظف — احذف كل الخيارات واستبدل بخياره فقط
+    const empCode=mapUser.code;
+    const empZone=EMP_ZONE_MAP[empCode];
+    if(!empZone){
+      document.body.innerHTML='<div style="padding:40px;text-align:center;color:#fff;background:#1a6b3c;min-height:100vh;"><h2>❌ لا توجد بيانات لهذا الكود</h2></div>';
+      return;
     }
+    // امسح الـ select وضع خياره فقط
+    sel.innerHTML='';
+    const opt=document.createElement('option');
+    opt.value=empCode;
+    opt.textContent='📍 '+mapUser.name;
+    sel.appendChild(opt);
+    sel.value=empCode;
+    sel.disabled=true;
+    sel.style.cssText='opacity:0.7;pointer-events:none;';
+    // حمّل بياناته تلقائياً
+    currentEmp=empCode;
+    actions=loadActions(empCode);
+    loading(true);
+    const varName='EMP_DATA_'+empCode.replace(/-/g,'_');
+    if(window[varName]){currentData=window[varName];finishLoad();return;}
+    const fileCode=empCode.replace(/-/g,'');
+    const script=document.createElement('script');
+    script.src=BASE_URL+'clients_'+fileCode+'.js';
+    script.onload=()=>{currentData=window[varName];finishLoad();};
+    script.onerror=()=>{loading(false);};
+    document.head.appendChild(script);
+
   } else {
-    // المشرف والمدير يشوفون كل الخيارات
-    // أضف اسم المستخدم
+    // المدير والمشرف — يشوفون كل الخيارات
     const nameSpan=document.createElement('span');
     nameSpan.textContent='👤 '+mapUser.name;
     nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;margin-right:8px;';
