@@ -62,26 +62,19 @@ select option{background:#3B0764;color:#fff;}
   </div>
   <div style="display:flex;align-items:center;gap:8px;">
     <span id="count-badge">اختر موظف</span>
-    <a href="index-w.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
+    <a href="index.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
   </div>
 </div>
 <div id="controls">
   <span class="ctrl-label">👤</span>
   <select id="emp-select" onchange="onEmpChange()">
-    <option value="">-- اختر الموظف --</option>
-    <option value="W1-JH">W1 — Jabir Mohammed Hassan (Jeddah)</option>
-    <option value="W2-HM">W2 — Haitham Mahmoud (Jeddah)</option>
-    <option value="W3-V">W3 — Vacant (Jeddah)</option>
-    <option value="W4-V">W4 — Vacant (Jeddah)</option>
-    <option value="W5-V">W5 — Vacant (Makkah)</option>
-    <option value="W6-V">W6 — Vacant (Makkah)</option>
-    <option value="W7-V">W7 — Vacant (Jeddah)</option>
-    <option value="W8-MA">W8 — Mustafa Amanullah (Jeddah)</option>
-    <option value="W9-V">W9 — Vacant (Jeddah)</option>
-    <option value="W10-AA">W10 — Abdullah Abdulqayyum (Makkah)</option>
-    <option value="W11-V">W11 — Vacant (Makkah)</option>
-    <option value="W12-SF">W12 — Shadi Fahad Alghamdi (Jeddah)</option>
-    <option value="W13-V">W13 — Vacant (Jeddah)</option>
+    <option value="">— اختر موظف —</option>
+    <option value="W1-JH">W1+W13 — Jabir Mohammed Hassan (جدة)</option>
+    <option value="W2-HM">W2+W3 — Haitham Mahmoud (جدة)</option>
+    <option value="W8-MA">W8+W9 — Mustafa Amanullah (جدة)</option>
+    <option value="W10-AA">W10+W5+W11+W7 — Abdullah Abdulqayyum (مكة)</option>
+    <option value="W12-SF">W12+W4 — Shadi Fahad Alghamdi (جدة)</option>
+    <option value="N6-AB">N6+N7+N8 — Abdulaziz Abdulbaqi (ينبع)</option>
   </select>
   <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
   <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
@@ -137,19 +130,12 @@ const AR_NAMES_MAP={
 function getMapFirstName(){const code=mapUser?.code||'';return AR_NAMES_MAP[code]||(mapUser?.name||'').split(' ')[0];}
 
 const ZONE_CENTERS={
-  'W1-JH':[21.5433, 39.1728],   // Jeddah North
-  'W2-HM':[21.4858, 39.1925],   // Jeddah Central
-  'W3-V': [21.6200, 39.1100],   // Jeddah North-West
-  'W4-V': [21.4500, 39.2300],   // Jeddah East
-  'W5-V': [21.3800, 39.8700],   // Makkah West
-  'W6-V': [21.4200, 39.8200],   // Makkah Central
-  'W7-V': [21.5700, 39.1600],   // Jeddah North-East
-  'W8-MA':[21.5200, 39.2100],   // Jeddah East-Central
-  'W9-V': [21.4100, 39.1700],   // Jeddah South
-  'W10-AA':[21.3891, 39.8579],  // Makkah South
-  'W11-V':[21.3500, 39.9000],   // Makkah East
-  'W12-SF':[21.5600, 39.1500],  // Jeddah West
-  'W13-V':[21.5000, 39.2400],   // Jeddah South-East
+  'W1-JH': [21.5433, 39.1728],
+  'W2-HM': [21.4858, 39.1925],
+  'W8-MA': [21.5200, 39.2100],
+  'W10-AA':[21.3891, 39.8579],
+  'W12-SF':[21.5600, 39.1500],
+  'N6-AB': [24.5000, 38.0000],
 };
 const BASE_URL=window.location.href.split('map-w.html')[0].split('?')[0];
 
@@ -159,7 +145,7 @@ try{const u=localStorage.getItem('hu5');if(u)mapUser=JSON.parse(u);}catch(e){}
 
 // إذا ما في جلسة — وجّهه للرئيسية
 if(!mapUser){
-  document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index-w.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
+  document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
 }
 
 const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region');
@@ -315,6 +301,35 @@ function updateMarker(id){
   markers[id].setIcon(makeIcon(id,'#6B21A8'));
 }
 
+function buildTakeAction(c){
+  const done=isDone(c.id);
+  return `<div style="padding:8px 0;">
+    <div style="font-size:13px;font-weight:700;color:#1a6b3c;margin-bottom:12px;">✅ اتخاذ إجراء</div>
+    <div style="margin-bottom:10px;">
+      <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:5px;">هل تم زيارة العميل فعلياً؟</label>
+      <div style="display:flex;gap:8px;">
+        <button onclick="confirmVisit('${c.id}','yes')" style="flex:1;padding:8px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:8px;font-size:12px;font-weight:600;color:#1a6b3c;cursor:pointer;font-family:'Cairo',sans-serif;">نعم ✅</button>
+        <button onclick="confirmVisit('${c.id}','no')" style="flex:1;padding:8px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:8px;font-size:12px;font-weight:600;color:#DC2626;cursor:pointer;font-family:'Cairo',sans-serif;">لا ❌</button>
+      </div>
+    </div>
+    <div id="visit-q2-${c.id}" style="display:none;margin-bottom:10px;">
+      <label style="font-size:12px;font-weight:600;color:#444;display:block;margin-bottom:5px;">هل العميل مهتم بالتمويل؟</label>
+      <div style="display:flex;gap:8px;">
+        <button onclick="markDone('${c.id}','interested')" style="flex:1;padding:8px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:8px;font-size:12px;font-weight:600;color:#1a6b3c;cursor:pointer;font-family:'Cairo',sans-serif;">مهتم 🤝</button>
+        <button onclick="markDone('${c.id}','later')" style="flex:1;padding:8px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:8px;font-size:12px;font-weight:600;color:#B45309;cursor:pointer;font-family:'Cairo',sans-serif;">لاحقاً ⏳</button>
+        <button onclick="markDone('${c.id}','not')" style="flex:1;padding:8px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:8px;font-size:12px;font-weight:600;color:#6B7280;cursor:pointer;font-family:'Cairo',sans-serif;">غير مهتم</button>
+      </div>
+    </div>
+  </div>`;
+}
+function confirmVisit(id, ans){
+  if(ans==='yes'){
+    document.getElementById('visit-q2-'+id).style.display='block';
+  } else {
+    // لم يتم الزيارة — سجّل فقط
+    markDone(id,'not-visited');
+  }
+}
 function buildPopup(c){
   const done=isDone(c.id);
   const a=actions[c.id]||{};
