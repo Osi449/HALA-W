@@ -319,36 +319,38 @@ function updateMarker(id){
 function buildPopup(c){
   const done=isDone(c.id);
   const a=actions[c.id]||{};
-  let h=`<div class="cp">
-    <div class="cp-name">${c.name}</div>
-    <div class="cp-cat">${c.category}</div>
-    <div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">${c.id}</span></div>
-    <div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">${c.tid||'—'}</span></div>
-    <div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">${c.zone}</span></div>
-    <div class="cp-row">
-      <span class="cp-lbl">📞 محاسب</span>
-      <span class="cp-nums">
-        <span class="cp-val">${c.cashier}</span>
-        <a href="tel:${c.cashier}" class="btn-call" style="background:#166534;">📞</a>
-        <button class="btn-cpy" onclick="copyNum('${c.cashier}')">نسخ</button>
-      </span>
-    </div>
-    <div class="cp-row">
-      <span class="cp-lbl">👔 مدير</span>
-      <span class="cp-nums">
-        <span class="cp-val">${c.owner}</span>
-        <a href="tel:${c.owner}" class="btn-call" style="background:#6B21A8;">📞</a>
-        <button class="btn-cpy" onclick="copyNum('${c.owner}')">نسخ</button>
-      </span>
-    </div>
-    <a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank">🗺️ توجيه Google Maps</a>
-    <div style="display:flex;gap:6px;margin-top:6px;">
-      <a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/966${c.cashier.startsWith('0')?c.cashier.slice(1):c.cashier}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب محاسب</a>
-      <a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/966${c.owner.startsWith('0')?c.owner.slice(1):c.owner}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب مدير</a>
-    </div>
-    <button class="btn-action" onclick="openAction('${c.id}')">⚡ Take Action</button>`;
+  const wa=getMapFirstName();
+  const waMsg=encodeURIComponent('سلام عليكم معك '+wa+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني');
+  // c.id = Cashier ID, c.manager = manager phone (may not exist)
+  const cashierNum=String(c.id||'');
+  const managerNum=String(c.manager||c.owner||'');
+  const cashierWa='966'+(cashierNum.startsWith('0')?cashierNum.slice(1):cashierNum);
+  const managerWa=managerNum?'966'+(managerNum.startsWith('0')?managerNum.slice(1):managerNum):'';
+
+  let h='<div class="cp">';
+  h+='<div class="cp-name">'+(c.name||'—')+'</div>';
+  h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
+  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+cashierNum+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+(c.zone||'—')+'</span></div>';
+  if(managerNum){
+    h+='<div class="cp-row"><span class="cp-lbl">📞 مدير</span>';
+    h+='<span class="cp-nums"><span class="cp-val">'+managerNum+'</span>';
+    h+='<a href="tel:'+managerNum+'" class="btn-call" style="background:#166534;">📞</a>';
+    h+='<button class="btn-cpy" onclick="copyNum(\''+managerNum+'\')">نسخ</button></span></div>';
+  }
+  h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
+  h+='<div style="display:flex;gap:6px;margin-top:6px;">';
+  if(cashierNum){
+    h+='<a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/'+cashierWa+'?text='+waMsg+'" target="_blank">💬 واتساب</a>';
+  }
+  if(managerWa){
+    h+='<a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/'+managerWa+'?text='+waMsg+'" target="_blank">💬 واتساب مدير</a>';
+  }
+  h+='</div>';
+  h+='<button class="btn-action" onclick="openAction(\''+c.id+'\')">⚡ Take Action</button>';
   if(done){
-    h+=`<div class="done-badge">✅ تم الإجراء — ${a.q1?'تواصل ✓':'لا تواصل'} · ${a.q2?'مهتم ✓':'غير مهتم'} · ${a.q3?'واتساب ✓':'لا واتساب'}</div>`;
+    h+='<div class="done-badge">✅ '+(a.visit===false?'لم يُزار':'تم الإجراء')+' — '+(a.q1?'تواصل ✓':'لا تواصل')+' · '+(a.q2?'مهتم ✓':'غير مهتم')+' · '+(a.q3?'واتساب ✓':'لا واتساب')+'</div>';
   }
   h+='</div>';
   return h;
