@@ -64,6 +64,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
 <button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
 <button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
+<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🔧</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الإبلاغ عن مشكلة</div></button>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
@@ -104,6 +105,10 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="shift" class="page"></div>
 <div id="analyzer" class="page"></div>
 
+<div id="techissue" class="page"></div>
+
+
+
 <script>
 const SB='https://ggmvlrwbmnuvnnrojrcs.supabase.co';
 const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbXZscndibW51dm5ucm9qcmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTI2MjYsImV4cCI6MjA5MzI4ODYyNn0.fSfgSVe_7nI_XzWY3L25gy86HLAxC0e99RdRdMGD_kY';
@@ -118,45 +123,34 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
 const EMP_PINS={
-  'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151',
-  'W3-V':'1111','W4-V':'1111','W5-V':'1111','W6-V':'1111',
-  'W7-V':'1111','W9-V':'1111','W11-V':'1111','W13-V':'1111',
-  'N6-AB':'1893'
+  'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640',
+  'W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'
 };
 const FIN_INIT={
-  'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,
-  'W3-V':0,'W4-V':0,'W5-V':0,'W6-V':0,'W7-V':0,'W9-V':0,'W11-V':0,'W13-V':0,'N6-AB':0
+  'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0
 };
 const EMP_TGT=583333, RGN_TGT=7000000;
 
 const TEAMS={
   w1:{label:'Western',sup:{code:'WEST-MGR',name:'Osman Baboor',color:'#15803D'},
     members:{
-      'W1-JH':{name:'Jabir Mohammed Hassan',short:'Jabir',color:'#15803D'},
-      'W2-HM':{name:'Haitham Mahmoud Mohamed',short:'Haitham',color:'#166534'},
-      'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',color:'#D97706'},
-      'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',color:'#7C3AED'},
-      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'},
-      'W3-V':{name:'Vacant W3',short:'W3',color:'#9CA3AF'},
-      'W4-V':{name:'Vacant W4',short:'W4',color:'#9CA3AF'},
-      'W5-V':{name:'Vacant W5',short:'W5',color:'#9CA3AF'},
-      'W6-V':{name:'Vacant W6',short:'W6',color:'#9CA3AF'},
-      'W7-V':{name:'Vacant W7',short:'W7',color:'#9CA3AF'},
-      'W9-V':{name:'Vacant W9',short:'W9',color:'#9CA3AF'},
-      'W11-V':{name:'Vacant W11',short:'W11',color:'#9CA3AF'},
-      'W13-V':{name:'Vacant W13',short:'W13',color:'#9CA3AF'},
-      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',color:'#06B6D4'}
+      'W1-JH':{name:'Jabir Mohammed Hassan',short:'Jabir',zones:'W1+W13',color:'#15803D'},
+      'W2-HM':{name:'Haitham Mahmoud Mohamed',short:'Haitham',zones:'W2+W3',color:'#166534'},
+      'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',zones:'W8+W9',color:'#D97706'},
+      'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',zones:'W10+W5+W11+W7',color:'#7C3AED'},
+      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',zones:'W12+W4',color:'#06B6D4'},
+      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',zones:'N6+N7+N8',color:'#EF4444'}
     }}
 };
 const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
 const ALL_S={};Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
 
 const PF=[
-  {key:'visits',label:'عدد الزيارات اليومية (عملاء هلا)',icon:'📍',target:10,unit:'زيارة'},
-  {key:'nonhala',label:'Non-Hala',icon:'🔗',target:5,unit:'عميل'},
-  {key:'cards',label:'بزنس كارد',icon:'🪪',target:30,unit:'كرت'},
-  {key:'finance',label:'طلبات تمويل',icon:'📄',target:1,unit:'طلب'},
-  {key:'sources',label:'كم مصدر تواصلت معه اليوم',icon:'🤝',target:1,unit:'مصدر'}
+  {key:'visits',    label:'زيارة غير مزار', icon:'📍', target:10,  unit:'زيارة',  monthly:210},
+  {key:'nonhala',   label:'Non-Hala',        icon:'🔗', target:5,   unit:'زيارة',  monthly:105},
+  {key:'cards',     label:'بزنس كارد',       icon:'🪪', target:30,  unit:'كارت',   monthly:630},
+  {key:'finHala',   label:'طلب هلا',         icon:'📄', target:1,   unit:'طلب',    monthly:21},
+  {key:'finNonHala',label:'طلب Non-Hala',    icon:'📋', target:1,   unit:'طلب',    monthly:21},
 ];
 
 const CSTATS=[{key:'pending',label:'Pending with SV',color:'#B7770D',bg:'#FEF3C7',icon:'⏳'},{key:'review',label:'Under Review',color:'#1A5276',bg:'#DBEAFE',icon:'🔍'},{key:'rejected',label:'Rejected',color:'#991B1B',bg:'#FEE2E2',icon:'❌'},{key:'approved',label:'Approved',color:'#065F46',bg:'#D1FAE5',icon:'✅'},{key:'done',label:'Done',color:'#166534',bg:'#A7F3D0',icon:'🏆'}];
@@ -204,7 +198,7 @@ function authGo(dest){
   showPage(dest);
   if(dest==='tracker')renderTracker();
   else if(dest==='credit')renderCredit();
-  else if(dest==='shift')renderShift();
+  else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();
 }
 function updHome(){
   const nb=document.getElementById('hnb'),hu=document.getElementById('huser');
@@ -239,7 +233,7 @@ function doLogin(){
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -247,7 +241,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
   }
   lErr('الكود غير صحيح');
 }
@@ -954,6 +948,118 @@ function anResH(eid,months,info,fin){
 // ── INIT ──────────────────────────────────────────
 try{const u=lLS('hu5',null);if(u){user=u;updHome();}}catch(e){}
 buildChips();
+function renderTechIssue(){
+  if(!user){document.getElementById('techissue').innerHTML=nlH('techissue');return;}
+  const el=document.getElementById('techissue');
+
+  const ISSUE_TYPES=[
+    'جهاز لا يعمل (POS)',
+    'مشكلة في الشبكة/الاتصال',
+    'خطأ في المعاملات',
+    'مشكلة في التطبيق',
+    'بطاقة لا تُقبل',
+    'طباعة الإيصالات',
+    'خطأ في الحساب',
+    'أخرى',
+  ];
+
+  let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
+  h+='<div class="content">';
+  h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل وإرفاق صورة توضيحية إن أمكن</div>';
+
+  // بيانات الموظف
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:8px;">معلومات الموظف</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+  h+='<div style="background:#F9FAFB;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:10px;color:#9CA3AF;">الكود</div><div style="font-size:14px;font-weight:700;color:#111;">'+user.code+'</div></div>';
+  h+='<div style="background:#F9FAFB;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:10px;color:#9CA3AF;">الاسم</div><div style="font-size:13px;font-weight:600;color:#111;">'+user.name+'</div></div>';
+  h+='</div></div>';
+
+  // رقم الكاشير
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🏪 رقم الكاشير (Cashier ID)</div>';
+  h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." class="pfinput" style="width:100%;font-size:16px;letter-spacing:2px;" dir="ltr">';
+  h+='</div>';
+
+  // نوع المشكلة
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🔍 نوع المشكلة</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="issue-type-grid">';
+  ISSUE_TYPES.forEach((t,i)=>{
+    h+=`<button onclick="selectIssueType(${i})" id="itype_${i}" style="padding:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;font-family:'Cairo',sans-serif;text-align:center;transition:all .2s;">${t}</button>`;
+  });
+  h+='</div></div>';
+
+  // وصف المشكلة
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة بالتفصيل</div>';
+  h+='<textarea id="ti_desc" placeholder="اشرح المشكلة بوضوح: متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:'Cairo',sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
+  h+='</div>';
+
+  // رفع صورة/مرفق
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:8px;">📎 مرفق (رابط صورة)</div>';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة على Google Drive أو Dropbox أو أي خدمة والصق الرابط هنا</div>';
+  h+='<input type="url" id="ti_link" placeholder="https://drive.google.com/..." class="pfinput" style="width:100%;direction:ltr;font-size:13px;">';
+  h+='<button onclick="openUploadLink()" style="width:100%;margin-top:10px;padding:11px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;font-size:13px;font-weight:600;color:#166534;cursor:pointer;font-family:'Cairo',sans-serif;">📤 فتح Google Drive لرفع الصورة</button>';
+  h+='</div>';
+
+  // زر الإرسال
+  h+='<button onclick="submitTechIssue()" style="width:100%;padding:16px;background:linear-gradient(135deg,#DC2626,#B91C1C);border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:'Cairo',sans-serif;">🔧 إرسال البلاغ</button>';
+  h+='</div>';
+
+  el.innerHTML=h;
+}
+
+let selectedIssueType=null;
+function selectIssueType(i){
+  selectedIssueType=i;
+  document.querySelectorAll('[id^="itype_"]').forEach((b,j)=>{
+    b.style.background=j===i?'#FEF3C7':'#F9FAFB';
+    b.style.borderColor=j===i?'#F59E0B':'#E5E7EB';
+    b.style.color=j===i?'#92400E':'#374151';
+  });
+}
+
+function openUploadLink(){
+  window.open('https://drive.google.com/drive/my-drive','_blank');
+}
+
+async function submitTechIssue(){
+  const cashier=(document.getElementById('ti_cashier').value||'').trim();
+  const desc=(document.getElementById('ti_desc').value||'').trim();
+  const link=(document.getElementById('ti_link').value||'').trim();
+
+  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة/الاتصال','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
+
+  if(!cashier){alert('يرجى إدخال رقم الكاشير');return;}
+  if(selectedIssueType===null){alert('يرجى تحديد نوع المشكلة');return;}
+  if(!desc){alert('يرجى وصف المشكلة');return;}
+
+  const record={
+    agent_code:user.code,
+    agent_name:user.name,
+    cashier_id:cashier,
+    issue_type:ISSUE_TYPES[selectedIssueType],
+    description:desc,
+    attachment:link||null,
+    status:'open',
+    region:'west',
+    submitted_at:new Date().toISOString()
+  };
+
+  try{
+    await dbIns('tech_issues',record);
+    alert('✅ تم إرسال البلاغ بنجاح! سيتم التواصل معك قريباً');
+    selectedIssueType=null;
+    showPage('home');
+  }catch(e){
+    alert('❌ خطأ في الإرسال، تحقق من الاتصال');
+    console.error(e);
+  }
+}
+
+
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
 </body>
