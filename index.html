@@ -1075,10 +1075,9 @@ async function submitTI(){
   const link=(document.getElementById('ti_link').value||'').trim();
   const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
   if(!cashier){alert('يرجى إدخال رقم الكاشير');return;}
-  if(_selIT===null){alert('يرجى تحديد نوع المشكلة');return;}
   if(!desc){alert('يرجى وصف المشكلة');return;}
   try{
-    await dbIns('tech_issues',{agent_code:user.code,agent_name:user.name,cashier_id:cashier,issue_type:ISSUE_TYPES[_selIT],description:desc,attachment:link||null,status:'open',region:'west',submitted_at:new Date().toISOString()});
+    await dbIns('tech_issues',{agent_code:user.code,agent_name:user.name,cashier_id:cashier,description:desc,attachment:link||null,status:'open',region:'west',submitted_at:new Date().toISOString()});
     alert('✅ تم إرسال البلاغ بنجاح');_selIT=null;showPage('home');
   }catch(e){alert('❌ خطأ في الإرسال');}
 }
