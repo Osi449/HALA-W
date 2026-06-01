@@ -148,14 +148,17 @@ if(!mapUser){
   document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
 }
 
-const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region');
+const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region'||mapUser.role==='owner');
 const isEmp=mapUser&&mapUser.role==='employee';
 
 // خريطة الموظف لزونه فقط
 const EMP_ZONE_MAP={
-  'C1-KR':'C1-KR','C2-SM':'C2-SM','C3-MQ':'C3-MQ','C4-MN':'C4-MN',
-  'C5-MS':'C5-MS','C6-AS':'C6-AS','C7-AA':'C7-AA','C8-AH':'C8-AH',
-  'C9-BJ':'C9-BJ','C10-AR':'C10-AR','C11-KS':'C11-KS','C12-FA':'C12-FA'
+  'W1-JH':'W1-JH',
+  'W2-HM':'W2-HM',
+  'W8-MA':'W8-MA',
+  'W10-AA':'W10-AA',
+  'W12-SF':'W12-SF',
+  'N6-AB':'N6-AB'
 };
 
 const map=L.map('map').setView([21.54,39.17],11);
