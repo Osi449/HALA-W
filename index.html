@@ -58,19 +58,7 @@ input,textarea,select{font-family:Cairo,sans-serif;outline:none;}
 <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:5px 16px;font-size:11px;color:rgba(255,255,255,0.9);margin-bottom:20px;">المنظومة الداخلية لهلا تمويل ☁️</div>
 <h1 style="font-size:clamp(30px,6vw,52px);font-weight:900;line-height:1.15;color:#fff;margin-bottom:14px;text-align:right;">منصة الفريق<br><span style="color:#86EFAC;">المتكاملة</span></h1>
 <p style="font-size:14px;color:rgba(255,255,255,0.65);margin-bottom:36px;text-align:right;line-height:1.8;">متابعة الأداء · طلبات التمويل · ساعات العمل · تحليل المبيعات</p>
-<div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
-<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
-<button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
-<button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
-</div>
-<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
-<button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
-</div>
-</div>
+<div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button><button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button><button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button><button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button></div><button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button></div>
 <div id="huser" style="display:none;margin-top:16px;background:rgba(255,255,255,0.08);border-radius:12px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,0.7);"></div>
 </div>
 <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.1);padding:14px 24px;display:flex;justify-content:flex-end;gap:28px;">
@@ -209,7 +197,7 @@ function setCode(k){const lc=document.getElementById('lcode');if(lc)lc.value=k;l
 function buildChips(){
   const mc=document.getElementById('mchips'),sc=document.getElementById('schips');
   if(mc)mc.innerHTML=Object.keys(ALL_M).map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid #DDD6FE;color:#6B21A8;background:#F5F3FF;font-family:monospace;display:inline-block;margin:2px;">'+k+'</span>').join('');
-  if(sc)sc.innerHTML=['W1-JH','W2-HM','W8-MA','W10-AA','W12-SF','N6-AB',RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
+  if(sc)sc.innerHTML=[RGN].map(k=>'<span onclick="setCode(\''+k+'\')" style="font-size:9px;padding:3px 8px;border-radius:20px;cursor:pointer;border:1px solid rgba(217,119,6,0.3);color:#D97706;background:#FEF3C7;font-family:monospace;display:inline-block;">'+k+'</span>').join('');
 }
 function doLogin(){
   const code=(document.getElementById('lcode').value||'').trim().toUpperCase();lErr('');
@@ -950,7 +938,6 @@ try{const u=lLS('hu5',null);if(u){user=u;updHome();}}catch(e){}
 buildChips();
 function renderTechIssue(){
   if(!user){document.getElementById('techissue').innerHTML=nlH('techissue');return;}
-  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
   let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
   h+='<div class="content">';
   h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل</div>';
@@ -959,26 +946,20 @@ function renderTechIssue(){
   h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:16px;letter-spacing:2px;font-family:monospace;outline:none;" dir="ltr">';
   h+='</div>';
   h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🔍 نوع المشكلة</div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
-  ISSUE_TYPES.forEach((t,i)=>{h+=`<button onclick="selIT(${i})" id="itype_${i}" style="padding:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;font-family:Cairo,sans-serif;">${t}</button>`;});
-  h+='</div></div>';
-  h+='<div class="card" style="padding:16px;">';
   h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة بالتفصيل</div>';
-  h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:Cairo,sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
+  h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:120px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:Cairo,sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
   h+='</div>';
   h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:8px;">📎 رابط المرفق (اختياري)</div>';
-  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة وضع الرابط هنا</div>';
-  h+='<input type="url" id="ti_link" placeholder="https://..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
-  h+='<button onclick="window.open(&quot;https://drive.google.com/drive/my-drive&quot;,&quot;_blank&quot;)" style="width:100%;margin-top:10px;padding:11px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;font-size:13px;font-weight:600;color:#166534;cursor:pointer;font-family:Cairo,sans-serif;">📤 فتح Google Drive</button>';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة</div>';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:12px;">ارفع الصورة على files.fm ثم ضع الرابط هنا</div>';
+  h+='<button onclick="openFilesFM()" style="width:100%;padding:12px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;margin-bottom:10px;">📤 رفع صورة على files.fm</button>';
+  h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
   h+='</div>';
   h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;">🔧 إرسال البلاغ</button>';
   h+='</div>';
   document.getElementById('techissue').innerHTML=h;
 }
-let _selIT=null;
-function openGDrive(){window.open("https://drive.google.com/drive/my-drive","_blank");}
+function openFilesFM(){window.open("https://files.fm/","_blank");}
 function selIT(i){
   _selIT=i;
   document.querySelectorAll('[id^="itype_"]').forEach((b,j)=>{
