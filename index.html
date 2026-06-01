@@ -51,7 +51,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="home" class="page active">
 <div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8 0%,#7C3AED 40%,#166534 100%);display:flex;flex-direction:column;">
 <nav style="padding:20px 24px;display:flex;justify-content:space-between;align-items:center;">
-<div style="display:flex;align-items:center;gap:10px;"><svg width="36" height="36" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:16px;font-weight:900;color:#fff;">هلا — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div>
+<div style="display:flex;align-items:center;gap:10px;"><svg width="36" height="36" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:16px;font-weight:900;color:#fff;">هلا تمويل</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div>
 <div id="hnb"><button onclick="showPage('login')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;padding:8px 18px;color:#fff;font-size:13px;font-weight:700;">دخول</button></div>
 </nav>
 <div style="flex:1;padding:32px 24px 48px;display:flex;flex-direction:column;align-items:flex-end;">
@@ -62,16 +62,14 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
 <button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
-</div>
-<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
 <button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
 <button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
 </div>
+<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
-<button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
+<button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
+<button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
 </div>
-<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:22px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
 </div>
 <div id="huser" style="display:none;margin-top:16px;background:rgba(255,255,255,0.08);border-radius:12px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,0.7);"></div>
 </div>
@@ -87,7 +85,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="login" class="page">
 <div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;padding:20px;">
 <div style="width:100%;max-width:380px;">
-<div style="display:flex;justify-content:center;margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;"><svg width="44" height="44" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:18px;font-weight:900;color:#fff;">هلا — غربية</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div></div>
+<div style="display:flex;justify-content:center;margin-bottom:24px;"><div style="display:flex;align-items:center;gap:10px;"><svg width="44" height="44" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg><div><div style="font-size:18px;font-weight:900;color:#fff;">هلا تمويل</div><div style="font-size:8px;color:rgba(255,255,255,0.6);letter-spacing:2px;font-family:monospace;">HALA FINANCING</div></div></div></div>
 <div style="background:rgba(255,255,255,0.97);border-radius:20px;padding:32px 28px;box-shadow:0 24px 64px rgba(107,33,168,0.35);">
 <div style="font-size:20px;font-weight:800;text-align:center;margin-bottom:4px;">تسجيل الدخول</div>
 <div style="font-size:12px;color:#4B5563;text-align:center;margin-bottom:20px;">أدخل كودك ثم كلمة المرور</div>
@@ -106,10 +104,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <div id="credit" class="page"></div>
 <div id="shift" class="page"></div>
 <div id="analyzer" class="page"></div>
-
 <div id="techissue" class="page"></div>
-
-
 
 <script>
 const SB='https://ggmvlrwbmnuvnnrojrcs.supabase.co';
@@ -128,31 +123,29 @@ const EMP_PINS={
   'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640',
   'W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'
 };
-const FIN_INIT={
-  'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0
-};
+const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0};
 const EMP_TGT=583333, RGN_TGT=7000000;
 
 const TEAMS={
   w1:{label:'Western',sup:{code:'WEST-MGR',name:'Osman Baboor',color:'#15803D'},
     members:{
-      'W1-JH':{name:'Jabir Mohammed Hassan',short:'Jabir',zones:'W1+W13',color:'#15803D'},
-      'W2-HM':{name:'Haitham Mahmoud Mohamed',short:'Haitham',zones:'W2+W3',color:'#166534'},
-      'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',zones:'W8+W9',color:'#D97706'},
-      'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',zones:'W10+W5+W11+W7',color:'#7C3AED'},
-      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',zones:'W12+W4',color:'#06B6D4'},
-      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',zones:'N6+N7+N8',color:'#EF4444'}
+      'W1-JH':{name:'Jabir Mohammed Hassan',short:'Jabir',color:'#15803D'},
+      'W2-HM':{name:'Haitham Mahmoud Mohamed',short:'Haitham',color:'#166534'},
+      'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',color:'#D97706'},
+      'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',color:'#7C3AED'},
+      'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'},
+      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',color:'#EF4444'}
     }}
 };
-const ALL_M=(()=>{const m={};Object.values(TEAMS).forEach(t=>Object.entries(t.members).forEach(([k,v])=>m[k]=v));return m;})();Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
-const ALL_S=(()=>{const s={};Object.values(TEAMS).forEach(t=>s[t.sup.code]=t.sup);return s;})();Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
+const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
+const ALL_S={};Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
 
 const PF=[
-  {key:'visits',    label:'زيارة غير مزار', icon:'📍', target:10,  unit:'زيارة',  monthly:210},
-  {key:'nonhala',   label:'Non-Hala',        icon:'🔗', target:5,   unit:'زيارة',  monthly:105},
-  {key:'cards',     label:'بزنس كارد',       icon:'🪪', target:30,  unit:'كارت',   monthly:630},
-  {key:'finHala',   label:'طلب هلا',         icon:'📄', target:1,   unit:'طلب',    monthly:21},
-  {key:'finNonHala',label:'طلب Non-Hala',    icon:'📋', target:1,   unit:'طلب',    monthly:21},
+  {key:'visits',     label:'زيارة غير مزار', icon:'📍', target:10, unit:'زيارة', monthly:210},
+  {key:'nonhala',    label:'Non-Hala',        icon:'🔗', target:5,  unit:'زيارة', monthly:105},
+  {key:'cards',      label:'بزنس كارد',       icon:'🪪', target:30, unit:'كارت',  monthly:630},
+  {key:'finHala',    label:'طلب هلا',         icon:'📄', target:1,  unit:'طلب',   monthly:21},
+  {key:'finNonHala', label:'طلب Non-Hala',    icon:'📋', target:1,  unit:'طلب',   monthly:21},
 ];
 
 const CSTATS=[{key:'pending',label:'Pending with SV',color:'#B7770D',bg:'#FEF3C7',icon:'⏳'},{key:'review',label:'Under Review',color:'#1A5276',bg:'#DBEAFE',icon:'🔍'},{key:'rejected',label:'Rejected',color:'#991B1B',bg:'#FEE2E2',icon:'❌'},{key:'approved',label:'Approved',color:'#065F46',bg:'#D1FAE5',icon:'✅'},{key:'done',label:'Done',color:'#166534',bg:'#A7F3D0',icon:'🏆'}];
@@ -231,11 +224,11 @@ function doLogin(){
   if(isSup){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
     if((document.getElementById('lpin').value||'')!==SPIN){lErr('رمز الدخول غير صحيح');return;}
-    const isR=code===RGN,tk=Object.keys(TEAMS).find(k=>TEAMS[k].sup.code===code),si=ALL_S[code]||{name:'Osman Baboor',color:'#15803D'};
+    const isR=code===RGN,tk=Object.keys(TEAMS).find(k=>TEAMS[k].sup.code===code),si=ALL_S[code]||{name:'Osman Baboor',color:'#6B21A8'};
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='analyzer')renderAnalyzer();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -243,7 +236,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='analyzer')renderAnalyzer();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
   }
   lErr('الكود غير صحيح');
 }
@@ -276,7 +269,7 @@ function finBanner(code){
 
 function renderTDash(){
   const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
-  const tks=(user.role==='region'||user.role==='owner')?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
+  const tks=user.role==='region'?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
   const showM=user.role==='employee'?[user.code]:tks.flatMap(tk=>Object.keys(TEAMS[tk].members));
   const d=wdPassed(),wd=wdTotal();
   let h=tbH('متابعة الأداء','📊',null,'showPage(\'home\')');
@@ -291,7 +284,7 @@ function renderTDash(){
     h+='<div class="card" style="display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;font-weight:700;">📅 أيام العمل هذا الشهر</div><div style="font-size:11px;color:#9CA3AF;">(باستثناء الجمعة والسبت)</div></div><div style="font-size:28px;font-weight:900;color:#6B21A8;">'+d+'<span style="font-size:14px;color:#9CA3AF;">/'+wd+'</span></div></div>';
     const e=gE(user.code);
     if(e){h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">📅 أداؤك اليوم</div><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">'+PF.map(f=>{const v=e[f.key]||0,p=pct(v,f.target);return'<div class="card-sm" style="text-align:center;"><div>'+f.icon+'</div><div style="font-size:20px;font-weight:900;color:'+(p>=100?'#166534':'#6B21A8')+'">'+v+'</div><div style="font-size:9px;color:#9CA3AF;">/'+f.target+' '+f.unit+'</div></div>';}).join('')+'</div></div>';}
-  } else if(user.role==='region'||user.role==='owner'){
+  } else if(user.role==='region'){
     h+=renderRegion(d,wd);
   } else {
     h+=renderSupSection(showM,d,wd);
@@ -362,13 +355,18 @@ function renderRegion(d,wd){
   const sub=allM.filter(c=>gE(c)).length;
   const rAvg=sub?Math.round(allM.map(c=>{const e=gE(c);return e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((a,b)=>a+b,0)/sub):0;
   const totF=allM.reduce((s,c)=>s+getTF(c),0),rp=Math.round(totF/RGN_TGT*100);
+  const c1F=Object.keys(TEAMS.c1.members).reduce((s,c)=>s+getTF(c),0);
+  const c2F=Object.keys(TEAMS.c2.members).reduce((s,c)=>s+getTF(c),0);
 
-  let h='<div class="card" style="background:linear-gradient(135deg,#15803D,#166534);padding:20px;">';
-  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">🏢 تقدم المنطقة الغربية — هدف 7,000,000 ريال</div>';
+  let h='<div class="card" style="background:linear-gradient(135deg,#6B21A8,#166534);padding:20px;">';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">🏢 تقدم المنطقة الوسطى — هدف 7,000,000 ريال</div>';
   h+='<div style="font-size:32px;font-weight:900;color:#fff;margin-bottom:4px;">'+totF.toLocaleString('ar-SA')+'</div>';
   h+='<div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;">'+rp+'% من الهدف</div>';
   h+='<div style="background:rgba(255,255,255,0.2);border-radius:8px;height:12px;overflow:hidden;"><div style="height:100%;background:'+(rp>=100?'#22C55E':'#86EFAC')+';border-radius:8px;width:'+Math.min(rp,100)+'%;"></div></div>';
-  h+='</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">';
+  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c1F.toLocaleString('ar-SA')+'</div></div>';
+  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c2F.toLocaleString('ar-SA')+'</div></div>';
+  h+='</div></div>';
 
   h+='<div class="card" style="background:rgba(107,33,168,0.08);border:1px solid #DDD6FE;">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:11px;color:#6B21A8;font-weight:700;">📊 أداء المنطقة اليوم</div><div style="font-size:38px;font-weight:900;color:'+(rAvg>=80?'#166534':'#D97706')+'">'+rAvg+'%</div></div>';
@@ -600,7 +598,7 @@ function renderCPreview(){
 }
 async function doSubC(){
   const tc=gCT(cType);document.querySelectorAll('#credit button').forEach(b=>b.disabled=true);
-  try{await dbIns('credit_requests',{id:'REQ-W-'+Date.now(),agent_code:user.code,agent_name:user.name,client_type:cType,client_type_label:tc.label,data:cFD,status:'pending',sup_note:'',entry_date:tod(),region:'west'});await loadCredit();renderCDone();}
+  try{await dbIns('credit_requests',{id:'REQ-W-'+Date.now(),region:'west',agent_code:user.code,agent_name:user.name,client_type:cType,client_type_label:tc.label,data:cFD,status:'pending',sup_note:'',entry_date:tod()});await loadCredit();renderCDone();}
   catch(err){document.querySelectorAll('#credit button').forEach(b=>b.disabled=false);alert('خطأ: '+(err?.message||''));}
 }
 function renderCDone(){
@@ -812,7 +810,7 @@ async function doApproveReset(shiftId){
 }
 
 async function renderShiftSup(){
-  const tks=(user.role==='region'||user.role==='owner')?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
+  const tks=user.role==='region'?Object.keys(TEAMS):user.teamKey?[user.teamKey]:[];
   const showM=tks.flatMap(tk=>Object.keys(TEAMS[tk].members));
   let shifts=[];try{shifts=await dbGet('shift_logs','?shift_date=eq.'+tod());}catch(e){}
   let h=tbH('ساعات العمل','⏱️',null,'showPage(\'home\')');
@@ -952,115 +950,55 @@ try{const u=lLS('hu5',null);if(u){user=u;updHome();}}catch(e){}
 buildChips();
 function renderTechIssue(){
   if(!user){document.getElementById('techissue').innerHTML=nlH('techissue');return;}
-  const el=document.getElementById('techissue');
-
-  const ISSUE_TYPES=[
-    'جهاز لا يعمل (POS)',
-    'مشكلة في الشبكة/الاتصال',
-    'خطأ في المعاملات',
-    'مشكلة في التطبيق',
-    'بطاقة لا تُقبل',
-    'طباعة الإيصالات',
-    'خطأ في الحساب',
-    'أخرى',
-  ];
-
+  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
   let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
   h+='<div class="content">';
-  h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل وإرفاق صورة توضيحية إن أمكن</div>';
-
-  // بيانات الموظف
-  h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:8px;">معلومات الموظف</div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
-  h+='<div style="background:#F9FAFB;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:10px;color:#9CA3AF;">الكود</div><div style="font-size:14px;font-weight:700;color:#111;">'+user.code+'</div></div>';
-  h+='<div style="background:#F9FAFB;border-radius:8px;padding:10px;text-align:center;"><div style="font-size:10px;color:#9CA3AF;">الاسم</div><div style="font-size:13px;font-weight:600;color:#111;">'+user.name+'</div></div>';
-  h+='</div></div>';
-
-  // رقم الكاشير
+  h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل</div>';
   h+='<div class="card" style="padding:16px;">';
   h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🏪 رقم الكاشير (Cashier ID)</div>';
-  h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." class="pfinput" style="width:100%;font-size:16px;letter-spacing:2px;" dir="ltr">';
+  h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:16px;letter-spacing:2px;font-family:monospace;outline:none;" dir="ltr">';
   h+='</div>';
-
-  // نوع المشكلة
   h+='<div class="card" style="padding:16px;">';
   h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🔍 نوع المشكلة</div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;" id="issue-type-grid">';
-  ISSUE_TYPES.forEach((t,i)=>{
-    h+=`<button onclick="selectIssueType(${i})" id="itype_${i}" style="padding:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;font-family:'Cairo',sans-serif;text-align:center;transition:all .2s;">${t}</button>`;
-  });
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">';
+  ISSUE_TYPES.forEach((t,i)=>{h+=`<button onclick="selIT(${i})" id="itype_${i}" style="padding:10px;background:#F9FAFB;border:1.5px solid #E5E7EB;border-radius:10px;font-size:12px;font-weight:600;color:#374151;cursor:pointer;font-family:'Cairo',sans-serif;">${t}</button>`;});
   h+='</div></div>';
-
-  // وصف المشكلة
   h+='<div class="card" style="padding:16px;">';
   h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة بالتفصيل</div>';
-  h+='<textarea id="ti_desc" placeholder="اشرح المشكلة بوضوح: متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:'Cairo',sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
+  h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:'Cairo',sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
   h+='</div>';
-
-  // رفع صورة/مرفق
   h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:8px;">📎 مرفق (رابط صورة)</div>';
-  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة على Google Drive أو Dropbox أو أي خدمة والصق الرابط هنا</div>';
-  h+='<input type="url" id="ti_link" placeholder="https://drive.google.com/..." class="pfinput" style="width:100%;direction:ltr;font-size:13px;">';
-  h+='<button onclick="openUploadLink()" style="width:100%;margin-top:10px;padding:11px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;font-size:13px;font-weight:600;color:#166534;cursor:pointer;font-family:'Cairo',sans-serif;">📤 فتح Google Drive لرفع الصورة</button>';
+  h+='<div style="font-size:14px;font-weight:700;margin-bottom:8px;">📎 رابط المرفق (اختياري)</div>';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة وضع الرابط هنا</div>';
+  h+='<input type="url" id="ti_link" placeholder="https://..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
+  h+='<button onclick="window.open('https://drive.google.com/drive/my-drive','_blank')" style="width:100%;margin-top:10px;padding:11px;background:#F0FDF4;border:1.5px solid #86EFAC;border-radius:10px;font-size:13px;font-weight:600;color:#166534;cursor:pointer;font-family:'Cairo',sans-serif;">📤 فتح Google Drive</button>';
   h+='</div>';
-
-  // زر الإرسال
-  h+='<button onclick="submitTechIssue()" style="width:100%;padding:16px;background:linear-gradient(135deg,#DC2626,#B91C1C);border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:'Cairo',sans-serif;">🔧 إرسال البلاغ</button>';
+  h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:'Cairo',sans-serif;">🔧 إرسال البلاغ</button>';
   h+='</div>';
-
-  el.innerHTML=h;
+  document.getElementById('techissue').innerHTML=h;
 }
-
-let selectedIssueType=null;
-function selectIssueType(i){
-  selectedIssueType=i;
+let _selIT=null;
+function selIT(i){
+  _selIT=i;
   document.querySelectorAll('[id^="itype_"]').forEach((b,j)=>{
     b.style.background=j===i?'#FEF3C7':'#F9FAFB';
     b.style.borderColor=j===i?'#F59E0B':'#E5E7EB';
     b.style.color=j===i?'#92400E':'#374151';
   });
 }
-
-function openUploadLink(){
-  window.open('https://drive.google.com/drive/my-drive','_blank');
-}
-
-async function submitTechIssue(){
+async function submitTI(){
   const cashier=(document.getElementById('ti_cashier').value||'').trim();
   const desc=(document.getElementById('ti_desc').value||'').trim();
   const link=(document.getElementById('ti_link').value||'').trim();
-
-  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة/الاتصال','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
-
+  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
   if(!cashier){alert('يرجى إدخال رقم الكاشير');return;}
-  if(selectedIssueType===null){alert('يرجى تحديد نوع المشكلة');return;}
+  if(_selIT===null){alert('يرجى تحديد نوع المشكلة');return;}
   if(!desc){alert('يرجى وصف المشكلة');return;}
-
-  const record={
-    agent_code:user.code,
-    agent_name:user.name,
-    cashier_id:cashier,
-    issue_type:ISSUE_TYPES[selectedIssueType],
-    description:desc,
-    attachment:link||null,
-    status:'open',
-    region:'west',
-    submitted_at:new Date().toISOString()
-  };
-
   try{
-    await dbIns('tech_issues',record);
-    alert('✅ تم إرسال البلاغ بنجاح! سيتم التواصل معك قريباً');
-    selectedIssueType=null;
-    showPage('home');
-  }catch(e){
-    alert('❌ خطأ في الإرسال، تحقق من الاتصال');
-    console.error(e);
-  }
+    await dbIns('tech_issues',{agent_code:user.code,agent_name:user.name,cashier_id:cashier,issue_type:ISSUE_TYPES[_selIT],description:desc,attachment:link||null,status:'open',region:'west',submitted_at:new Date().toISOString()});
+    alert('✅ تم إرسال البلاغ بنجاح');_selIT=null;showPage('home');
+  }catch(e){alert('❌ خطأ في الإرسال');}
 }
-
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
