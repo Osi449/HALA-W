@@ -355,53 +355,36 @@ function confirmVisit(id, ans){
 function buildPopup(c){
   const done=isDone(c.id);
   const a=actions[c.id]||{};
-  let h=`<div class="cp">
-    <div class="cp-name">${c.name}</div>
-    <div class="cp-cat">${c.category}</div>
-    <div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">${c.id}</span></div>
-    <div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">${c.tid||'—'}</span></div>
-    <div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">${c.zone}</span></div>
-    <div class="cp-row">
-      <span class="cp-lbl">📞 محاسب</span>
-      <span class="cp-nums">
-        <span class="cp-val">${c.cashier}</span>
-        <a href="tel:${c.cashier}" class="btn-call" style="background:#166534;">📞</a>
-        <button class="btn-cpy" onclick="copyNum('${c.cashier}')">نسخ</button>
-      </span>
-    </div>
-    <div class="cp-row">
-      <span class="cp-lbl">👔 مدير</span>
-      <span class="cp-nums">
-        <span class="cp-val">${c.owner}</span>
-        <a href="tel:${c.owner}" class="btn-call" style="background:#6B21A8;">📞</a>
-        <button class="btn-cpy" onclick="copyNum('${c.owner}')">نسخ</button>
-      </span>
-    </div>
-    <a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination=${c.lat},${c.lng}" target="_blank">🗺️ توجيه Google Maps</a>
-    <div style="display:flex;gap:6px;margin-top:6px;">
-      <a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/966${c.cashier.startsWith('0')?c.cashier.slice(1):c.cashier}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب محاسب</a>
-      <a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/966${c.owner.startsWith('0')?c.owner.slice(1):c.owner}?text=${encodeURIComponent('سلام عليكم معك '+getMapFirstName()+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني')}" target="_blank">💬 واتساب مدير</a>
-    </div>
-    ${!done ? `
-    <div style="margin-top:8px;padding:10px;background:#f7faf8;border-radius:10px;border:1px solid #e8e4dc;">
-      <div style="font-size:11px;font-weight:700;color:#1a6b3c;margin-bottom:8px;">⚡ Take Action</div>
-      <div style="font-size:11px;color:#555;margin-bottom:6px;">هل تم زيارة العميل فعلياً؟</div>
-      <div style="display:flex;gap:6px;margin-bottom:6px;">
-        <button onclick="mapVisitYes('${c.id}')" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:11px;font-weight:700;color:#1a6b3c;cursor:pointer;">نعم ✅</button>
-        <button onclick="mapMarkDone('${c.id}','not-visited')" style="flex:1;padding:7px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:7px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">لا ❌</button>
-      </div>
-      <div id="map-q2-${c.id}" style="display:none;">
-        <div style="font-size:11px;color:#555;margin-bottom:6px;">هل العميل مهتم؟</div>
-        <div style="display:flex;gap:6px;">
-          <button onclick="mapMarkDone('${c.id}','interested')" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:10px;font-weight:700;color:#1a6b3c;cursor:pointer;">مهتم 🤝</button>
-          <button onclick="mapMarkDone('${c.id}','later')" style="flex:1;padding:7px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:7px;font-size:10px;font-weight:700;color:#B45309;cursor:pointer;">لاحقاً ⏳</button>
-          <button onclick="mapMarkDone('${c.id}','not')" style="flex:1;padding:7px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:7px;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;">غير مهتم</button>
-        </div>
-      </div>
-    </div>` : ''}
-    `;
-  if(done){
-    h+=`<div class="done-badge">✅ تم الإجراء — ${a.q1?'تواصل ✓':'لا تواصل'} · ${a.q2?'مهتم ✓':'غير مهتم'} · ${a.q3?'واتساب ✓':'لا واتساب'}</div>`;
+  let h='<div class="cp">';
+  h+='<div class="cp-name">'+(c.name||'—')+'</div>';
+  h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
+  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+c.id+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+c.zone+'</span></div>';
+  // نسخ ID
+  h+='<div style="display:flex;gap:6px;margin:6px 0;">';
+  h+='<button class="btn-cpy" onclick="copyNum(\"'+c.id+'\")">📋 نسخ ID</button>';
+  h+='</div>';
+  // Google Maps
+  h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
+  // Take Action
+  if(!done){
+    h+='<div style="margin-top:8px;padding:10px;background:#f7faf8;border-radius:10px;border:1px solid #e8e4dc;">';
+    h+='<div style="font-size:11px;font-weight:700;color:#1a6b3c;margin-bottom:8px;">⚡ Take Action</div>';
+    h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل تم زيارة العميل فعلياً؟</div>';
+    h+='<div style="display:flex;gap:6px;margin-bottom:6px;">';
+    h+='<button onclick="mapVisitYes(''+c.id+'')" style="flex:1;padding:7px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:11px;font-weight:700;color:#1a6b3c;cursor:pointer;">نعم ✅</button>';
+    h+='<button onclick="mapMarkDone(''+c.id+'','not-visited')" style="flex:1;padding:7px;background:#fef2f2;border:1.5px solid #DC2626;border-radius:7px;font-size:11px;font-weight:700;color:#DC2626;cursor:pointer;">لا ❌</button>';
+    h+='</div>';
+    h+='<div id="map-q2-'+c.id+'" style="display:none;">';
+    h+='<div style="font-size:11px;color:#555;margin-bottom:6px;">هل العميل مهتم؟</div>';
+    h+='<div style="display:flex;gap:4px;">';
+    h+='<button onclick="mapMarkDone(''+c.id+'','interested')" style="flex:1;padding:6px;background:#e6f5ec;border:1.5px solid #3ABF6E;border-radius:7px;font-size:10px;font-weight:700;color:#1a6b3c;cursor:pointer;">مهتم 🤝</button>';
+    h+='<button onclick="mapMarkDone(''+c.id+'','later')" style="flex:1;padding:6px;background:#fffbeb;border:1.5px solid #F59E0B;border-radius:7px;font-size:10px;font-weight:700;color:#B45309;cursor:pointer;">لاحقاً ⏳</button>';
+    h+='<button onclick="mapMarkDone(''+c.id+'','not')" style="flex:1;padding:6px;background:#f9fafb;border:1.5px solid #9CA3AF;border-radius:7px;font-size:10px;font-weight:700;color:#6B7280;cursor:pointer;">غير مهتم</button>';
+    h+='</div></div></div>';
+  } else {
+    h+='<div class="done-badge">✅ تم الإجراء — '+((a.result==='interested')?'مهتم':(a.result==='later')?'لاحقاً':'تم')+' </div>';
   }
   h+='</div>';
   return h;
