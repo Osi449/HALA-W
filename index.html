@@ -112,7 +112,9 @@ const EMP_PINS={
   'W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'
 };
 const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0};
-const EMP_TGT=583333, RGN_TGT=7000000;
+const EMP_TGT=1100000, RGN_TGT=6000000;
+const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'N6-AB':1100000};
+const getEmpTgt=code=>EMP_TGT_MAP[code]||EMP_TGT;
 
 const TEAMS={
   w1:{label:'Western',sup:{code:'WEST-MGR',name:'Osman Baboor',color:'#15803D'},
@@ -243,7 +245,7 @@ function renderTracker(){
 }
 
 function finBanner(code){
-  const total=getTF(code),p=Math.round(total/EMP_TGT*100),r100=Math.max(0,EMP_TGT-total),r150=Math.max(0,EMP_TGT*1.5-total);
+  const total=getTF(code),p=Math.round(total/getEmpTgt(user.code)*100),r100=Math.max(0,EMP_TGT-total),r150=Math.max(0,EMP_TGT*1.5-total);
   return'<div class="card" style="background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:18px;">'+
   '<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">💰 تحقيق التمويل الشهري</div>'+
   '<div style="font-size:30px;font-weight:900;color:#fff;margin-bottom:4px;">'+total.toLocaleString('ar-SA')+' <span style="font-size:13px;">ريال</span></div>'+
@@ -327,7 +329,7 @@ function showDayFilter(date){
 function mCardH(code,d,wd){
   const m=ALL_M[code]||{name:code,color:'#6B21A8'};
   const e=gE(code),p=e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;
-  const st=pL(p),tf=getTF(code),fp=Math.round(tf/EMP_TGT*100);
+  const st=pL(p),tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100);
   const bc=fp>=100?'#22C55E':fp>=70?'#D97706':'#DC2626',bg=fp>=100?'#F0FDF4':fp>=70?'#FEF3C7':'#FEF2F2';
   let h='<button class="mcard" style="border-right-color:'+m.color+';opacity:'+(e?1:0.7)+';border-top:2px solid '+bc+';background:'+bg+';" onclick="renderTDetail(\''+code+'\')">';
   h+='<div style="padding:12px 16px;display:flex;justify-content:space-between;align-items:center;"><div style="display:flex;align-items:center;gap:8px;"><div style="width:10px;height:10px;border-radius:50%;background:'+m.color+'"></div><div style="text-align:right;"><div style="font-size:14px;font-weight:700;">'+(m.short||m.name)+'</div>'+(e?'':'<div style="font-size:10px;color:#DC2626;">⚠️ لم يُدخل</div>')+'</div></div>';
@@ -374,7 +376,7 @@ function renderRegion(d,wd){
     h+='<div style="margin-bottom:14px;"><div style="font-size:11px;color:'+t.sup.color+';font-weight:700;margin-bottom:8px;">'+t.label+' — '+t.sup.name+'</div>';
     Object.entries(t.members).forEach(([code,m])=>{
       const e=gE(code),p=e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;
-      const tf=getTF(code),fp=Math.round(tf/EMP_TGT*100),bc=fp>=100?'#22C55E':fp>=70?'#D97706':'#DC2626';
+      const tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),bc=fp>=100?'#22C55E':fp>=70?'#D97706':'#DC2626';
       h+='<button onclick="renderTDetail(\''+code+'\')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:'+(fp>=100?'#F0FDF4':fp>=70?'#FEF3C7':'#FEF2F2')+';margin-bottom:6px;border:1px solid #E5E7EB;width:100%;font-family:Cairo,sans-serif;text-align:right;cursor:pointer;">';
       h+='<div style="width:8px;height:8px;border-radius:50%;background:'+m.color+';flex-shrink:0;"></div>';
       h+='<div style="flex:1;text-align:right;"><div style="font-size:12px;font-weight:600;">'+(m.short||m.name)+'</div>'+(e?'':'<div style="font-size:9px;color:#DC2626;">⚠️ لم يُدخل</div>')+'</div>';
@@ -441,7 +443,7 @@ function renderTDone(pl){
 }
 
 function renderFinInput(){
-  const cur=getTF(user.code),p=Math.round(cur/EMP_TGT*100);
+  const cur=getTF(user.code),p=Math.round(cur/getEmpTgt(user.code)*100);
   let h=tbH('تسجيل تمويل مُقفل','💰','renderTDash()',null);
   h+='<div class="content">';
   h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:16px;">سجّل مبلغ التمويل الذي أقفلته اليوم</div>';
@@ -511,7 +513,7 @@ function renderTDetail(code){
   const m=ALL_M[code]||{name:code,color:'#6B21A8'};
   const e=gE(code),last7=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));const date=d.toISOString().split('T')[0];return{date,entry:entries.find(en=>en.agent_code===code&&en.entry_date===date)||null};});
   const mEs=gME(code),mT=PF.reduce((a,f)=>{a[f.key]=mEs.reduce((s,en)=>s+(en[f.key]||0),0);return a;},{});
-  const d=wdPassed(),wd=wdTotal(),tf=getTF(code),fp=Math.round(tf/EMP_TGT*100),r100=Math.max(0,EMP_TGT-tf),r150=Math.max(0,EMP_TGT*1.5-tf);
+  const d=wdPassed(),wd=wdTotal(),tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),r100=Math.max(0,EMP_TGT-tf),r150=Math.max(0,EMP_TGT*1.5-tf);
 
   let h='<div style="background:linear-gradient(135deg,'+m.color+','+m.color+'88);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;"><button class="btn-top" onclick="renderTDash()">← رجوع</button><span style="color:#fff;font-weight:700;font-size:14px;">'+m.name+'</span></div>';
   h+='<div class="content">';
@@ -968,6 +970,7 @@ function renderTechForm(){
   h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
   h+='</div>';
   h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;">🔧 إرسال البلاغ</button>';
+  h+='<button onclick="renderTechMyList()" style="width:100%;padding:13px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;font-family:Cairo,sans-serif;margin-top:8px;">📋 عرض بلاغاتي السابقة</button>';
   h+='</div>';
   document.getElementById('techissue').innerHTML=h;
 }
