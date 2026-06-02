@@ -321,31 +321,40 @@ function buildPopup(c){
   const a=actions[c.id]||{};
   const wa=getMapFirstName();
   const waMsg=encodeURIComponent('سلام عليكم معك '+wa+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني');
-  // c.id = Cashier ID, c.manager = manager phone (may not exist)
-  const cashierNum=String(c.id||'');
-  const managerNum=String(c.manager||c.owner||'');
+  const cashierNum=String(c.cashier||c.id||'');
+  const ownerNum=String(c.owner||'');
   const cashierWa='966'+(cashierNum.startsWith('0')?cashierNum.slice(1):cashierNum);
-  const managerWa=managerNum?'966'+(managerNum.startsWith('0')?managerNum.slice(1):managerNum):'';
+  const ownerWa=ownerNum?'966'+(ownerNum.startsWith('0')?ownerNum.slice(1):ownerNum):'';
 
   let h='<div class="cp">';
   h+='<div class="cp-name">'+(c.name||'—')+'</div>';
   h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
-  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+cashierNum+'</span></div>';
+  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+(c.id||'—')+'</span></div>';
   h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
   h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+(c.zone||'—')+'</span></div>';
-  if(managerNum){
-    h+='<div class="cp-row"><span class="cp-lbl">📞 مدير</span>';
-    h+='<span class="cp-nums"><span class="cp-val">'+managerNum+'</span>';
-    h+='<a href="tel:'+managerNum+'" class="btn-call" style="background:#166534;">📞</a>';
-    h+='<button class="btn-cpy" onclick="copyNum(\''+managerNum+'\')">نسخ</button></span></div>';
+  if(cashierNum){
+    h+='<div class="cp-row"><span class="cp-lbl">📞 محاسب</span>';
+    h+='<span class="cp-nums">';
+    h+='<span class="cp-val">'+cashierNum+'</span>';
+    h+='<a href="tel:'+cashierNum+'" class="btn-call" style="background:#166534;">📞</a>';
+    h+='<button class="btn-cpy" onclick="copyNum(\''+cashierNum+'\')">نسخ</button>';
+    h+='</span></div>';
+  }
+  if(ownerNum && ownerNum!==cashierNum){
+    h+='<div class="cp-row"><span class="cp-lbl">👔 مدير</span>';
+    h+='<span class="cp-nums">';
+    h+='<span class="cp-val">'+ownerNum+'</span>';
+    h+='<a href="tel:'+ownerNum+'" class="btn-call" style="background:#6B21A8;">📞</a>';
+    h+='<button class="btn-cpy" onclick="copyNum(\''+ownerNum+'\')">نسخ</button>';
+    h+='</span></div>';
   }
   h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
   h+='<div style="display:flex;gap:6px;margin-top:6px;">';
   if(cashierNum){
-    h+='<a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/'+cashierWa+'?text='+waMsg+'" target="_blank">💬 واتساب</a>';
+    h+='<a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/'+cashierWa+'?text='+waMsg+'" target="_blank">💬 واتساب محاسب</a>';
   }
-  if(managerWa){
-    h+='<a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/'+managerWa+'?text='+waMsg+'" target="_blank">💬 واتساب مدير</a>';
+  if(ownerWa && ownerNum!==cashierNum){
+    h+='<a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/'+ownerWa+'?text='+waMsg+'" target="_blank">💬 واتساب مدير</a>';
   }
   h+='</div>';
   h+='<button class="btn-action" onclick="openAction(\''+c.id+'\')">⚡ Take Action</button>';
