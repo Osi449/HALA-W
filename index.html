@@ -352,39 +352,33 @@ function mCardH(code,d,wd){
 function renderRegion(d,wd){
   const allM=Object.values(TEAMS).flatMap(t=>Object.keys(t.members));
   const sub=allM.filter(c=>gE(c)).length;
-  const rAvg=sub?Math.round(allM.map(c=>{const e=gE(c);return e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((a,b)=>a+b,0)/sub):0;
-  const totF=allM.reduce((s,c)=>s+getTF(c),0),rp=Math.round(totF/RGN_TGT*100);
+  const totF=allM.reduce((s,c)=>s+getTF(c),0);
+  const rp=Math.min(150,Math.round(totF/RGN_TGT*100));
+  const bar=Math.min(100,rp);
 
   let h='<div class="card" style="background:linear-gradient(135deg,#1a6b3c,#166534);color:#fff;padding:18px;border-radius:14px;">';
-  h+='<div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px;">💰 تحقيق التمويل الشهري — المنطقة الغربية</div>';
-  h+='<div style="font-size:32px;font-weight:900;">'+totF.toLocaleString('ar-SA')+' <span style="font-size:14px;font-weight:400;opacity:.7">ريال</span></div>';
-  const bar=Math.min(100,rp);
+  h+='<div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px;">💰 تحقيق التمويل — المنطقة الغربية</div>';
+  h+='<div style="font-size:30px;font-weight:900;">'+totF.toLocaleString('ar-SA')+' <span style="font-size:13px;opacity:.7">ريال</span></div>';
   h+='<div style="background:rgba(255,255,255,.2);border-radius:20px;height:6px;margin:10px 0 4px;"><div style="background:#3ABF6E;height:6px;border-radius:20px;width:'+bar+'%;"></div></div>';
-  h+='<div style="display:flex;justify-content:space-between;font-size:10px;opacity:.7">';
-  h+='<span>'+rp+'% من '+RGN_TGT.toLocaleString('ar-SA')+' ريال</span>';
-  h+='<span>'+sub+'/'+allM.length+' موظفين سجّلوا اليوم</span></div></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:10px;opacity:.75">';
+  h+='<span>'+rp+'% من '+RGN_TGT.toLocaleString('ar-SA')+'</span>';
+  h+='<span>'+sub+'/'+allM.length+' سجّلوا اليوم</span></div></div>';
 
-  // KPI summary
-  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">📊 ملخص الفريق اليوم</div>';
+  // KPI cards
+  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">📊 KPIs الفريق اليوم</div>';
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
   PF.forEach(f=>{
     const total=allM.reduce((s,c)=>{const e=gE(c);return s+(e?e[f.key]||0:0);},0);
     const tgt=f.target*allM.length;
     const p=Math.round(total/tgt*100);
-    h+='<div class="card-sm" style="text-align:center;"><div>'+f.icon+'</div>';
-    h+='<div style="font-size:18px;font-weight:900;color:'+(p>=100?'#166534':'#6B21A8')+'">'+total+'</div>';
-    h+='<div style="font-size:9px;color:#9CA3AF;">/'+tgt+' ('+p+'%)</div></div>';
+    h+='<div class="card-sm" style="text-align:center;"><div style="font-size:18px;">'+f.icon+'</div>';
+    h+='<div style="font-size:20px;font-weight:900;color:'+(p>=100?'#166534':'#6B21A8')+'">'+total+'</div>';
+    h+='<div style="font-size:9px;color:#9CA3AF;">'+f.label+' — '+p+'%</div></div>';
   });
   h+='</div></div>';
 
-  // Per-member cards
-  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">👥 أداء الفريق</div>';
-  h+=allM.map(c=>{
-    const m=Object.values(TEAMS).flatMap(t=>Object.values(t.members))[allM.indexOf(c)];
-    const mObj=Object.values(TEAMS).reduce((found,t)=>found||t.members[c],null);
-    return renderMemberCard(c,mObj,d,wd);
-  }).join('');
-  h+='</div>';
+  // Per-member using renderSupSection
+  h+=renderSupSection(allM,d,wd);
   return h;
 }
 
@@ -1095,9 +1089,14 @@ async function updateTI(id,status,note){
   try{
     const body={status:status};
     if(note)body.sup_note=note;
-    await fetch(SB+'/rest/v1/tech_issues?id=eq.'+id,{method:'PATCH',headers:{...SH,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+    const r=await fetch(SB+'/rest/v1/tech_issues?id=eq.'+id,{
+      method:'PATCH',
+      headers:{...SH,'Prefer':'return=minimal'},
+      body:JSON.stringify(body)
+    });
+    if(!r.ok){const t=await r.text();throw new Error(t);}
     await renderTechDash();
-  }catch(e){alert('❌ خطأ في التحديث');}
+  }catch(e){console.error('updateTI error:',e);alert('❌ خطأ: '+e.message);}
 }
 function showTIResolve(id){
   const f=document.getElementById('rf_'+id);
