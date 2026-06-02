@@ -7,11 +7,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:Cairo,sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
+body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
 .page{display:none;min-height:100vh;}
 .page.active{display:block;}
-button{font-family:Cairo,sans-serif;cursor:pointer;border:none;outline:none;}
-input,textarea,select{font-family:Cairo,sans-serif;outline:none;}
+button{font-family:'Cairo',sans-serif;cursor:pointer;border:none;outline:none;}
+input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 .topbar{background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;}
 .btn-top{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.25);border-radius:8px;padding:6px 12px;color:#fff;font-size:12px;}
 .content{max-width:700px;margin:0 auto;padding:16px;display:flex;flex-direction:column;gap:14px;}
@@ -32,14 +32,14 @@ input,textarea,select{font-family:Cairo,sans-serif;outline:none;}
 .bar-bg{background:#E5E7EB;border-radius:6px;height:8px;overflow:hidden;}
 .bar-fill{height:100%;border-radius:6px;background:#6B21A8;transition:width 0.4s;}
 .bar-fill.done{background:#166534;}
-.mcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:none;width:100%;text-align:right;font-family:Cairo,sans-serif;margin-bottom:10px;border-right:4px solid #6B21A8;}
-.rcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:none;width:100%;text-align:right;font-family:Cairo,sans-serif;margin-bottom:10px;}
+.mcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:none;width:100%;text-align:right;font-family:'Cairo',sans-serif;margin-bottom:10px;border-right:4px solid #6B21A8;}
+.rcard{background:#fff;border-radius:14px;overflow:hidden;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:none;width:100%;text-align:right;font-family:'Cairo',sans-serif;margin-bottom:10px;}
 .ctype-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
-.ctbtn{background:#FAFAFA;border:1.5px solid #E5E7EB;border-radius:14px;padding:16px 12px;cursor:pointer;text-align:center;font-family:Cairo,sans-serif;}
+.ctbtn{background:#FAFAFA;border:1.5px solid #E5E7EB;border-radius:14px;padding:16px 12px;cursor:pointer;text-align:center;font-family:'Cairo',sans-serif;}
 .done-pg{min-height:100vh;background:#FAFAFA;display:flex;align-items:center;justify-content:center;padding:20px;}
 .done-card{background:#fff;border-radius:20px;padding:40px 28px;max-width:380px;width:100%;text-align:center;box-shadow:0 4px 20px rgba(107,33,168,0.10);}
 .danger-box{background:#FEF2F2;border:1px solid #FECACA;border-radius:14px;padding:16px;text-align:center;display:none;}
-.notes{width:100%;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px 16px;color:#1A1A2E;font-size:13px;resize:none;font-family:Cairo,sans-serif;}
+.notes{width:100%;background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:12px 16px;color:#1A1A2E;font-size:13px;resize:none;font-family:'Cairo',sans-serif;}
 .alert-box{border-radius:12px;padding:12px 16px;font-size:13px;font-weight:600;display:flex;align-items:center;gap:10px;}
 .tbar-bg{background:#E5E7EB;border-radius:8px;height:12px;overflow:hidden;}
 .tbar-fill{height:100%;border-radius:8px;transition:width 0.5s;}
@@ -58,7 +58,19 @@ input,textarea,select{font-family:Cairo,sans-serif;outline:none;}
 <div style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:30px;padding:5px 16px;font-size:11px;color:rgba(255,255,255,0.9);margin-bottom:20px;">المنظومة الداخلية لهلا تمويل ☁️</div>
 <h1 style="font-size:clamp(30px,6vw,52px);font-weight:900;line-height:1.15;color:#fff;margin-bottom:14px;text-align:right;">منصة الفريق<br><span style="color:#86EFAC;">المتكاملة</span></h1>
 <p style="font-size:14px;color:rgba(255,255,255,0.65);margin-bottom:36px;text-align:right;line-height:1.8;">متابعة الأداء · طلبات التمويل · ساعات العمل · تحليل المبيعات</p>
-<div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button><button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button><button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button></div><div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;"><button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button><button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button></div><button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.08);border:1px solid rgba(255,255,255,0.15);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button></div>
+<div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
+<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
+<button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
+<button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
+</div>
+<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+<button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
+<button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
+</div>
+</div>
 <div id="huser" style="display:none;margin-top:16px;background:rgba(255,255,255,0.08);border-radius:12px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,0.7);"></div>
 </div>
 <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.1);padding:14px 24px;display:flex;justify-content:flex-end;gap:28px;">
@@ -107,10 +119,7 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 // ── DATA ─────────────────────────────────────────
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
-const EMP_PINS={
-  'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640',
-  'W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'
-};
+const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'};
 const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0};
 const EMP_TGT=1100000, RGN_TGT=6000000;
 const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'N6-AB':1100000};
@@ -249,7 +258,7 @@ function finBanner(code){
   return'<div class="card" style="background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:18px;">'+
   '<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">💰 تحقيق التمويل الشهري</div>'+
   '<div style="font-size:30px;font-weight:900;color:#fff;margin-bottom:4px;">'+total.toLocaleString('ar-SA')+' <span style="font-size:13px;">ريال</span></div>'+
-  '<div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;">'+p+'% من '+getEmpTgt(user.code).toLocaleString('ar-SA')+'</div>'+
+  '<div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;">'+p+'% من '+EMP_TGT.toLocaleString('ar-SA')+'</div>'+
   '<div style="background:rgba(255,255,255,0.2);border-radius:8px;height:12px;overflow:hidden;margin-bottom:10px;"><div style="height:100%;background:'+(p>=100?'#22C55E':'#86EFAC')+';border-radius:8px;width:'+Math.min(p,100)+'%;"></div></div>'+
   '<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;">'+
   '<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">باقي لـ 100%</div><div style="font-size:15px;font-weight:700;color:'+(r100===0?'#22C55E':'#FCD34D')+';">'+(r100===0?'✅ محقق':r100.toLocaleString('ar-SA'))+'</div></div>'+
@@ -287,7 +296,7 @@ function renderSupSection(showM,d,wd){
   let sub=0,tot=0;
   showM.forEach(c=>{const e=gE(c);if(e){sub++;tot+=PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length;}});
   const tAvg=sub?Math.round(tot/sub):0;
-  const tfT=showM.reduce((s,c)=>s+getTF(c),0),tpct=Math.round(tfT/(showM.length*getEmpTgt(user.code))*100);
+  const tfT=showM.reduce((s,c)=>s+getTF(c),0),tpct=Math.round(tfT/(showM.length*EMP_TGT)*100);
 
   let h='<div class="card" style="background:rgba(107,33,168,0.08);border:1px solid #DDD6FE;">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:11px;color:#6B21A8;font-weight:700;">أداء الفريق اليوم</div><div style="font-size:38px;font-weight:900;color:'+(tAvg>=80?'#166534':'#D97706')+'">'+tAvg+'%</div></div>';
@@ -298,7 +307,7 @@ function renderSupSection(showM,d,wd){
   h+='</div>';
   h+='<div style="font-size:11px;color:#6B21A8;font-weight:700;margin-bottom:6px;">💰 تمويل الفريق — '+tpct+'%</div>';
   h+='<div class="tbar-bg"><div class="tbar-fill" style="width:'+Math.min(tpct,100)+'%;background:'+(tpct>=100?'#22C55E':'#6B21A8')+'"></div></div>';
-  h+='<div style="display:flex;justify-content:space-between;font-size:10px;color:#9CA3AF;margin-top:4px;"><span>'+tfT.toLocaleString('ar-SA')+' ريال</span><span>هدف: '+(showM.length*getEmpTgt(user.code).toLocaleString('ar-SA')+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:10px;color:#9CA3AF;margin-top:4px;"><span>'+tfT.toLocaleString('ar-SA')+' ريال</span><span>هدف: '+(showM.length*getEmpTgt(user.code)).toLocaleString('ar-SA')+'</span></div>';
   h+='</div>';
 
   // فلتر اليوم
@@ -366,7 +375,7 @@ function renderRegion(d,wd){
 
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'+Object.entries(TEAMS).map(([tk,t])=>{
     const mems=Object.keys(t.members),s=mems.filter(c=>gE(c)).length,a=s?Math.round(mems.map(c=>{const e=gE(c);return e?PF.reduce((x,f)=>x+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((x,y)=>x+y,0)/s):0;
-    const tf=mems.reduce((s,c)=>s+getTF(c),0),tp=Math.round(tf/(mems.length*getEmpTgt(c))*100);
+    const tf=mems.reduce((s,c)=>s+getTF(c),0),tp=Math.round(tf/(mems.length*EMP_TGT)*100);
     return'<div class="card" style="border-top:3px solid '+t.sup.color+'"><div style="font-size:13px;font-weight:700;color:'+t.sup.color+';margin-bottom:4px;">'+t.label+'</div><div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;">'+t.sup.name+'</div><div style="font-size:30px;font-weight:900;color:'+(a>=80?'#166534':'#D97706')+'">'+a+'%</div><div style="background:#E5E7EB;border-radius:4px;height:5px;overflow:hidden;margin:6px 0"><div style="height:100%;width:'+a+'%;background:'+t.sup.color+'"></div></div><div style="font-size:10px;color:#9CA3AF;">✅ '+s+'/'+mems.length+'</div><div style="font-size:11px;font-weight:700;color:'+(tp>=100?'#166534':tp>=70?'#D97706':'#DC2626')+';margin-top:4px;">💰 '+tp+'%</div></div>';
   }).join('')+'</div>';
 
@@ -377,7 +386,7 @@ function renderRegion(d,wd){
     Object.entries(t.members).forEach(([code,m])=>{
       const e=gE(code),p=e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;
       const tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),bc=fp>=100?'#22C55E':fp>=70?'#D97706':'#DC2626';
-      h+='<button onclick="renderTDetail(\''+code+'\')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:'+(fp>=100?'#F0FDF4':fp>=70?'#FEF3C7':'#FEF2F2')+';margin-bottom:6px;border:1px solid #E5E7EB;width:100%;font-family:Cairo,sans-serif;text-align:right;cursor:pointer;">';
+      h+='<button onclick="renderTDetail(\''+code+'\')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:'+(fp>=100?'#F0FDF4':fp>=70?'#FEF3C7':'#FEF2F2')+';margin-bottom:6px;border:1px solid #E5E7EB;width:100%;font-family:\'Cairo\',sans-serif;text-align:right;cursor:pointer;">';
       h+='<div style="width:8px;height:8px;border-radius:50%;background:'+m.color+';flex-shrink:0;"></div>';
       h+='<div style="flex:1;text-align:right;"><div style="font-size:12px;font-weight:600;">'+(m.short||m.name)+'</div>'+(e?'':'<div style="font-size:9px;color:#DC2626;">⚠️ لم يُدخل</div>')+'</div>';
       if(e)h+='<div style="display:flex;gap:6px;">'+PF.map(f=>{const v=e[f.key]||0,pp=pct(v,f.target);return'<div style="text-align:center;min-width:20px;"><div style="font-size:9px;">'+f.icon+'</div><div style="font-size:11px;font-weight:700;color:'+(pp>=100?'#166534':'#1A1A2E')+'">'+v+'</div></div>';}).join('')+'</div>';
@@ -422,16 +431,15 @@ async function doSaveT(){
   const btn=document.getElementById('btsave');if(btn.disabled)return;
   btn.disabled=true;btn.textContent='⏳ جاري الحفظ...';
   try{
-    const gV=id=>{const el=document.getElementById(id);return el?parseInt(el.value)||0:0;};
     const p={agent_code:user.code,agent_name:user.name,entry_date:tod(),
-      visits:gV('pf_visits'),
-      nonhala:gV('pf_nonhala'),
-      cards:gV('pf_cards'),
-      finance:gV('pf_finHala')+gV('pf_finNonHala'),
+      visits:parseInt(document.getElementById('pf_visits').value)||0,
+      nonhala:parseInt(document.getElementById('pf_nonhala').value)||0,
+      cards:parseInt(document.getElementById('pf_cards').value)||0,
+      finance:(()=>{const fh=document.getElementById('pf_finHala');const fn=document.getElementById('pf_finNonHala');return (fh?parseInt(fh.value)||0:0)+(fn?parseInt(fn.value)||0:0);})(),
       sources:0,
-      fin_hala:gV('pf_finHala'),
-      fin_nonhala:gV('pf_finNonHala'),
-      notes:document.getElementById('tnotes')?document.getElementById('tnotes').value||'':''};
+      fin_hala:(document.getElementById('pf_finHala')?parseInt(document.getElementById('pf_finHala').value)||0:0),
+      fin_nonhala:(document.getElementById('pf_finNonHala')?parseInt(document.getElementById('pf_finNonHala').value)||0:0),
+      notes:document.getElementById('tnotes').value||''};
     await dbUp('daily_entries',p,'agent_code,entry_date');
     await loadEntries();renderTDone(p);
   }catch(err){btn.disabled=false;btn.textContent='حفظ وإرسال ✓';alert('خطأ: '+(err?.message||'تأكد من الاتصال'));}
@@ -628,10 +636,10 @@ function renderCDetail(id){
   h+='<div style="background:linear-gradient(135deg,'+tc.color+','+tc.color+'CC);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:16px;font-weight:800;color:#fff;">'+(selReq.data?.client_name||'—')+'</div><div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;">'+selReq.agent_name+' · '+(selReq.data?.zone||'')+'</div></div><div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:#fff;">'+(selReq.data?.offer_amount?Number(selReq.data.offer_amount).toLocaleString():'—')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">SAR</div></div></div>';
   h+='<div style="padding:12px 20px;display:flex;justify-content:space-between;align-items:center;">'+bH(selReq.status,true)+'<span style="font-size:11px;color:#9CA3AF;">'+new Date(selReq.submitted_at).toLocaleDateString('ar-SA')+'</span></div></div>';
   if(selReq.sup_note)h+='<div style="background:#F0FDF4;border:1px solid #22C55E;border-radius:12px;padding:12px 16px;"><div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px;">🔔 ملاحظة المشرف</div><div style="font-size:13px;">'+selReq.sup_note+'</div></div>';
-  if(isSup)h+='<div class="card"><div style="font-size:12px;font-weight:700;margin-bottom:12px;">🔧 تغيير الحالة</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">'+CSTATS.map(s=>'<button style="padding:7px 14px;border-radius:20px;border:1px solid '+s.color+'44;background:'+(selReq.status===s.key?s.bg:'transparent')+';color:'+s.color+';font-size:11px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="doUpdSt(\''+s.key+'\')">'+s.icon+' '+s.label+'</button>').join('')+'</div><textarea id="snote" class="notes" rows="2" dir="rtl" placeholder="ملاحظة للموظف (تظهر له إشعار)...">'+cNote+'</textarea></div>';
+  if(isSup)h+='<div class="card"><div style="font-size:12px;font-weight:700;margin-bottom:12px;">🔧 تغيير الحالة</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">'+CSTATS.map(s=>'<button style="padding:7px 14px;border-radius:20px;border:1px solid '+s.color+'44;background:'+(selReq.status===s.key?s.bg:'transparent')+';color:'+s.color+';font-size:11px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doUpdSt(\''+s.key+'\')">'+s.icon+' '+s.label+'</button>').join('')+'</div><textarea id="snote" class="notes" rows="2" dir="rtl" placeholder="ملاحظة للموظف (تظهر له إشعار)...">'+cNote+'</textarea></div>';
   h+='<div class="card"><div style="font-size:11px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">تفاصيل الطلب</div>'+rf.filter(f=>selReq.data?.[f.key]).map(f=>'<div style="border-bottom:1px solid #E5E7EB;padding:9px 0;"><div style="font-size:10px;color:#9CA3AF;margin-bottom:2px;">'+(FL[f.key]||f.label)+'</div><div style="font-size:13px;word-break:break-all;line-height:1.6;">'+(String(selReq.data[f.key]).startsWith('http')?'<a href="'+selReq.data[f.key]+'" target="_blank" style="color:'+tc.color+'">'+selReq.data[f.key]+'</a>':selReq.data[f.key])+'</div></div>').join('')+'</div>';
-  if(canEdit)h+='<div style="display:flex;gap:10px;"><button style="flex:1;padding:11px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;color:#1D4ED8;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="renderCEdit()">✏️ تعديل</button><button style="flex:1;padding:11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'block\'">🗑️ حذف</button></div>';
-  h+='<div id="delc" class="danger-box"><div style="font-size:14px;font-weight:700;color:#DC2626;margin-bottom:8px;">⚠️ تأكيد الحذف</div><div style="font-size:12px;color:#4B5563;margin-bottom:12px;">حذف طلب '+(selReq.data?.client_name||'')+'؟</div><div style="display:flex;gap:10px;"><button style="flex:1;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:10px;color:#4B5563;font-size:13px;cursor:pointer;font-family:Cairo,sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'none\'">إلغاء</button><button style="flex:1;padding:10px;background:#DC2626;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="doDelReq()">حذف نهائي</button></div></div>';
+  if(canEdit)h+='<div style="display:flex;gap:10px;"><button style="flex:1;padding:11px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;color:#1D4ED8;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="renderCEdit()">✏️ تعديل</button><button style="flex:1;padding:11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'block\'">🗑️ حذف</button></div>';
+  h+='<div id="delc" class="danger-box"><div style="font-size:14px;font-weight:700;color:#DC2626;margin-bottom:8px;">⚠️ تأكيد الحذف</div><div style="font-size:12px;color:#4B5563;margin-bottom:12px;">حذف طلب '+(selReq.data?.client_name||'')+'؟</div><div style="display:flex;gap:10px;"><button style="flex:1;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:10px;color:#4B5563;font-size:13px;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'none\'">إلغاء</button><button style="flex:1;padding:10px;background:#DC2626;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doDelReq()">حذف نهائي</button></div></div>';
   h+='</div>';
   document.getElementById('credit').innerHTML=h;
 }
@@ -661,9 +669,9 @@ function renderCDash(){
   let filtered=cReqs.filter(r=>(dF==='all'||r.status===dF)&&(aF==='all'||r.agent_code===aF));
   let h=tbH('داشبورد الطلبات','📊','renderCType()','showPage(\'home\')');
   h+='<div class="content">';
-  h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">'+CSTATS.map(s=>'<button style="background:'+(dF===s.key?s.bg:'#fff')+';border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:1.5px solid '+(dF===s.key?s.color:'#E5E7EB')+';font-family:Cairo,sans-serif;" onclick="dF=dF===\''+s.key+'\'?\'all\':\''+s.key+'\';renderCDash()"><div style="font-size:8px;margin-bottom:2px;">'+s.icon+'</div><div style="font-size:20px;font-weight:900;color:'+s.color+'">'+cReqs.filter(r=>r.status===s.key).length+'</div><div style="font-size:8px;color:#4B5563;line-height:1.3;">'+s.label+'</div></button>').join('')+'</div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">'+CSTATS.map(s=>'<button style="background:'+(dF===s.key?s.bg:'#fff')+';border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:1.5px solid '+(dF===s.key?s.color:'#E5E7EB')+';font-family:\'Cairo\',sans-serif;" onclick="dF=dF===\''+s.key+'\'?\'all\':\''+s.key+'\';renderCDash()"><div style="font-size:8px;margin-bottom:2px;">'+s.icon+'</div><div style="font-size:20px;font-weight:900;color:'+s.color+'">'+cReqs.filter(r=>r.status===s.key).length+'</div><div style="font-size:8px;color:#4B5563;line-height:1.3;">'+s.label+'</div></button>').join('')+'</div>';
   h+='<div class="card"><div style="font-size:12px;font-weight:700;margin-bottom:10px;">📊 إحصائيات بالنوع</div><div style="display:flex;flex-wrap:wrap;gap:8px;">'+CTYPES.map(t=>'<div style="background:'+t.color+'22;border:1px solid '+t.color+'44;border-radius:10px;padding:8px 12px;text-align:center;"><div style="font-size:11px;">'+t.icon+' '+t.label+'</div><div style="font-size:20px;font-weight:900;color:'+t.color+'">'+byType[t.key]+'</div></div>').join('')+'</div></div>';
-  h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-size:12px;font-weight:700;">فلتر</div><div style="font-size:12px;color:#6B21A8;font-weight:700;">'+filtered.length+' · '+filtered.reduce((a,r)=>a+(Number(r.data?.offer_amount)||0),0).toLocaleString()+' SAR</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;"><button onclick="aF=\'all\';renderCDash()" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:'+(aF==='all'?'#6B21A8':'#FAFAFA')+';color:'+(aF==='all'?'#fff':'#4B5563')+';border:1px solid '+(aF==='all'?'#6B21A8':'#E5E7EB')+';font-family:Cairo,sans-serif;">الكل</button>'+Object.keys(ALL_M).map(k=>'<button onclick="aF=aF===\''+k+'\'?\'all\':\''+k+'\';renderCDash()" style="font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;background:'+(aF===k?'#F5F3FF':'#FAFAFA')+';color:'+(aF===k?'#6B21A8':'#4B5563')+';border:1px solid '+(aF===k?'#DDD6FE':'#E5E7EB')+';font-family:Cairo,sans-serif;">'+k+'</button>').join('')+'</div></div>';
+  h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-size:12px;font-weight:700;">فلتر</div><div style="font-size:12px;color:#6B21A8;font-weight:700;">'+filtered.length+' · '+filtered.reduce((a,r)=>a+(Number(r.data?.offer_amount)||0),0).toLocaleString()+' SAR</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;"><button onclick="aF=\'all\';renderCDash()" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:'+(aF==='all'?'#6B21A8':'#FAFAFA')+';color:'+(aF==='all'?'#fff':'#4B5563')+';border:1px solid '+(aF==='all'?'#6B21A8':'#E5E7EB')+';font-family:\'Cairo\',sans-serif;">الكل</button>'+Object.keys(ALL_M).map(k=>'<button onclick="aF=aF===\''+k+'\'?\'all\':\''+k+'\';renderCDash()" style="font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;background:'+(aF===k?'#F5F3FF':'#FAFAFA')+';color:'+(aF===k?'#6B21A8':'#4B5563')+';border:1px solid '+(aF===k?'#DDD6FE':'#E5E7EB')+';font-family:\'Cairo\',sans-serif;">'+k+'</button>').join('')+'</div></div>';
   if(!filtered.length)h+='<div style="text-align:center;padding:40px;background:#fff;border-radius:14px;"><div style="font-size:36px;margin-bottom:8px;">📭</div><div style="color:#9CA3AF;">لا يوجد طلبات</div></div>';
   else filtered.forEach(req=>{
     const tc=gCT(req.client_type);
@@ -674,8 +682,8 @@ function renderCDash(){
     h+='</button>';
   });
   h+='<button class="btn-purple" onclick="cType=null;cFD={};renderCType()">+ رفع طلب جديد</button>';
-  h+='<button style="width:100%;padding:11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="document.getElementById(\'dellall\').style.display=\'block\'">🗑️ مسح كل الطلبات (تيست)</button>';
-  h+='<div id="dellall" class="danger-box"><div style="font-size:13px;font-weight:700;color:#DC2626;margin-bottom:8px;">⚠️ مسح كل الطلبات؟</div><div style="display:flex;gap:10px;margin-top:12px;"><button style="flex:1;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:10px;color:#4B5563;font-size:13px;cursor:pointer;font-family:Cairo,sans-serif;" onclick="document.getElementById(\'dellall\').style.display=\'none\'">إلغاء</button><button style="flex:1;padding:10px;background:#DC2626;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;" onclick="doClrAll()">مسح الكل</button></div></div>';
+  h+='<button style="width:100%;padding:11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'dellall\').style.display=\'block\'">🗑️ مسح كل الطلبات (تيست)</button>';
+  h+='<div id="dellall" class="danger-box"><div style="font-size:13px;font-weight:700;color:#DC2626;margin-bottom:8px;">⚠️ مسح كل الطلبات؟</div><div style="display:flex;gap:10px;margin-top:12px;"><button style="flex:1;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:10px;color:#4B5563;font-size:13px;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'dellall\').style.display=\'none\'">إلغاء</button><button style="flex:1;padding:10px;background:#DC2626;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doClrAll()">مسح الكل</button></div></div>';
   h+='</div>';
   document.getElementById('credit').innerHTML=h;
 }
@@ -709,10 +717,10 @@ function renderShiftEmp(){
     h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:20px;">وقت البريك: '+(sl.break_mins||0)+' دقيقة</div>';
     h+='<div style="display:flex;gap:10px;justify-content:center;">';
     if(!brkActive){
-      h+='<button style="flex:1;padding:14px;background:#FEF3C7;color:#92400E;border-radius:12px;font-size:14px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;" onclick="doStartBrk()">☕ بريك</button>';
-      h+='<button style="flex:1;padding:14px;background:#FEF2F2;color:#DC2626;border-radius:12px;font-size:14px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;" onclick="doEndShift()">⏹️ إنهاء الشفت</button>';
+      h+='<button style="flex:1;padding:14px;background:#FEF3C7;color:#92400E;border-radius:12px;font-size:14px;font-weight:700;font-family:\'Cairo\',sans-serif;cursor:pointer;" onclick="doStartBrk()">☕ بريك</button>';
+      h+='<button style="flex:1;padding:14px;background:#FEF2F2;color:#DC2626;border-radius:12px;font-size:14px;font-weight:700;font-family:\'Cairo\',sans-serif;cursor:pointer;" onclick="doEndShift()">⏹️ إنهاء الشفت</button>';
     } else {
-      h+='<button style="flex:1;padding:14px;background:#F0FDF4;color:#166534;border-radius:12px;font-size:14px;font-weight:700;font-family:Cairo,sans-serif;cursor:pointer;" onclick="doEndBrk()">▶️ استئناف</button>';
+      h+='<button style="flex:1;padding:14px;background:#F0FDF4;color:#166534;border-radius:12px;font-size:14px;font-weight:700;font-family:\'Cairo\',sans-serif;cursor:pointer;" onclick="doEndBrk()">▶️ استئناف</button>';
     }
     h+='</div></div>';
     // start timer
@@ -874,7 +882,7 @@ function renderAnalyzer(){
   h+='<div style="background:#F5F3FF;border-bottom:1px solid #E5E7EB;padding:14px 20px;">';
   h+='<div style="display:flex;gap:8px;max-width:680px;margin:0 auto;">';
   h+='<input id="anq" style="flex:1;background:#fff;border:1.5px solid #DDD6FE;border-radius:10px;padding:11px 16px;font-size:16px;font-weight:700;outline:none;font-family:monospace;letter-spacing:2px;color:#6B21A8;direction:ltr;" placeholder="أدخل Entity ID" onkeydown="if(event.key===\'Enter\')doAnSrch()">';
-  h+='<button onclick="doAnSrch()" style="padding:11px 24px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">بحث ←</button>';
+  h+='<button onclick="doAnSrch()" style="padding:11px 24px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;">بحث ←</button>';
   h+='</div><div id="anst" style="font-size:12px;text-align:center;margin-top:8px;color:#6B21A8;">☁️ البيانات على الموقع — لا حاجة لرفع ملف</div>';
   if(anHist.length)h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-width:680px;margin:10px auto 0;">'+anHist.map(x=>'<span onclick="document.getElementById(\'anq\').value=\''+x.eid+'\'" style="font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;background:#F5F3FF;color:#6B21A8;border:1px solid #DDD6FE;font-family:monospace;">'+x.eid+'</span>').join('')+'</div>';
   h+='</div><div class="content" id="anres"><div style="text-align:center;padding:60px 20px;"><div style="font-size:52px;margin-bottom:16px;">🔍</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;">ابحث عن عميل بـ Entity ID</div><div style="background:#F5F3FF;border-radius:10px;padding:10px 20px;font-size:12px;color:#6B21A8;display:inline-block;">☁️ 95,674 عميل · يناير 2025 — أبريل 2026</div></div></div>';
@@ -943,182 +951,171 @@ try{const u=lLS('hu5',null);if(u){user=u;updHome();}}catch(e){}
 buildChips();
 function renderTechIssue(){
   if(!user){document.getElementById('techissue').innerHTML=nlH('techissue');return;}
-  const isMgr=user.role==='region'||user.role==='supervisor'||user.role==='owner';
-  if(isMgr){
+  if(user.role==='region'||user.role==='supervisor'||user.role==='owner'){
     renderTechDash();
   } else {
     renderTechForm();
   }
 }
-
 function renderTechForm(){
   let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
   h+='<div class="content">';
   h+='<div class="alert-box" style="background:#FEF3C7;border:1px solid #FCD34D;color:#92400E;">⚠️ يرجى وصف المشكلة بدقة لسرعة الحل</div>';
-  h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">🏪 رقم الكاشير (Cashier ID)</div>';
-  h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:16px;letter-spacing:2px;font-family:monospace;outline:none;" dir="ltr">';
-  h+='</div>';
-  h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة بالتفصيل</div>';
-  h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث بالضبط؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:120px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;font-family:Cairo,sans-serif;resize:vertical;outline:none;direction:rtl;"></textarea>';
-  h+='</div>';
-  h+='<div class="card" style="padding:16px;">';
-  h+='<div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة (اختياري)</div>';
-  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:12px;">ارفع الصورة على files.fm ثم ضع الرابط هنا</div>';
-  h+='<button onclick="openFilesFM()" style="width:100%;padding:12px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;margin-bottom:10px;">📤 رفع صورة على files.fm</button>';
-  h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;">';
-  h+='</div>';
-  h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;">🔧 إرسال البلاغ</button>';
-  h+='<button onclick="renderTechMyList()" style="width:100%;padding:13px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;font-family:Cairo,sans-serif;margin-top:8px;">📋 عرض بلاغاتي السابقة</button>';
+  h+='<div class="card" style="padding:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">🏪 رقم الكاشير (Cashier ID)</div>';
+  h+='<input type="number" id="ti_cashier" placeholder="أدخل رقم الكاشير..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:16px;outline:none;" dir="ltr"></div>';
+  h+='<div class="card" style="padding:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة</div>';
+  h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;resize:vertical;outline:none;direction:rtl;"></textarea></div>';
+  h+='<div class="card" style="padding:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة</div>';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة على files.fm ثم ضع الرابط هنا</div>';
+  h+='<button onclick="window.open(&quot;https://files.fm/&quot;,&quot;_blank&quot;)" style="width:100%;padding:11px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:8px;">📤 رفع على files.fm</button>';
+  h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;"></div>';
+  h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;">🔧 إرسال البلاغ</button>';
+  h+='<button onclick="renderTechMyList()" style="width:100%;margin-top:8px;padding:13px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;">📋 بلاغاتي السابقة</button>';
   h+='</div>';
   document.getElementById('techissue').innerHTML=h;
-}
-
-let techIssues=[];
-async function renderTechDash(){
-  const el=document.getElementById('techissue');
-  let h=tbH('المشاكل التقنية — داشبورد','🔧',null,"showPage('home')");
-  h+='<div class="content">';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">';
-  h+='<div class="card-sm" style="text-align:center;background:#FEF2F2;border:1px solid #FECACA;"><div style="font-size:22px;font-weight:900;color:#DC2626;" id="ti_count_pending">—</div><div style="font-size:10px;color:#9CA3AF;">معلّق</div></div>';
-  h+='<div class="card-sm" style="text-align:center;background:#FEF3C7;border:1px solid #FCD34D;"><div style="font-size:22px;font-weight:900;color:#D97706;" id="ti_count_sv">—</div><div style="font-size:10px;color:#9CA3AF;">مع المشرف</div></div>';
-  h+='<div class="card-sm" style="text-align:center;background:#F0FDF4;border:1px solid #86EFAC;"><div style="font-size:22px;font-weight:900;color:#166534;" id="ti_count_resolved">—</div><div style="font-size:10px;color:#9CA3AF;">محلول</div></div>';
-  h+='</div>';
-  h+='<div id="ti_list"><div style="text-align:center;padding:20px;color:#9CA3AF;">⏳ جاري التحميل...</div></div>';
-  h+='</div>';
-  el.innerHTML=h;
-  await loadTechIssues();
-}
-
-async function loadTechIssues(){
-  try{
-    const d=await dbGet('tech_issues','?region=eq.west&order=submitted_at.desc');
-    techIssues=Array.isArray(d)?d:[];
-    renderTechList();
-  }catch(e){
-    document.getElementById('ti_list').innerHTML='<div style="text-align:center;color:#DC2626;padding:20px;">❌ خطأ في التحميل</div>';
-  }
-}
-
-function renderTechList(){
-  const pending=techIssues.filter(t=>t.status==='open');
-  const withSV=techIssues.filter(t=>t.status==='with_sv');
-  const resolved=techIssues.filter(t=>t.status==='resolved');
-  const el_p=document.getElementById('ti_count_pending');
-  const el_s=document.getElementById('ti_count_sv');
-  const el_r=document.getElementById('ti_count_resolved');
-  if(el_p)el_p.textContent=pending.length;
-  if(el_s)el_s.textContent=withSV.length;
-  if(el_r)el_r.textContent=resolved.length;
-
-  const STATUS_LABEL={open:'🔴 معلّق',with_sv:'🟡 مع المشرف',resolved:'🟢 محلول'};
-  const STATUS_COLOR={open:'#FEF2F2',with_sv:'#FFFBEB',resolved:'#F0FDF4'};
-  const STATUS_BORDER={open:'#FECACA',with_sv:'#FCD34D',resolved:'#86EFAC'};
-
-  let h='';
-  if(!techIssues.length){h='<div style="text-align:center;color:#9CA3AF;padding:30px;">✅ لا توجد بلاغات</div>';}
-  else{
-    techIssues.forEach(t=>{
-      const dt=t.submitted_at?new Date(t.submitted_at).toLocaleDateString('ar-SA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-      h+=`<div class="card" style="padding:14px;border-right:4px solid ${STATUS_BORDER[t.status]||'#E5E7EB'};background:${STATUS_COLOR[t.status]||'#fff'};">`;
-      h+=`<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">`;
-      h+=`<div><div style="font-size:13px;font-weight:700;color:#111;">${t.agent_name||'—'} <span style="font-size:10px;color:#9CA3AF;">${t.agent_code||''}</span></div>`;
-      h+=`<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">🏪 ${t.cashier_id||'—'} · ${dt}</div></div>`;
-      h+=`<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:${STATUS_BORDER[t.status]||'#E5E7EB'};color:#374151;">${STATUS_LABEL[t.status]||t.status}</span>`;
-      h+='</div>';
-      h+=`<div style="font-size:12px;color:#374151;margin-bottom:10px;line-height:1.6;">${t.description||'—'}</div>`;
-      if(t.attachment)h+=`<a href="${t.attachment}" target="_blank" style="font-size:11px;color:#6B21A8;font-weight:600;">📎 عرض المرفق</a>`;
-      h+=`<div style="margin-top:10px;display:flex;gap:8px;flex-wrap:wrap;">`;
-      if(t.status!=='with_sv')h+=`<button onclick="updateTI('${t.id}','with_sv')" style="padding:7px 14px;background:#FEF3C7;border:1px solid #FCD34D;border-radius:8px;font-size:11px;font-weight:700;color:#92400E;cursor:pointer;font-family:Cairo,sans-serif;">🟡 مع المشرف</button>`;
-      if(t.status!=='resolved')h+=`<button onclick="showTIResolve('${t.id}')" style="padding:7px 14px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;font-size:11px;font-weight:700;color:#166534;cursor:pointer;font-family:Cairo,sans-serif;">✅ تم الحل</button>`;
-      h+='</div>';
-      h+=`<div id="resolve_form_${t.id}" style="display:none;margin-top:10px;">`;
-      h+=`<textarea id="resolve_note_${t.id}" placeholder="ملاحظة الحل..." style="width:100%;padding:10px;border:1.5px solid #86EFAC;border-radius:8px;font-size:12px;font-family:Cairo,sans-serif;outline:none;direction:rtl;min-height:60px;"></textarea>`;
-      h+=`<button onclick="confirmResolve('${t.id}')" style="width:100%;margin-top:6px;padding:9px;background:#166534;border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;font-family:Cairo,sans-serif;">حفظ الحل ✅</button>`;
-      h+='</div>';
-      h+='</div>';
-    });
-  }
-  const listEl=document.getElementById('ti_list');
-  if(listEl)listEl.innerHTML=h;
-}
-
-async function updateTI(id,status,note=''){
-  try{
-    const body={status};
-    if(note)body.sup_note=note;
-    await fetch(SB+'/rest/v1/tech_issues?id=eq.'+id,{method:'PATCH',headers:{...SH,'Prefer':'return=minimal'},body:JSON.stringify(body)});
-    await loadTechIssues();
-  }catch(e){alert('❌ خطأ في التحديث');}
-}
-
-function showTIResolve(id){
-  const f=document.getElementById('resolve_form_'+id);
-  if(f)f.style.display=f.style.display==='none'?'block':'none';
-}
-
-async function confirmResolve(id){
-  const note=(document.getElementById('resolve_note_'+id).value||'').trim();
-  await updateTI(id,'resolved',note);
-}
-
-function openFilesFM(){window.open("https://files.fm/","_blank");}
-function selIT(i){
-  _selIT=i;
-  document.querySelectorAll('[id^="itype_"]').forEach((b,j)=>{
-    b.style.background=j===i?'#FEF3C7':'#F9FAFB';
-    b.style.borderColor=j===i?'#F59E0B':'#E5E7EB';
-    b.style.color=j===i?'#92400E':'#374151';
-  });
 }
 async function submitTI(){
   const cashier=(document.getElementById('ti_cashier').value||'').trim();
   const desc=(document.getElementById('ti_desc').value||'').trim();
   const link=(document.getElementById('ti_link').value||'').trim();
-  const ISSUE_TYPES=['جهاز لا يعمل (POS)','مشكلة في الشبكة','خطأ في المعاملات','مشكلة في التطبيق','بطاقة لا تُقبل','طباعة الإيصالات','خطأ في الحساب','أخرى'];
   if(!cashier){alert('يرجى إدخال رقم الكاشير');return;}
   if(!desc){alert('يرجى وصف المشكلة');return;}
   try{
     await dbIns('tech_issues',{agent_code:user.code,agent_name:user.name,cashier_id:cashier,description:desc,attachment:link||null,status:'open',region:'west',submitted_at:new Date().toISOString()});
-    alert('✅ تم إرسال البلاغ بنجاح');_selIT=null;showPage('home');
+    renderTechStatus(cashier,desc);
   }catch(e){alert('❌ خطأ في الإرسال');}
 }
-
+function renderTechStatus(cashier,desc){
+  const el=document.getElementById('techissue');
+  let h=tbH('المشاكل التقنية','🔧',null,"showPage('home')");
+  h+='<div class="content">';
+  h+='<div class="card" style="padding:20px;text-align:center;background:#F0FDF4;border:1px solid #86EFAC;">';
+  h+='<div style="font-size:40px;margin-bottom:10px;">✅</div>';
+  h+='<div style="font-size:16px;font-weight:800;color:#166534;margin-bottom:6px;">تم إرسال البلاغ بنجاح</div>';
+  h+='<div style="font-size:12px;color:#9CA3AF;">سيتم التواصل معك قريباً</div></div>';
+  h+='<div class="card" style="padding:16px;">';
+  h+='<div style="display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #F3F4F6;">';
+  h+='<span style="font-size:12px;color:#6B7280;">رقم الكاشير</span><span style="font-size:12px;font-weight:700;">'+cashier+'</span></div>';
+  h+='<div style="padding:8px 0;border-bottom:1px solid #F3F4F6;">';
+  h+='<div style="font-size:12px;color:#6B7280;margin-bottom:4px;">الوصف</div>';
+  h+='<div style="font-size:12px;color:#374151;">'+desc+'</div></div>';
+  h+='<div style="display:flex;justify-content:space-between;padding:8px 0;">';
+  h+='<span style="font-size:12px;color:#6B7280;">الحالة</span>';
+  h+='<span style="font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;background:#FEF2F2;color:#DC2626;">🔴 معلّق</span></div></div>';
+  h+='<button onclick="renderTechMyList()" style="width:100%;padding:13px;background:#F5F3FF;border:1px solid #DDD6FE;border-radius:12px;font-size:13px;font-weight:700;color:#6B21A8;cursor:pointer;">📋 عرض جميع بلاغاتي</button>';
+  h+='<button onclick="renderTechForm()" style="width:100%;margin-top:8px;padding:13px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;">➕ إرسال بلاغ جديد</button>';
+  h+='</div>';
+  el.innerHTML=h;
+}
 async function renderTechMyList(){
   const el=document.getElementById('techissue');
-  let h=tbH('بلاغاتي التقنية','🔧',null,"renderTechForm()");
-  h+='<div class="content">';
-  h+='<div id="my-issues-list"><div style="text-align:center;padding:20px;color:#9CA3AF;">⏳ جاري التحميل...</div></div>';
-  h+='</div>';
+  let h=tbH('بلاغاتي','🔧',null,"renderTechForm()");
+  h+='<div class="content"><div id="my-issues-list"><div style="text-align:center;padding:30px;color:#9CA3AF;">⏳ جاري التحميل...</div></div></div>';
   el.innerHTML=h;
   let issues=[];
   try{
     const d=await dbGet('tech_issues','?agent_code=eq.'+user.code+'&order=submitted_at.desc&limit=20');
     issues=Array.isArray(d)?d:[];
   }catch(e){}
-  const STATUS_LABEL={open:'🔴 معلّق',with_sv:'🟡 مع المشرف',resolved:'🟢 تم الحل'};
-  const STATUS_BG={open:'#FEF2F2',with_sv:'#FFFBEB',resolved:'#F0FDF4'};
-  const STATUS_COLOR={open:'#DC2626',with_sv:'#D97706',resolved:'#166534'};
-  let listH='';
-  if(!issues.length){
-    listH='<div style="text-align:center;color:#9CA3AF;padding:30px;">لا توجد بلاغات سابقة</div>';
-  } else {
-    issues.forEach(t=>{
-      const dt=t.submitted_at?new Date(t.submitted_at).toLocaleDateString('ar-SA',{day:'numeric',month:'short',hour:'2-digit',minute:'2-digit'}):'—';
-      listH+='<div class="card" style="padding:14px;border-right:4px solid '+(STATUS_COLOR[t.status]||'#9CA3AF')+';margin-bottom:8px;">';
-      listH+='<div style="display:flex;justify-content:space-between;margin-bottom:6px;">';
-      listH+='<span style="font-size:11px;color:#9CA3AF;">🏪 '+(t.cashier_id||'—')+' · '+dt+'</span>';
-      listH+='<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:'+(STATUS_BG[t.status]||'#F3F4F6')+';color:'+(STATUS_COLOR[t.status]||'#374151')+'">'+(STATUS_LABEL[t.status]||t.status)+'</span>';
-      listH+='</div>';
-      listH+='<div style="font-size:12px;color:#374151;line-height:1.6;">'+(t.description||'—')+'</div>';
-      if(t.sup_note)listH+='<div style="font-size:11px;color:#166534;margin-top:6px;padding:6px;background:#F0FDF4;border-radius:6px;">📝 ملاحظة المشرف: '+t.sup_note+'</div>';
-      if(t.attachment)listH+='<a href="'+t.attachment+'" target="_blank" style="font-size:11px;color:#6B21A8;font-weight:600;display:block;margin-top:6px;">📎 عرض المرفق</a>';
-      listH+='</div>';
-    });
-  }
+  const SL={open:'🔴 معلّق',with_sv:'🟡 مع المشرف',resolved:'🟢 تم الحل'};
+  const SB={open:'#FEF2F2',with_sv:'#FFFBEB',resolved:'#F0FDF4'};
+  const SC={open:'#DC2626',with_sv:'#D97706',resolved:'#166534'};
+  let lh=issues.length?issues.map(t=>{
+    const dt=t.submitted_at?new Date(t.submitted_at).toLocaleDateString('ar-SA',{day:'numeric',month:'short'}):'—';
+    let s='<div class="card" style="padding:14px;border-right:4px solid '+(SC[t.status]||'#9CA3AF')+';margin-bottom:8px;">';
+    s+='<div style="display:flex;justify-content:space-between;margin-bottom:6px;">';
+    s+='<span style="font-size:11px;color:#9CA3AF;">🏪 '+(t.cashier_id||'—')+' · '+dt+'</span>';
+    s+='<span style="font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;background:'+(SB[t.status]||'#F3F4F6')+';color:'+(SC[t.status]||'#374151')+'">'+(SL[t.status]||t.status)+'</span></div>';
+    s+='<div style="font-size:12px;color:#374151;">'+t.description+'</div>';
+    if(t.sup_note)s+='<div style="font-size:11px;color:#166534;margin-top:6px;padding:6px;background:#F0FDF4;border-radius:6px;">📝 '+t.sup_note+'</div>';
+    return s+'</div>';
+  }).join(''):'<div style="text-align:center;color:#9CA3AF;padding:30px;">لا توجد بلاغات سابقة</div>';
   const listEl=document.getElementById('my-issues-list');
-  if(listEl)listEl.innerHTML=listH;
+  if(listEl)listEl.innerHTML=lh;
+}
+let techIssues=[];
+async function renderTechDash(){
+  const el=document.getElementById('techissue');
+  let h=tbH('المشاكل التقنية — داشبورد','🔧',null,"showPage('home')");
+  h+='<div class="content">';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:16px;">';
+  h+='<div class="card-sm" style="text-align:center;background:#FEF2F2;border:1px solid #FECACA;"><div style="font-size:22px;font-weight:900;color:#DC2626;" id="ti_p">—</div><div style="font-size:10px;color:#9CA3AF;">معلّق</div></div>';
+  h+='<div class="card-sm" style="text-align:center;background:#FFFBEB;border:1px solid #FCD34D;"><div style="font-size:22px;font-weight:900;color:#D97706;" id="ti_s">—</div><div style="font-size:10px;color:#9CA3AF;">مع المشرف</div></div>';
+  h+='<div class="card-sm" style="text-align:center;background:#F0FDF4;border:1px solid #86EFAC;"><div style="font-size:22px;font-weight:900;color:#166534;" id="ti_r">—</div><div style="font-size:10px;color:#9CA3AF;">محلول</div></div>';
+  h+='</div><div id="ti_list"><div style="text-align:center;padding:20px;color:#9CA3AF;">⏳ جاري التحميل...</div></div></div>';
+  el.innerHTML=h;
+  try{
+    const d=await dbGet('tech_issues','?region=eq.west&order=submitted_at.desc');
+    techIssues=Array.isArray(d)?d:[];
+    renderTechList();
+  }catch(e){document.getElementById('ti_list').innerHTML='<div style="text-align:center;color:#DC2626;padding:20px;">❌ خطأ في التحميل</div>';}
+}
+function renderTechList(){
+  const SL={open:'🔴 معلّق',with_sv:'🟡 مع المشرف',resolved:'🟢 تم الحل'};
+  const SB={open:'#FEF2F2',with_sv:'#FFFBEB',resolved:'#F0FDF4'};
+  const SC={open:'#DC2626',with_sv:'#D97706',resolved:'#166534'};
+  const ep_el=document.getElementById('ti_p');
+  const es_el=document.getElementById('ti_s');
+  const er_el=document.getElementById('ti_r');
+  if(ep_el)ep_el.textContent=techIssues.filter(t=>t.status==='open').length;
+  if(es_el)es_el.textContent=techIssues.filter(t=>t.status==='with_sv').length;
+  if(er_el)er_el.textContent=techIssues.filter(t=>t.status==='resolved').length;
+  const listEl=document.getElementById('ti_list');
+  if(!listEl)return;
+  if(!techIssues.length){listEl.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:30px;">✅ لا توجد بلاغات</div>';return;}
+  listEl.innerHTML=techIssues.map(t=>{
+    const dt=t.submitted_at?new Date(t.submitted_at).toLocaleDateString('ar-SA',{day:'numeric',month:'short'}):'—';
+    const tid=String(t.id||'');
+    let s='<div class="card" style="padding:14px;border-right:4px solid '+(SC[t.status]||'#E5E7EB')+';background:'+(SB[t.status]||'#fff')+';margin-bottom:8px;">';
+    s+='<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">';
+    s+='<div><div style="font-size:13px;font-weight:700;">'+(t.agent_name||'—')+' <span style="font-size:10px;color:#9CA3AF;">'+(t.agent_code||'')+'</span></div>';
+    s+='<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">🏪 '+(t.cashier_id||'—')+' · '+dt+'</div></div>';
+    s+='<span style="font-size:10px;font-weight:700;padding:3px 10px;border-radius:20px;background:'+(SB[t.status]||'#F3F4F6')+';color:'+(SC[t.status]||'#374151')+'">'+(SL[t.status]||t.status)+'</span></div>';
+    s+='<div style="font-size:12px;color:#374151;margin-bottom:10px;">'+(t.description||'—')+'</div>';
+    if(t.attachment)s+='<a href="'+t.attachment+'" target="_blank" style="font-size:11px;color:#6B21A8;font-weight:600;display:block;margin-bottom:8px;">📎 عرض المرفق</a>';
+    s+='<div style="display:flex;gap:8px;flex-wrap:wrap;" data-tid="'+tid+'">';
+    if(t.status!=='with_sv')s+='<button class="ti-sv-btn" data-tid="'+tid+'" style="padding:7px 14px;background:#FFFBEB;border:1px solid #FCD34D;border-radius:8px;font-size:11px;font-weight:700;color:#92400E;cursor:pointer;">🟡 مع المشرف</button>';
+    if(t.status!=='resolved')s+='<button class="ti-res-btn" data-tid="'+tid+'" style="padding:7px 14px;background:#F0FDF4;border:1px solid #86EFAC;border-radius:8px;font-size:11px;font-weight:700;color:#166534;cursor:pointer;">✅ تم الحل</button>';
+    s+='</div>';
+    s+='<div class="ti-resolve-form" data-tid="'+tid+'" style="display:none;margin-top:10px;">';
+    s+='<textarea class="ti-note" data-tid="'+tid+'" placeholder="ملاحظة الحل..." style="width:100%;padding:10px;border:1.5px solid #86EFAC;border-radius:8px;font-size:12px;outline:none;direction:rtl;min-height:60px;"></textarea>';
+    s+='<button class="ti-confirm-btn" data-tid="'+tid+'" style="width:100%;margin-top:6px;padding:9px;background:#166534;border:none;border-radius:8px;font-size:12px;font-weight:700;color:#fff;cursor:pointer;">حفظ الحل ✅</button>';
+    s+='</div>';
+    return s+'</div>';
+  }).join('');
+  // Event delegation
+  listEl.addEventListener('click',function(e){
+    const tid=e.target.dataset.tid;
+    if(!tid)return;
+    if(e.target.classList.contains('ti-sv-btn')){updateTI(tid,'with_sv');return;}
+    if(e.target.classList.contains('ti-res-btn')){
+      const f=listEl.querySelector('.ti-resolve-form[data-tid="'+tid+'"]');
+      if(f)f.style.display=f.style.display==='none'?'block':'none';
+      return;
+    }
+    if(e.target.classList.contains('ti-confirm-btn')){
+      const n=listEl.querySelector('.ti-note[data-tid="'+tid+'"]');
+      confirmResolve(tid,n?n.value:'');
+      return;
+    }
+  });
+}
+
+async function updateTI(id,status,note){
+  try{
+    const body={status:status};
+    if(note)body.sup_note=note;
+    await fetch(SB+'/rest/v1/tech_issues?id=eq.'+id,{method:'PATCH',headers:{...SH,'Prefer':'return=minimal'},body:JSON.stringify(body)});
+    await renderTechDash();
+  }catch(e){alert('❌ خطأ في التحديث');}
+}
+function showTIResolve(id){
+  const f=document.getElementById('rf_'+id);
+  if(f)f.style.display=f.style.display==='none'?'block':'none';
+}
+async function confirmResolve(id){
+  const note=(document.getElementById('rn_'+id).value||'').trim();
+  await updateTI(id,'resolved',note);
 }
 
 </script>
