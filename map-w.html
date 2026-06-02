@@ -407,9 +407,17 @@ function openAction(id){
   const c=currentData&&currentData.clients.find(x=>x.id===id);
   if(!c)return;
   modalClientId=id;
-  answers={1:null,2:null,3:null};
+  answers={visit:null,1:null,2:null,3:null};
+  // Reset visit UI
+  const cq=document.getElementById('contact-questions');
+  if(cq)cq.style.display='none';
+  const qvy=document.getElementById('qv-yes');
+  const qvn=document.getElementById('qv-no');
+  if(qvy)qvy.className='btn-yes';
+  if(qvn)qvn.className='btn-no';
   // Load existing answers
-  if(actions[id]){answers=Object.assign({visit:null,1:null,2:null,3:null},actions[id]);
+  if(actions[id]){
+    answers=Object.assign({visit:null,1:null,2:null,3:null},actions[id]);
     if(answers.visit!==null){setVisit(answers.visit);}
   }
   document.getElementById('modal-client-name').textContent=c.name;
@@ -442,14 +450,24 @@ function setVisit(val){
 }
 
 function submitAction(){
+  // إذا لم يتم الزيارة — احفظ مباشرة بدون باقي الأسئلة
+  if(answers['visit']===false){
+    actions[modalClientId]={visit:false,q1:null,q2:null,q3:null};
+    saveActions(currentEmp);
+    closeModal();
+    updateMarker(modalClientId);
+    updateDoneCount();
+    map.closePopup();
+    return;
+  }
+  // إذا تم الزيارة — تحقق من الأسئلة الثلاثة
+  if(answers['visit']===null){alert('يرجى الإجابة على سؤال الزيارة');return;}
   if(answers[1]===null||answers[2]===null||answers[3]===null){alert('يرجى الإجابة على جميع الأسئلة');return;}
-  actions[modalClientId]={q1:answers[1],q2:answers[2],q3:answers[3]};
+  actions[modalClientId]={visit:true,q1:answers[1],q2:answers[2],q3:answers[3]};
   saveActions(currentEmp);
   closeModal();
-  // Update marker color
   updateMarker(modalClientId);
   updateDoneCount();
-  // Refresh popup if open
   map.closePopup();
 }
 
