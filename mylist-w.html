@@ -213,6 +213,7 @@ function renderList(){
   if(currentFilter==='interested')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='interested');
   else if(currentFilter==='later')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='later');
   else if(currentFilter==='deposited')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='deposited');
+  else if(currentFilter==='unqualified')filteredByAction=filtered.filter(c=>{const act=actions[c.cashier]||actions[c.tid]||actions[c.id];return act==='unqualified';});
   else if(currentFilter==='not')filteredByAction=filtered.filter(c=>getAction(c.cashier)==='not');
   else if(currentFilter==='pending')filteredByAction=filtered.filter(c=>!getAction(c.cashier));
   // Apply type filter
@@ -246,7 +247,7 @@ function renderList(){
         <div style="text-align:left;">
           <div class="cc-amount">${c.amount.toLocaleString('ar-SA')} ريال</div>
           <div class="cc-period">${c.period} شهر</div>
-          ${act?`<div style="font-size:10px;margin-top:4px;font-weight:700;color:${act==='interested'?'#166534':act==='later'?'#D97706':act==='deposited'?'#166534':'#DC2626'}">${act==='interested'?'✅ مهتم':act==='later'?'⏳ لاحقاً':act==='deposited'?'🏆 تم الإيداع':'❌ غير مهتم'}</div>`:''}
+          ${act?`<div style="font-size:10px;margin-top:4px;font-weight:700;color:${act==='interested'?'#166534':act==='later'?'#D97706':act==='deposited'?'#166534':'#DC2626'}">${act==='interested'?'✅ مهتم':act==='later'?'⏳ لاحقاً':act==='deposited'?'🏆 تم الإيداع':act==='unqualified'?'🚫 غير مؤهل':'❌ غير مهتم'}</div>`:''}
         </div>
       </div>
       <div class="cc-actions">
@@ -254,6 +255,7 @@ function renderList(){
         <button class="btn-action btn-later${act==='later'?' active':''}" onclick="setAction('${c.cashier}','later')">⏳ لاحقاً</button>
         <button class="btn-action btn-deposited${act==='deposited'?' active':''}" onclick="setAction('${c.cashier}','deposited')">🏆 تم الإيداع</button>
         <button class="btn-action btn-not${act==='not'?' active':''}" onclick="setAction('${c.cashier}','not')">❌ غير مهتم</button>
+        <button class="btn-action btn-unqualified${act==='unqualified'?' active':''}" onclick="setAction('${c.cashier}','unqualified')" style="background:${act==='unqualified'?'#6B7280':'#f3f4f6'};color:${act==='unqualified'?'#fff':'#6B7280'};border:1px solid #d1d5db;">🚫 غير مؤهل</button>
       </div>
       <div class="cc-actions" style="padding-top:0;border-top:none;">
         <a href="tel:${c.manager}" class="btn-call">📞 محاسب</a>
