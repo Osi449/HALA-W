@@ -174,15 +174,15 @@ function getFilterStyle(f){const s=FILTER_COLORS[f]||{bg:'#F3F4F6',color:'#4B556
 // ── Render ────────────────────────────────
 function getClients(){
   if(!mlUser||!window.MY_LIST_W)return[];
+  let clients;
   if(isSup){
-    // المشرف يشوف كل الزونات
-    return Object.values(window.MY_LIST_W).flatMap(z=>z.clients);
+    clients=Object.values(window.MY_LIST_W).flatMap(z=>z.clients);
+  } else {
+    const empData=window.MY_LIST_W[mlUser.code];
+    clients=empData?empData.clients:[];
   }
-  // الموظف يشوف زونه فقط
-  const empData=window.MY_LIST_W[mlUser.code];
-  return empData?empData.clients:[];
+  return clients.slice().sort((a,b)=>(b.amount||0)-(a.amount||0));
 }
-
 function setTypeFilter(f){
   currentTypeFilter=f;
   document.querySelectorAll('#type-filter-bar .fbtn').forEach(b=>b.classList.remove('active'));
