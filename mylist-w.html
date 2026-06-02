@@ -219,6 +219,8 @@ function renderList(){
   // Apply type filter
   let finalFiltered = filteredByAction;
   if(currentTypeFilter!=='all')finalFiltered=filteredByAction.filter(c=>c.filter===currentTypeFilter);
+  // ترتيب تنازلي بالمبلغ دائماً
+  finalFiltered=finalFiltered.slice().sort((a,b)=>(b.amount||0)-(a.amount||0));
 
   // Stats
   document.getElementById('s-total').textContent=all.length;
