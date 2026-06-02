@@ -354,46 +354,36 @@ function renderRegion(d,wd){
   const sub=allM.filter(c=>gE(c)).length;
   const rAvg=sub?Math.round(allM.map(c=>{const e=gE(c);return e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((a,b)=>a+b,0)/sub):0;
   const totF=allM.reduce((s,c)=>s+getTF(c),0),rp=Math.round(totF/RGN_TGT*100);
-  const c1F=Object.keys(TEAMS.c1.members).reduce((s,c)=>s+getTF(c),0);
-  const c2F=Object.keys(TEAMS.c2.members).reduce((s,c)=>s+getTF(c),0);
 
-  let h='<div class="card" style="background:linear-gradient(135deg,#6B21A8,#166534);padding:20px;">';
-  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">🏢 تقدم المنطقة الوسطى — هدف 7,000,000 ريال</div>';
-  h+='<div style="font-size:32px;font-weight:900;color:#fff;margin-bottom:4px;">'+totF.toLocaleString('ar-SA')+'</div>';
-  h+='<div style="font-size:12px;color:rgba(255,255,255,0.7);margin-bottom:10px;">'+rp+'% من الهدف</div>';
-  h+='<div style="background:rgba(255,255,255,0.2);border-radius:8px;height:12px;overflow:hidden;"><div style="height:100%;background:'+(rp>=100?'#22C55E':'#86EFAC')+';border-radius:8px;width:'+Math.min(rp,100)+'%;"></div></div>';
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px;">';
-  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c1F.toLocaleString('ar-SA')+'</div></div>';
-  h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:10px;color:rgba(255,255,255,0.6);">Central</div><div style="font-size:14px;font-weight:700;color:#fff;">'+c2F.toLocaleString('ar-SA')+'</div></div>';
-  h+='</div></div>';
+  let h='<div class="card" style="background:linear-gradient(135deg,#1a6b3c,#166534);color:#fff;padding:18px;border-radius:14px;">';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,.6);margin-bottom:4px;">💰 تحقيق التمويل الشهري — المنطقة الغربية</div>';
+  h+='<div style="font-size:32px;font-weight:900;">'+totF.toLocaleString('ar-SA')+' <span style="font-size:14px;font-weight:400;opacity:.7">ريال</span></div>';
+  const bar=Math.min(100,rp);
+  h+='<div style="background:rgba(255,255,255,.2);border-radius:20px;height:6px;margin:10px 0 4px;"><div style="background:#3ABF6E;height:6px;border-radius:20px;width:'+bar+'%;"></div></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:10px;opacity:.7">';
+  h+='<span>'+rp+'% من '+RGN_TGT.toLocaleString('ar-SA')+' ريال</span>';
+  h+='<span>'+sub+'/'+allM.length+' موظفين سجّلوا اليوم</span></div></div>';
 
-  h+='<div class="card" style="background:rgba(107,33,168,0.08);border:1px solid #DDD6FE;">';
-  h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:11px;color:#6B21A8;font-weight:700;">📊 أداء المنطقة اليوم</div><div style="font-size:38px;font-weight:900;color:'+(rAvg>=80?'#166534':'#D97706')+'">'+rAvg+'%</div></div>';
-  h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
-  [{n:sub,l:'أدخلوا',c:'#6B21A8'},{n:allM.length-sub,l:'لم يُدخلوا',c:'#DC2626'},{n:allM.length,l:'إجمالي',c:'#1A1A2E'},{n:d,l:'يوم مضى',c:'#D97706'}].forEach(s=>{h+='<div class="card-sm" style="text-align:center;"><div style="font-size:20px;font-weight:900;color:'+s.c+'">'+s.n+'</div><div style="font-size:9px;color:#9CA3AF;">'+s.l+'</div></div>';});
-  h+='</div></div>';
-
-  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'+Object.entries(TEAMS).map(([tk,t])=>{
-    const mems=Object.keys(t.members),s=mems.filter(c=>gE(c)).length,a=s?Math.round(mems.map(c=>{const e=gE(c);return e?PF.reduce((x,f)=>x+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((x,y)=>x+y,0)/s):0;
-    const tf=mems.reduce((s,c)=>s+getTF(c),0),tp=Math.round(tf/(mems.length*EMP_TGT)*100);
-    return'<div class="card" style="border-top:3px solid '+t.sup.color+'"><div style="font-size:13px;font-weight:700;color:'+t.sup.color+';margin-bottom:4px;">'+t.label+'</div><div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;">'+t.sup.name+'</div><div style="font-size:30px;font-weight:900;color:'+(a>=80?'#166534':'#D97706')+'">'+a+'%</div><div style="background:#E5E7EB;border-radius:4px;height:5px;overflow:hidden;margin:6px 0"><div style="height:100%;width:'+a+'%;background:'+t.sup.color+'"></div></div><div style="font-size:10px;color:#9CA3AF;">✅ '+s+'/'+mems.length+'</div><div style="font-size:11px;font-weight:700;color:'+(tp>=100?'#166534':tp>=70?'#D97706':'#DC2626')+';margin-top:4px;">💰 '+tp+'%</div></div>';
-  }).join('')+'</div>';
-
-  // قائمة الكل
-  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">👥 جميع الموظفين</div>';
-  Object.entries(TEAMS).forEach(([tk,t])=>{
-    h+='<div style="margin-bottom:14px;"><div style="font-size:11px;color:'+t.sup.color+';font-weight:700;margin-bottom:8px;">'+t.label+' — '+t.sup.name+'</div>';
-    Object.entries(t.members).forEach(([code,m])=>{
-      const e=gE(code),p=e?PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length:0;
-      const tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),bc=fp>=100?'#22C55E':fp>=70?'#D97706':'#DC2626';
-      h+='<button onclick="renderTDetail(\''+code+'\')" style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:10px;background:'+(fp>=100?'#F0FDF4':fp>=70?'#FEF3C7':'#FEF2F2')+';margin-bottom:6px;border:1px solid #E5E7EB;width:100%;font-family:\'Cairo\',sans-serif;text-align:right;cursor:pointer;">';
-      h+='<div style="width:8px;height:8px;border-radius:50%;background:'+m.color+';flex-shrink:0;"></div>';
-      h+='<div style="flex:1;text-align:right;"><div style="font-size:12px;font-weight:600;">'+(m.short||m.name)+'</div>'+(e?'':'<div style="font-size:9px;color:#DC2626;">⚠️ لم يُدخل</div>')+'</div>';
-      if(e)h+='<div style="display:flex;gap:6px;">'+PF.map(f=>{const v=e[f.key]||0,pp=pct(v,f.target);return'<div style="text-align:center;min-width:20px;"><div style="font-size:9px;">'+f.icon+'</div><div style="font-size:11px;font-weight:700;color:'+(pp>=100?'#166534':'#1A1A2E')+'">'+v+'</div></div>';}).join('')+'</div>';
-      h+='<div style="text-align:left;min-width:50px;"><div style="font-size:11px;font-weight:700;color:'+(p>=100?'#166534':p>=70?'#D97706':'#DC2626')+'">'+Math.round(p)+'%</div><div style="font-size:9px;color:'+bc+'">💰'+fp+'%</div></div><span style="color:#9CA3AF">›</span></button>';
-    });
-    h+='</div>';
+  // KPI summary
+  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">📊 ملخص الفريق اليوم</div>';
+  h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">';
+  PF.forEach(f=>{
+    const total=allM.reduce((s,c)=>{const e=gE(c);return s+(e?e[f.key]||0:0);},0);
+    const tgt=f.target*allM.length;
+    const p=Math.round(total/tgt*100);
+    h+='<div class="card-sm" style="text-align:center;"><div>'+f.icon+'</div>';
+    h+='<div style="font-size:18px;font-weight:900;color:'+(p>=100?'#166534':'#6B21A8')+'">'+total+'</div>';
+    h+='<div style="font-size:9px;color:#9CA3AF;">/'+tgt+' ('+p+'%)</div></div>';
   });
+  h+='</div></div>';
+
+  // Per-member cards
+  h+='<div class="card"><div style="font-size:12px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">👥 أداء الفريق</div>';
+  h+=allM.map(c=>{
+    const m=Object.values(TEAMS).flatMap(t=>Object.values(t.members))[allM.indexOf(c)];
+    const mObj=Object.values(TEAMS).reduce((found,t)=>found||t.members[c],null);
+    return renderMemberCard(c,mObj,d,wd);
+  }).join('');
   h+='</div>';
   return h;
 }
