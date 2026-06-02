@@ -245,7 +245,7 @@ function renderTracker(){
 }
 
 function finBanner(code){
-  const total=getTF(code),p=Math.round(total/getEmpTgt(user.code)*100),r100=Math.max(0,EMP_TGT-total),r150=Math.max(0,EMP_TGT*1.5-total);
+  const total=getTF(code),p=Math.round(total/getEmpTgt(user.code)*100),r100=Math.max(0,getEmpTgt(user.code)-total),r150=Math.max(0,getEmpTgt(user.code)*1.5-total);
   return'<div class="card" style="background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:18px;">'+
   '<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:4px;">💰 تحقيق التمويل الشهري</div>'+
   '<div style="font-size:30px;font-weight:900;color:#fff;margin-bottom:4px;">'+total.toLocaleString('ar-SA')+' <span style="font-size:13px;">ريال</span></div>'+
@@ -287,7 +287,7 @@ function renderSupSection(showM,d,wd){
   let sub=0,tot=0;
   showM.forEach(c=>{const e=gE(c);if(e){sub++;tot+=PF.reduce((a,f)=>a+pct(e[f.key],f.target),0)/PF.length;}});
   const tAvg=sub?Math.round(tot/sub):0;
-  const tfT=showM.reduce((s,c)=>s+getTF(c),0),tpct=Math.round(tfT/(showM.length*EMP_TGT)*100);
+  const tfT=showM.reduce((s,c)=>s+getTF(c),0),tpct=Math.round(tfT/(showM.length*getEmpTgt(user.code))*100);
 
   let h='<div class="card" style="background:rgba(107,33,168,0.08);border:1px solid #DDD6FE;">';
   h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;"><div style="font-size:11px;color:#6B21A8;font-weight:700;">أداء الفريق اليوم</div><div style="font-size:38px;font-weight:900;color:'+(tAvg>=80?'#166534':'#D97706')+'">'+tAvg+'%</div></div>';
@@ -298,7 +298,7 @@ function renderSupSection(showM,d,wd){
   h+='</div>';
   h+='<div style="font-size:11px;color:#6B21A8;font-weight:700;margin-bottom:6px;">💰 تمويل الفريق — '+tpct+'%</div>';
   h+='<div class="tbar-bg"><div class="tbar-fill" style="width:'+Math.min(tpct,100)+'%;background:'+(tpct>=100?'#22C55E':'#6B21A8')+'"></div></div>';
-  h+='<div style="display:flex;justify-content:space-between;font-size:10px;color:#9CA3AF;margin-top:4px;"><span>'+tfT.toLocaleString('ar-SA')+' ريال</span><span>هدف: '+(showM.length*EMP_TGT).toLocaleString('ar-SA')+'</span></div>';
+  h+='<div style="display:flex;justify-content:space-between;font-size:10px;color:#9CA3AF;margin-top:4px;"><span>'+tfT.toLocaleString('ar-SA')+' ريال</span><span>هدف: '+(showM.length*getEmpTgt(user.code).toLocaleString('ar-SA')+'</span></div>';
   h+='</div>';
 
   // فلتر اليوم
@@ -366,7 +366,7 @@ function renderRegion(d,wd){
 
   h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'+Object.entries(TEAMS).map(([tk,t])=>{
     const mems=Object.keys(t.members),s=mems.filter(c=>gE(c)).length,a=s?Math.round(mems.map(c=>{const e=gE(c);return e?PF.reduce((x,f)=>x+pct(e[f.key],f.target),0)/PF.length:0;}).reduce((x,y)=>x+y,0)/s):0;
-    const tf=mems.reduce((s,c)=>s+getTF(c),0),tp=Math.round(tf/(mems.length*EMP_TGT)*100);
+    const tf=mems.reduce((s,c)=>s+getTF(c),0),tp=Math.round(tf/(mems.length*getEmpTgt(c))*100);
     return'<div class="card" style="border-top:3px solid '+t.sup.color+'"><div style="font-size:13px;font-weight:700;color:'+t.sup.color+';margin-bottom:4px;">'+t.label+'</div><div style="font-size:11px;color:#9CA3AF;margin-bottom:8px;">'+t.sup.name+'</div><div style="font-size:30px;font-weight:900;color:'+(a>=80?'#166534':'#D97706')+'">'+a+'%</div><div style="background:#E5E7EB;border-radius:4px;height:5px;overflow:hidden;margin:6px 0"><div style="height:100%;width:'+a+'%;background:'+t.sup.color+'"></div></div><div style="font-size:10px;color:#9CA3AF;">✅ '+s+'/'+mems.length+'</div><div style="font-size:11px;font-weight:700;color:'+(tp>=100?'#166534':tp>=70?'#D97706':'#DC2626')+';margin-top:4px;">💰 '+tp+'%</div></div>';
   }).join('')+'</div>';
 
@@ -513,7 +513,7 @@ function renderTDetail(code){
   const m=ALL_M[code]||{name:code,color:'#6B21A8'};
   const e=gE(code),last7=Array.from({length:7},(_,i)=>{const d=new Date();d.setDate(d.getDate()-(6-i));const date=d.toISOString().split('T')[0];return{date,entry:entries.find(en=>en.agent_code===code&&en.entry_date===date)||null};});
   const mEs=gME(code),mT=PF.reduce((a,f)=>{a[f.key]=mEs.reduce((s,en)=>s+(en[f.key]||0),0);return a;},{});
-  const d=wdPassed(),wd=wdTotal(),tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),r100=Math.max(0,EMP_TGT-tf),r150=Math.max(0,EMP_TGT*1.5-tf);
+  const d=wdPassed(),wd=wdTotal(),tf=getTF(code),fp=Math.round(tf/getEmpTgt(user.code)*100),r100=Math.max(0,getEmpTgt(code)-tf),r150=Math.max(0,getEmpTgt(code)*1.5-tf);
 
   let h='<div style="background:linear-gradient(135deg,'+m.color+','+m.color+'88);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;"><button class="btn-top" onclick="renderTDash()">← رجوع</button><span style="color:#fff;font-weight:700;font-size:14px;">'+m.name+'</span></div>';
   h+='<div class="content">';
