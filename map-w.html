@@ -127,7 +127,7 @@ select option{background:#3B0764;color:#fff;}
       </div>
     </div>
 
-    <button class="btn-save" onclick="saveAction()">حفظ الإجراء ✓</button>
+    <button class="btn-save" onclick="submitAction()">حفظ الإجراء ✓</button>
     <button class="btn-cancel-modal" onclick="closeModal()">إلغاء</button>
   </div>
 </div>
@@ -428,6 +428,17 @@ function setQ(q,val){
   answers[q]=val;
   document.getElementById('q'+q+'-yes').className='btn-yes'+(val===true?' active':'');
   document.getElementById('q'+q+'-no').className='btn-no'+(val===false?' active':'');
+}
+
+
+function setVisit(val){
+  answers['visit']=val;
+  const qvy=document.getElementById('qv-yes');
+  const qvn=document.getElementById('qv-no');
+  const cq=document.getElementById('contact-questions');
+  if(qvy)qvy.className='btn-yes'+(val===true?' active':'');
+  if(qvn)qvn.className='btn-no'+(val===false?' active':'');
+  if(cq)cq.style.display=val?'block':'none';
 }
 
 function submitAction(){
