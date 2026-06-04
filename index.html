@@ -1132,7 +1132,7 @@ function showTIResolve(id){
   const f=document.getElementById('rf_'+id);
   if(f)f.style.display=f.style.display==='none'?'block':'none';
 }
-async async function confirmResolve(id){
+async function confirmResolve(id){
   const n=document.querySelector('.ti-note[data-tid="'+id+'"]');
   const note=(n?n.value||'':'').trim();
   await updateTI(id,'resolved',note);
