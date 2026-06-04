@@ -1132,10 +1132,27 @@ function showTIResolve(id){
   const f=document.getElementById('rf_'+id);
   if(f)f.style.display=f.style.display==='none'?'block':'none';
 }
-async function confirmResolve(id){
-  const note=(document.getElementById('rn_'+id).value||'').trim();
+async async function confirmResolve(id){
+  const n=document.querySelector('.ti-note[data-tid="'+id+'"]');
+  const note=(n?n.value||'':'').trim();
   await updateTI(id,'resolved',note);
 }
+
+// Tech issues global event handler
+if(!window._tiEvt){window._tiEvt=true;document.addEventListener('click',function(e){
+  const tid=e.target.dataset.tid;
+  if(!tid)return;
+  if(e.target.classList.contains('ti-sv-btn')){updateTI(tid,'with_sv');return;}
+  if(e.target.classList.contains('ti-res-btn')){
+    const f=document.querySelector('.ti-resolve-form[data-tid="'+tid+'"]');
+    if(f)f.style.display=f.style.display==='none'?'block':'none';
+    return;
+  }
+  if(e.target.classList.contains('ti-confirm-btn')){
+    confirmResolve(tid);
+    return;
+  }
+});}
 
 </script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
