@@ -103,6 +103,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 
 <div id="tracker" class="page"></div>
 <div id="credit" class="page"></div>
+<div id="creport" class="page"></div>
 <div id="shift" class="page"></div>
 <div id="analyzer" class="page"></div>
 <div id="techissue" class="page"></div>
@@ -193,7 +194,7 @@ function authGo(dest){
   showPage(dest);
   if(dest==='tracker')renderTracker();
   else if(dest==='credit')renderCredit();
-  else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();
+  else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();else if(dest==='creport')renderEmpReport();
 }
 function updHome(){
   const nb=document.getElementById('hnb'),hu=document.getElementById('huser');
@@ -228,7 +229,7 @@ function doLogin(){
     user={code,name:si.name,role:isR?'region':'supervisor',teamKey:tk,color:si.color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();else if(dest==='creport')renderEmpReport();return;
   }
   if(ALL_M[code]){
     if(!needPin){needPin=true;document.getElementById('pinw').style.display='block';document.getElementById('lbtn').textContent='دخول ←';document.getElementById('lpin').focus();return;}
@@ -236,7 +237,7 @@ function doLogin(){
     user={code,name:ALL_M[code].name,role:'employee',color:ALL_M[code].color};
     sLS('hu5',user);document.getElementById('lcode').value='';document.getElementById('lpin').value='';needPin=false;
     updHome();const dest=document.getElementById('login').dataset.dest||'home';
-    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();return;
+    showPage(dest);if(dest==='tracker')renderTracker();else if(dest==='credit')renderCredit();else if(dest==='shift')renderShift();else if(dest==='techissue')renderTechIssue();else if(dest==='creport')renderEmpReport();return;
   }
   lErr('الكود غير صحيح');
 }
@@ -543,7 +544,10 @@ function renderCType(){
   const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
   let h=tbH('طلبات التمويل','📋',null,'showPage(\'home\')');
   h+='<div class="content">';
-  if(isSup)h+='<button class="btn-purple" onclick="loadCredit().then(renderCDash)">📊 داشبورد الطلبات</button>';
+  if(isSup){
+    h+='<button class="btn-purple" onclick="loadCredit().then(renderCDash)" style="margin-bottom:8px;">📊 داشبورد الطلبات</button>';
+    h+='<button class="btn-purple" onclick="loadCredit().then(renderEmpReport)" style="background:linear-gradient(135deg,#166534,#15803D);margin-bottom:8px;">👥 تحليل أداء الموظفين</button>';
+  }
   h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:16px;">رفع طلب جديد</div><div class="ctype-grid">'+CTYPES.map(t=>'<button class="ctbtn" style="border-top:3px solid '+t.color+'" onclick="selCT(\''+t.key+'\')"><div style="font-size:22px;margin-bottom:6px;">'+t.icon+'</div><div style="font-size:12px;font-weight:700;margin-bottom:3px;">'+t.label+'</div><div style="font-size:10px;color:#4B5563;">'+t.desc+'</div></button>').join('')+'</div></div>';
   h+='<button class="btn-outline" onclick="loadCredit().then(renderCMyReqs)">📋 طلباتي السابقة</button></div>';
   document.getElementById('credit').innerHTML=h;
@@ -1507,6 +1511,107 @@ async function buildAnResult(eid,months,info,fin){
   });
   h+='</tbody></table></div>';
   return h;
+}
+
+function renderEmpReport(){
+  if(!user||(user.role!=='region'&&user.role!=='owner')){
+    document.getElementById('creport').innerHTML='<div style="padding:40px;text-align:center;color:#DC2626;">غير مصرح</div>';
+    return;
+  }
+  showPage('creport');
+  const el=document.getElementById('creport');
+  let h=tbH('تحليل أداء الموظفين','👥','renderCType()','showPage(\'home\')')+'<div class="content">';
+
+  // جميع الموظفين
+  const allM=Object.values(TEAMS).flatMap(t=>Object.keys(t.members));
+  const allInfo=Object.values(TEAMS).flatMap(t=>Object.entries(t.members).map(([k,v])=>({code:k,...v})));
+
+  // أنواع الطلبات
+  const types=CTYPES.map(t=>t.key);
+  const typeLabels=Object.fromEntries(CTYPES.map(t=>[t.key,t.icon+' '+t.label]));
+
+  // الحالات
+  const statuses=['approved','rejected','pending','under_review','pending_sv','done'];
+  const statusLabel={approved:'✅ موافق',rejected:'❌ مرفوض',pending:'⏳ معلّق',under_review:'🔍 تحت المراجعة',pending_sv:'📋 مع المشرف',done:'🏆 منجز'};
+  const statusColor={approved:'#166534',rejected:'#DC2626',pending:'#D97706',under_review:'#0369A1',pending_sv:'#7C3AED',done:'#15803D'};
+  const statusBg={approved:'#F0FDF4',rejected:'#FEF2F2',pending:'#FFFBEB',under_review:'#EFF6FF',pending_sv:'#F5F3FF',done:'#DCFCE7'};
+
+  // ملخص الكل
+  const totalReqs=cReqs.length;
+  const approved=cReqs.filter(r=>r.status==='approved').length;
+  const rejected=cReqs.filter(r=>r.status==='rejected').length;
+  const pending=cReqs.filter(r=>!['approved','rejected','done'].includes(r.status)).length;
+
+  h+='<div style="background:linear-gradient(135deg,#6B21A8,#166534);border-radius:16px;padding:16px;margin-bottom:16px;">';
+  h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:8px;">إجمالي طلبات المنطقة الغربية</div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:8px;">';
+  [{l:'الكل',v:totalReqs,c:'#fff'},{l:'✅ موافق',v:approved,c:'#86EFAC'},{l:'❌ مرفوض',v:rejected,c:'#FCA5A5'},{l:'⏳ معلّق',v:pending,c:'#FDE68A'}]
+    .forEach(x=>{h+='<div style="background:rgba(255,255,255,0.12);border-radius:10px;padding:10px;text-align:center;"><div style="font-size:22px;font-weight:900;color:'+x.c+';">'+x.v+'</div><div style="font-size:10px;color:rgba(255,255,255,0.6);">'+x.l+'</div></div>';});
+  h+='</div></div>';
+
+  // إحصائيات بالنوع
+  h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px;">📦 إجمالي بالنوع</div>';
+  h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">';
+  CTYPES.forEach(t=>{
+    const cnt=cReqs.filter(r=>r.client_type===t.key).length;
+    const appr=cReqs.filter(r=>r.client_type===t.key&&r.status==='approved').length;
+    const rej=cReqs.filter(r=>r.client_type===t.key&&r.status==='rejected').length;
+    h+='<div style="background:#FAFAFA;border-radius:10px;padding:10px;border-top:3px solid '+t.color+';">';
+    h+='<div style="font-size:11px;font-weight:700;color:'+t.color+';margin-bottom:6px;">'+t.icon+' '+t.label+'</div>';
+    h+='<div style="font-size:22px;font-weight:900;color:#111;">'+cnt+'</div>';
+    h+='<div style="font-size:10px;color:#9CA3AF;margin-top:4px;">✅ '+appr+' · ❌ '+rej+'</div>';
+    h+='</div>';
+  });
+  h+='</div></div>';
+
+  // تحليل كل موظف
+  h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:14px;">👤 تفصيل الموظفين</div>';
+
+  allInfo.forEach(emp=>{
+    const empReqs=cReqs.filter(r=>r.agent_code===emp.code);
+    if(!empReqs.length)return;
+
+    const empApp=empReqs.filter(r=>r.status==='approved').length;
+    const empRej=empReqs.filter(r=>r.status==='rejected').length;
+    const empPend=empReqs.filter(r=>!['approved','rejected','done'].includes(r.status)).length;
+    const empDone=empReqs.filter(r=>r.status==='done').length;
+    const approvalRate=empReqs.length?Math.round((empApp+empDone)/empReqs.length*100):0;
+
+    h+='<div style="border:1px solid #E5E7EB;border-right:4px solid '+emp.color+';border-radius:12px;padding:14px;margin-bottom:12px;">';
+    // Header
+    h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
+    h+='<div><div style="font-size:14px;font-weight:800;color:'+emp.color+';">'+emp.name+'</div>';
+    h+='<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">'+emp.code+' · '+empReqs.length+' طلب</div></div>';
+    h+='<div style="text-align:center;background:'+(approvalRate>=70?'#F0FDF4':approvalRate>=50?'#FFFBEB':'#FEF2F2')+';border-radius:10px;padding:8px 14px;">';
+    h+='<div style="font-size:20px;font-weight:900;color:'+(approvalRate>=70?'#166534':approvalRate>=50?'#D97706':'#DC2626')+';">'+approvalRate+'%</div>';
+    h+='<div style="font-size:9px;color:#9CA3AF;">نسبة الموافقة</div></div></div>';
+
+    // Status summary
+    h+='<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:10px;">';
+    [{l:'✅ موافق',v:empApp,c:'#166534',bg:'#F0FDF4'},{l:'❌ مرفوض',v:empRej,c:'#DC2626',bg:'#FEF2F2'},{l:'⏳ معلّق',v:empPend,c:'#D97706',bg:'#FFFBEB'},{l:'🏆 منجز',v:empDone,c:'#15803D',bg:'#DCFCE7'}]
+      .forEach(x=>{h+='<div style="background:'+x.bg+';border-radius:8px;padding:8px;text-align:center;"><div style="font-size:18px;font-weight:800;color:'+x.c+';">'+x.v+'</div><div style="font-size:9px;color:#9CA3AF;">'+x.l+'</div></div>';});
+    h+='</div>';
+
+    // By type
+    h+='<div style="font-size:10px;color:#9CA3AF;margin-bottom:6px;">تفصيل حسب النوع</div>';
+    h+='<div style="display:flex;flex-wrap:wrap;gap:6px;">';
+    CTYPES.forEach(t=>{
+      const cnt=empReqs.filter(r=>r.client_type===t.key).length;
+      if(!cnt)return;
+      const appr=empReqs.filter(r=>r.client_type===t.key&&r.status==='approved').length;
+      const rej=empReqs.filter(r=>r.client_type===t.key&&r.status==='rejected').length;
+      h+='<div style="background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:6px 10px;">';
+      h+='<div style="font-size:10px;font-weight:700;color:'+t.color+';">'+t.icon+' '+t.label+'</div>';
+      h+='<div style="font-size:13px;font-weight:800;color:#111;">'+cnt+'</div>';
+      h+='<div style="font-size:9px;color:#9CA3AF;">✅'+appr+' ❌'+rej+'</div>';
+      h+='</div>';
+    });
+    h+='</div>';
+    h+='</div>';
+  });
+
+  h+='</div></div>';
+  el.innerHTML=h;
 }
 
 </script>
