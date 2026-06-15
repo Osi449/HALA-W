@@ -721,10 +721,12 @@ async function doSaveEdit(){
 }
 
 function renderCDash(){
-  const byType={};CTYPES.forEach(t=>{byType[t.key]=cReqs.filter(r=>r.client_type===t.key).length;});
-  let filtered=cReqs.filter(r=>(dF==='all'||r.status===dF)&&(aF==='all'||r.agent_code===aF));
+  const allMonthReqs=filterByMonth(cReqs);
+  const byType={};CTYPES.forEach(t=>{byType[t.key]=allMonthReqs.filter(r=>r.client_type===t.key).length;});
+  let filtered=allMonthReqs.filter(r=>(dF==='all'||r.status===dF)&&(aF==='all'||r.agent_code===aF));
   let h=tbH('داشبورد الطلبات','📊','renderCType()','showPage(\'home\')');
   h+='<div class="content">';
+  h+=monthFilterBar('renderCDash()');
   h+='<div style="display:grid;grid-template-columns:repeat(5,1fr);gap:8px;">'+CSTATS.map(s=>'<button style="background:'+(dF===s.key?s.bg:'#fff')+';border-radius:12px;padding:10px 6px;text-align:center;box-shadow:0 2px 8px rgba(107,33,168,0.10);cursor:pointer;border:1.5px solid '+(dF===s.key?s.color:'#E5E7EB')+';font-family:\'Cairo\',sans-serif;" onclick="dF=dF===\''+s.key+'\'?\'all\':\''+s.key+'\';renderCDash()"><div style="font-size:8px;margin-bottom:2px;">'+s.icon+'</div><div style="font-size:20px;font-weight:900;color:'+s.color+'">'+cReqs.filter(r=>r.status===s.key).length+'</div><div style="font-size:8px;color:#4B5563;line-height:1.3;">'+s.label+'</div></button>').join('')+'</div>';
   h+='<div class="card"><div style="font-size:12px;font-weight:700;margin-bottom:10px;">📊 إحصائيات بالنوع</div><div style="display:flex;flex-wrap:wrap;gap:8px;">'+CTYPES.map(t=>'<div style="background:'+t.color+'22;border:1px solid '+t.color+'44;border-radius:10px;padding:8px 12px;text-align:center;"><div style="font-size:11px;">'+t.icon+' '+t.label+'</div><div style="font-size:20px;font-weight:900;color:'+t.color+'">'+byType[t.key]+'</div></div>').join('')+'</div></div>';
   h+='<div class="card"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><div style="font-size:12px;font-weight:700;">فلتر</div><div style="font-size:12px;color:#6B21A8;font-weight:700;">'+filtered.length+' · '+filtered.reduce((a,r)=>a+(Number(r.data?.offer_amount)||0),0).toLocaleString()+' SAR</div></div><div style="display:flex;flex-wrap:wrap;gap:6px;"><button onclick="aF=\'all\';renderCDash()" style="font-size:11px;padding:4px 12px;border-radius:20px;cursor:pointer;background:'+(aF==='all'?'#6B21A8':'#FAFAFA')+';color:'+(aF==='all'?'#fff':'#4B5563')+';border:1px solid '+(aF==='all'?'#6B21A8':'#E5E7EB')+';font-family:\'Cairo\',sans-serif;">الكل</button>'+Object.keys(ALL_M).map(k=>'<button onclick="aF=aF===\''+k+'\'?\'all\':\''+k+'\';renderCDash()" style="font-size:10px;padding:4px 10px;border-radius:20px;cursor:pointer;background:'+(aF===k?'#F5F3FF':'#FAFAFA')+';color:'+(aF===k?'#6B21A8':'#4B5563')+';border:1px solid '+(aF===k?'#DDD6FE':'#E5E7EB')+';font-family:\'Cairo\',sans-serif;">'+k+'</button>').join('')+'</div></div>';
@@ -1587,7 +1589,9 @@ function renderEmpReport(){
   }
   showPage('creport');
   const el=document.getElementById('creport');
+  const cReqsM=filterByMonth(cReqs);
   let h=tbH('تحليل أداء الموظفين','👥','renderCType()','showPage(\'home\')')+'<div class="content">';
+  h+=monthFilterBar('renderEmpReport()');
 
   // جميع الموظفين
   const allM=Object.values(TEAMS).flatMap(t=>Object.keys(t.members));
@@ -1605,9 +1609,9 @@ function renderEmpReport(){
 
   // ملخص الكل
   const totalReqs=cReqs.length;
-  const approved=cReqs.filter(r=>r.status==='approved').length;
-  const rejected=cReqs.filter(r=>r.status==='rejected').length;
-  const pending=cReqs.filter(r=>!['approved','rejected','done'].includes(r.status)).length;
+  const approved=cReqsM.filter(r=>r.status==='approved').length;
+  const rejected=cReqsM.filter(r=>r.status==='rejected').length;
+  const pending=cReqsM.filter(r=>!['approved','rejected','done'].includes(r.status)).length;
 
   h+='<div style="background:linear-gradient(135deg,#6B21A8,#166534);border-radius:16px;padding:16px;margin-bottom:16px;">';
   h+='<div style="font-size:11px;color:rgba(255,255,255,0.7);margin-bottom:8px;">إجمالي طلبات المنطقة الغربية</div>';
@@ -1620,9 +1624,9 @@ function renderEmpReport(){
   h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:12px;">📦 إجمالي بالنوع</div>';
   h+='<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:8px;">';
   CTYPES.forEach(t=>{
-    const cnt=cReqs.filter(r=>r.client_type===t.key).length;
-    const appr=cReqs.filter(r=>r.client_type===t.key&&r.status==='approved').length;
-    const rej=cReqs.filter(r=>r.client_type===t.key&&r.status==='rejected').length;
+    const cnt=cReqsM.filter(r=>r.client_type===t.key).length;
+    const appr=cReqsM.filter(r=>r.client_type===t.key&&r.status==='approved').length;
+    const rej=cReqsM.filter(r=>r.client_type===t.key&&r.status==='rejected').length;
     h+='<div style="background:#FAFAFA;border-radius:10px;padding:10px;border-top:3px solid '+t.color+';">';
     h+='<div style="font-size:11px;font-weight:700;color:'+t.color+';margin-bottom:6px;">'+t.icon+' '+t.label+'</div>';
     h+='<div style="font-size:22px;font-weight:900;color:#111;">'+cnt+'</div>';
@@ -1635,7 +1639,7 @@ function renderEmpReport(){
   h+='<div class="card"><div style="font-size:13px;font-weight:700;margin-bottom:14px;">👤 تفصيل الموظفين</div>';
 
   allInfo.forEach(emp=>{
-    const empReqs=cReqs.filter(r=>r.agent_code===emp.code);
+    const empReqs=cReqsM.filter(r=>r.agent_code===emp.code);
     if(!empReqs.length)return;
 
     const empApp=empReqs.filter(r=>r.status==='approved').length;
@@ -1679,6 +1683,43 @@ function renderEmpReport(){
 
   h+='</div></div>';
   el.innerHTML=h;
+}
+
+function getAvailableMonths(){
+  const months=new Set();
+  cReqs.forEach(r=>{
+    if(r.submitted_at){
+      const d=new Date(r.submitted_at);
+      months.add(d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0'));
+    }
+  });
+  return Array.from(months).sort().reverse();
+}
+function filterByMonth(reqs){
+  if(mF==='all')return reqs;
+  return reqs.filter(r=>{
+    if(!r.submitted_at)return false;
+    const d=new Date(r.submitted_at);
+    const m=d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0');
+    return m===mF;
+  });
+}
+function monthLabel(m){
+  if(m==='all')return 'الكل';
+  const [y,mo]=m.split('-');
+  const names=['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  return names[parseInt(mo)-1]+' '+y;
+}
+function monthFilterBar(onchange){
+  const months=getAvailableMonths();
+  let h='<div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center;">';
+  h+='<span style="font-size:11px;color:#9CA3AF;font-weight:600;">📅 الشهر:</span>';
+  ['all',...months].forEach(m=>{
+    const act=mF===m;
+    h+='<button onclick="mF=\''+m+'\';'+onchange+'" style="padding:4px 12px;border-radius:20px;font-size:11px;font-weight:700;cursor:pointer;border:1.5px solid '+(act?'#6B21A8':'#E5E7EB')+';background:'+(act?'#F5F3FF':'#fff')+';color:'+(act?'#6B21A8':'#6B7280')+';font-family:Cairo,sans-serif;">'+monthLabel(m)+'</button>';
+  });
+  h+='</div>';
+  return h;
 }
 
 </script>
