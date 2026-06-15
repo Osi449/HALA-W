@@ -537,7 +537,7 @@ function renderTDetail(code){
 // CREDIT
 // ══════════════════════════════════════════════════
 async function loadCredit(){try{const d=await dbGet('credit_requests','?region=eq.west&order=submitted_at.desc');cReqs=Array.isArray(d)?d:[];}catch(e){}}
-function renderCredit(){if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}empFilter='all';empNotesSeen=false;loadCredit().then(renderCType);}
+function renderCredit(){if(!user){document.getElementById('credit').innerHTML=nlH('credit');return;}empFilter='all';empNotesSeen=false;mF='all';loadCredit().then(renderCType);}
 function rTitle(type){const t=gCT(type);return t.icon+' '+t.label;}
 
 function renderCType(){
@@ -1685,6 +1685,7 @@ function renderEmpReport(){
   el.innerHTML=h;
 }
 
+let mF="all";
 function getAvailableMonths(){
   const months=new Set();
   cReqs.forEach(r=>{
