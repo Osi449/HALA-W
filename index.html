@@ -654,7 +654,6 @@ function renderEmpList(){
     fDiv.innerHTML='';
     ESTATUS.forEach(s=>{
       const cnt=s.key==='all'?myReqs.length:myReqs.filter(r=>r.status===s.key).length;
-      if(cnt===0&&s.key!=='all')return;
       const act=empFilter===s.key;
       const btn=document.createElement('button');
       btn.innerHTML=s.label+' <span style="font-size:10px;">('+cnt+')</span>';
