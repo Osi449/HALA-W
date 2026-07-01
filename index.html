@@ -1688,6 +1688,9 @@ function renderEmpReport(){
 let mF="all";
 function getAvailableMonths(){
   const months=new Set();
+  // أضف الشهر الحالي دائماً
+  const now=new Date();
+  months.add(now.getFullYear()+'-'+String(now.getMonth()+1).padStart(2,'0'));
   cReqs.forEach(r=>{
     if(r.submitted_at){
       const d=new Date(r.submitted_at);
