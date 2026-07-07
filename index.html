@@ -121,10 +121,10 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 // ── DATA ─────────────────────────────────────────
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
-const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','N6-AB':'1893'};
-const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'N6-AB':0};
-const EMP_TGT=1100000, RGN_TGT=6000000;
-const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'N6-AB':1100000};
+const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151'};
+const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0};
+const EMP_TGT=1100000, RGN_TGT=4900000;
+const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000};
 const getEmpTgt=code=>EMP_TGT_MAP[code]||EMP_TGT;
 
 const TEAMS={
@@ -135,7 +135,7 @@ const TEAMS={
       'W8-MA':{name:'Mustafa Amanullah',short:'Mustafa',color:'#D97706'},
       'W10-AA':{name:'Abdullah Abdulqayyum',short:'Abdullah',color:'#7C3AED'},
       'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'},
-      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',color:'#EF4444'}
+      
     }}
 };
 const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
