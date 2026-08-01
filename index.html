@@ -578,19 +578,41 @@ function renderCForm(){
   rf.forEach(f=>{h+=fH(f,tc.color);});
   if(of.length){h+='<div style="font-size:10px;color:#9CA3AF;font-weight:700;letter-spacing:2px;border-top:1px solid #E5E7EB;padding-top:14px;margin-top:4px;">اختيارية</div>';of.forEach(f=>{h+=fH(f,'#9CA3AF');});}
   h+='<div id="cerr" style="display:none;background:#FEF2F2;border:1px solid #FECACA;border-radius:10px;padding:10px;font-size:12px;color:#DC2626;text-align:center;">⚠️ يرجى ملء جميع الحقول المطلوبة</div>';
+  // سؤال المبلغ الإضافي لـ شركة
+  if(cType==='شركة'){
+    const abv=cFD._above500||false;
+    h+='<div style="background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:14px;padding:16px;margin-bottom:14px;">';
+    h+='<div style="font-size:13px;font-weight:800;color:#6B21A8;margin-bottom:10px;">📋 هل المبلغ المطلوب أكثر من 500,000 ريال؟</div>';
+    h+='<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px;">';
+    h+='<button onclick="cFD._above500=true;renderCForm()" style="padding:12px;border-radius:10px;border:2px solid '+(abv?'#6B21A8':'#E5E7EB')+';background:'+(abv?'#6B21A8':'#fff')+';color:'+(abv?'#fff':'#374151')+';font-weight:700;font-size:14px;cursor:pointer;font-family:Cairo,sans-serif;">✅ نعم</button>';
+    h+='<button onclick="cFD._above500=false;renderCForm()" style="padding:12px;border-radius:10px;border:2px solid '+(!abv?'#6B21A8':'#E5E7EB')+';background:'+(!abv?'#6B21A8':'#fff')+';color:'+(!abv?'#fff':'#374151')+';font-weight:700;font-size:14px;cursor:pointer;font-family:Cairo,sans-serif;">❌ لا</button>';
+    h+='</div>';
+    if(abv){
+      h+='<div style="font-size:11px;color:#6B21A8;font-weight:700;margin-bottom:8px;border-top:1px solid #DDD6FE;padding-top:10px;">المستندات الإضافية المطلوبة ✱</div>';
+      CF_COMPANY_EXTRA.forEach(f=>{h+=fH(f,'#6B21A8');});
+    }
+    h+='</div>';
+  }
   h+='<button class="btn-purple" style="background:linear-gradient(135deg,'+tc.color+','+tc.color+'CC);" onclick="goCP()">معاينة الطلب ←</button></div>';
   document.getElementById('credit').innerHTML=h;
 }
 function goCP(){
   const fields=CFIELDS[cType]||[];
   fields.forEach(f=>{const el=document.getElementById('cf_'+f.key);if(el)cFD[f.key]=el.value;});
-  const miss=fields.filter(f=>f.req&&!cFD[f.key]?.toString().trim());
+  // حقول شركة الإضافية
+  const extraFields=cFD._above500&&cType==='شركة'?CF_COMPANY_EXTRA:[];
+  extraFields.forEach(f=>{const el=document.getElementById('cf_'+f.key);if(el)cFD[f.key]=el.value;});
+  const allReq=[...fields,...extraFields];
+  const miss=allReq.filter(f=>f.req&&!cFD[f.key]?.toString().trim());
   if(miss.length){document.getElementById('cerr').style.display='block';miss.forEach(f=>{const i=document.getElementById('cf_'+f.key);if(i){i.style.borderColor='#FCA5A5';i.style.background='#FEF2F2';}});return;}
   renderCPreview();
 }
 function renderCPreview(){
-  const tc=gCT(cType),fields=CFIELDS[cType]||[];
+  const tc=gCT(cType);
+  const extraPreview=cFD._above500&&cType==='شركة'?CF_COMPANY_EXTRA:[];
+  const allFields=[...(CFIELDS[cType]||[]),...extraPreview];
   let h=tbH('معاينة الطلب','👁','renderCForm()','showPage(\'home\')');
+  const fields=allFields;
   h+='<div class="content"><div class="card" style="padding:0;overflow:hidden;"><div style="background:linear-gradient(135deg,'+tc.color+','+tc.color+'CC);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:15px;font-weight:800;color:#fff;">'+(cFD.client_name||'—')+'</div><div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;">'+(cFD.cashier_id||'')+' · '+(cFD.zone||'')+'</div></div><div style="text-align:right;"><div style="font-size:18px;font-weight:900;color:#fff;">'+(cFD.offer_amount?Number(cFD.offer_amount).toLocaleString():'—')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">SAR</div></div></div>';
   h+='<div style="padding:16px;max-height:50vh;overflow-y:auto;">'+fields.filter(f=>cFD[f.key]).map(f=>'<div style="border-bottom:1px solid #E5E7EB;padding:8px 0;"><div style="font-size:10px;color:#9CA3AF;margin-bottom:2px;">'+(FL[f.key]||f.label)+'</div><div style="font-size:13px;word-break:break-all;line-height:1.6;">'+(String(cFD[f.key]).startsWith('http')?'<a href="'+cFD[f.key]+'" target="_blank" style="color:'+tc.color+'">'+cFD[f.key]+'</a>':cFD[f.key])+'</div></div>').join('')+'</div></div>';
   h+='<div style="display:flex;gap:10px;"><button class="btn-outline" style="flex:1;" onclick="renderCForm()">← تعديل</button><button class="btn-purple" style="flex:2;" onclick="doSubC()">إرسال الطلب ✓</button></div></div>';
