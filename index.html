@@ -154,6 +154,17 @@ const CTYPES=[{key:'هلا',label:'عميل هلا',icon:'🏪',color:'#166534',
 const CF_C=[{key:'cashier_id',label:'Cashier ID',t:'text',req:1},{key:'client_name',label:'اسم العميل',t:'text',req:1},{key:'zone',label:'المنطقة',t:'text',req:1},{key:'offer_amount',label:'المبلغ (SAR)',t:'number',req:1},{key:'reason',label:'سبب التمويل',t:'area',req:1},{key:'balady_url',label:'رابط شهادة بلدي',t:'url',req:1},{key:'shop_photo',label:'رابط صورة المحل',t:'url',req:1},{key:'location',label:'رابط الموقع',t:'url',req:1},{key:'promissory',label:'تفاصيل السند الثاني',t:'area',req:0},{key:'bank_stmt',label:'رابط كشف حساب',t:'url',req:0},{key:'rental',label:'رابط عقد الإيجار',t:'url',req:0}];
 const CF_T=[{key:'cashier_id',label:'Cashier ID',t:'text',req:1},{key:'client_name',label:'اسم العميل',t:'text',req:1},{key:'zone',label:'المنطقة',t:'text',req:1},{key:'offer_amount',label:'المبلغ (SAR)',t:'number',req:1},{key:'reason',label:'سبب التمويل',t:'area',req:1},{key:'balady_url',label:'رابط شهادة بلدي',t:'url',req:1},{key:'shop_photo',label:'رابط صورة المحل',t:'url',req:1},{key:'location',label:'رابط الموقع',t:'url',req:1},{key:'promissory',label:'تفاصيل السند الثاني',t:'area',req:0},{key:'bank_stmt',label:'رابط كشف حساب',t:'url',req:0},{key:'bank_stmt_stamped',label:'كشف حساب سنة (مختوم)',t:'url',req:0},{key:'rental',label:'رابط عقد الإيجار',t:'url',req:0}];
 const CF_36=[{key:'cashier_id',label:'Cashier ID',t:'text',req:1},{key:'client_name',label:'اسم العميل',t:'text',req:1},{key:'zone',label:'المنطقة',t:'text',req:1},{key:'offer_amount',label:'المبلغ (SAR)',t:'number',req:1},{key:'reason',label:'سبب التمويل',t:'area',req:1},{key:'balady_url',label:'رابط شهادة بلدي',t:'url',req:1},{key:'shop_photo',label:'رابط صورة المحل',t:'url',req:1},{key:'location',label:'رابط الموقع',t:'url',req:1},{key:'bank_stmt_stamped',label:'كشف حساب سنة (مختوم)',t:'url',req:1},{key:'promissory',label:'تفاصيل السند الثاني',t:'area',req:0}];
+
+// حقول شركة فوق 500K
+const CF_COMPANY_EXTRA=[
+  {key:'fin_stmt_2yr',label:'القوائم المالية المدققة (آخر سنتين)',t:'url',req:1},
+  {key:'fin_stmt_2026',label:'القوائم المالية الداخلية 2026',t:'url',req:1},
+  {key:'nitaqat',label:'شهادة السعودة (نطاقات)',t:'url',req:1},
+  {key:'gosi',label:'شهادة التأمينات الاجتماعية (GOSI)',t:'url',req:1},
+  {key:'chamber',label:'شهادة الغرفة التجارية',t:'url',req:1},
+  {key:'vat',label:'شهادة ضريبة القيمة المضافة + الإقرارات',t:'url',req:1},
+  {key:'zakat',label:'شهادة الزكاة',t:'url',req:1},
+];
 const CFIELDS={'هلا':CF_C,'شركة':[...CF_C,{key:'founding',label:'رابط عقد التأسيس',t:'url',req:1}],'Top Up':CF_T,'Renewal':CF_T.map(f=>f.key==='offer_amount'?{...f,label:'مبلغ التجديد (SAR)'}:f),'3-6':CF_36,'Non-Hala':CF_36};
 const FL={cashier_id:'Cashier ID',client_name:'اسم العميل',zone:'المنطقة',offer_amount:'المبلغ',reason:'سبب التمويل',balady_url:'شهادة بلدي',shop_photo:'صورة المحل',location:'الموقع',promissory:'السند الثاني',bank_stmt:'كشف الحساب',bank_stmt_stamped:'كشف حساب سنة',rental:'عقد الإيجار',founding:'عقد التأسيس'};
 const MO={'01':'يناير','02':'فبراير','03':'مارس','04':'أبريل','05':'مايو','06':'يونيو','07':'يوليو','08':'أغسطس','09':'سبتمبر','10':'أكتوبر','11':'نوفمبر','12':'ديسمبر'};
