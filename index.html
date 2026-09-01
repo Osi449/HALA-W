@@ -1770,38 +1770,38 @@ function monthFilterBar(onchange){
 function renderCalc(){
   let h=tbH('حاسبة التمويل','🧮',null,"showPage('home')");
   h+='<div class="content">';
-  h+='<div style="background:linear-gradient(135deg,#080F20,#0D1B3E);border:1px solid #1E2A4A;border-radius:16px;padding:20px;margin-bottom:16px;">';
+  h+='<div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:20px;margin-bottom:16px;">';
 
   // المبلغ
   h+='<div style="margin-bottom:16px;">';
-  h+='<label style="font-size:11px;color:#8DA0B8;letter-spacing:1px;display:block;margin-bottom:8px;">مبلغ التمويل (SAR)</label>';
-  h+='<input id="calc-amount" type="number" placeholder="مثال: 200000" style="width:100%;background:#080F20;border:1.5px solid #1E2A4A;border-radius:10px;padding:12px 16px;color:#E8EBF4;font-size:16px;font-weight:700;outline:none;font-family:Cairo,sans-serif;direction:ltr;" oninput="doCalc()"/>';
+  h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">مبلغ التمويل (SAR)</label>';
+  h+='<input id="calc-amount" type="number" placeholder="مثال: 200000" style="width:100%;background:#F5F3FF;border:1.5px solid #1E2A4A;border-radius:10px;padding:12px 16px;color:#6B21A8;font-size:16px;font-weight:700;outline:none;font-family:Cairo,sans-serif;direction:ltr;" oninput="doCalc()"/>';
   h+='</div>';
 
   // الفترة
   h+='<div style="margin-bottom:16px;">';
-  h+='<label style="font-size:11px;color:#8DA0B8;letter-spacing:1px;display:block;margin-bottom:8px;">فترة السداد</label>';
+  h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">فترة السداد</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [3,6,9,12,18,24].forEach(m=>{
-    h+='<button onclick="selCalc(\'period\','+m+',this)" data-calc-period="'+m+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#8DA0B8;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+m+' شهر</button>';
+    h+='<button onclick="selCalc(\'period\','+m+',this)" data-calc-period="'+m+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+m+' شهر</button>';
   });
   h+='</div></div>';
 
   // نسبة الفائدة
   h+='<div style="margin-bottom:16px;">';
-  h+='<label style="font-size:11px;color:#8DA0B8;letter-spacing:1px;display:block;margin-bottom:8px;">نسبة الفائدة السنوية</label>';
+  h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">نسبة الفائدة السنوية</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [17,19,22,24,26,28,30,32].forEach(r=>{
-    h+='<button onclick="selCalc(\'rate\','+r+',this)" data-calc-rate="'+r+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#8DA0B8;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+r+'%</button>';
+    h+='<button onclick="selCalc(\'rate\','+r+',this)" data-calc-rate="'+r+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+r+'%</button>';
   });
   h+='</div></div>';
 
   // الرسوم الإدارية
   h+='<div style="margin-bottom:20px;">';
-  h+='<label style="font-size:11px;color:#8DA0B8;letter-spacing:1px;display:block;margin-bottom:8px;">الرسوم الإدارية</label>';
+  h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">الرسوم الإدارية</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [3,3.5,4,4.5,5].forEach(f=>{
-    h+='<button onclick="selCalc(\'fee\','+f+',this)" data-calc-fee="'+f+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#8DA0B8;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+f+'%</button>';
+    h+='<button onclick="selCalc(\'fee\','+f+',this)" data-calc-fee="'+f+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+f+'%</button>';
   });
   h+='</div></div>';
 
@@ -1821,7 +1821,7 @@ function selCalc(key,val,btn){
   const attr='data-calc-'+key;
   document.querySelectorAll('['+attr+']').forEach(b=>{
     const isActive=b.getAttribute(attr)==String(val);
-    b.style.background=isActive?'#00C896':'#080F20';
+    b.style.background=isActive?'#00C896':'#fff';
     b.style.color=isActive?'#fff':'#8DA0B8';
     b.style.borderColor=isActive?'#00C896':'#1E2A4A';
   });
@@ -1847,8 +1847,8 @@ function doCalc(){
   if(!el)return;
   el.style.display='block';
   el.innerHTML=
-    '<div style="background:linear-gradient(135deg,#080F20,#0D1B3E);border:1px solid #1E2A4A;border-radius:16px;padding:20px;">'+
-    '<div style="font-size:12px;color:#8DA0B8;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #1E2A4A;">📊 تفاصيل التمويل</div>'+
+    '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:20px;">'+
+    '<div style="font-size:12px;color:#4B5563;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #1E2A4A;">📊 تفاصيل التمويل</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'+
     calcRow('مبلغ التمويل',amount.toLocaleString('ar-SA',{maximumFractionDigits:0})+' ر.س','#E8EBF4')+
     calcRow('مدة السداد',period+' شهر','#E8EBF4')+
@@ -1860,14 +1860,14 @@ function doCalc(){
     calcRow('إجمالي المطلوب',Math.round(totalPay+feeAmt).toLocaleString('ar-SA'),'#A78BFA')+
     '</div>'+
     '<div style="margin-top:16px;background:#00C89611;border:1px solid #00C89633;border-radius:10px;padding:12px;text-align:center;">'+
-    '<div style="font-size:11px;color:#8DA0B8;margin-bottom:4px;">القسط الشهري</div>'+
+    '<div style="font-size:11px;color:#4B5563;margin-bottom:4px;">القسط الشهري</div>'+
     '<div style="font-size:32px;font-weight:900;color:#00C896;">'+Math.round(monthlyPay).toLocaleString('ar-SA')+' <span style="font-size:14px;">ر.س</span></div>'+
     '</div></div>';
 }
 
 function calcRow(label,val,color){
   return '<div style="background:#080F20;border:1px solid #1E2A4A;border-radius:10px;padding:12px;">'+
-    '<div style="font-size:10px;color:#4A6080;margin-bottom:4px;">'+label+'</div>'+
+    '<div style="font-size:10px;color:#9CA3AF;margin-bottom:4px;">'+label+'</div>'+
     '<div style="font-size:14px;font-weight:800;color:'+color+';">'+val+'</div>'+
     '</div>';
 }
