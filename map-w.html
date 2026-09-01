@@ -172,8 +172,12 @@ function init(){
 
   // Init map
   map = L.map('map', {zoomControl:true, attributionControl:false});
-  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{
-    maxZoom:19, attribution:'© CartoDB'
+  L.tileLayer('https://mt1.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+    maxZoom:20, attribution:'© Google Maps'
+  }).addTo(map);
+  // Dark overlay
+  L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_only_labels/{z}/{x}/{y}{r}.png',{
+    maxZoom:20, opacity:0.7, attribution:''
   }).addTo(map);
 
   // Get user's clients
