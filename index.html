@@ -1775,7 +1775,7 @@ function renderCalc(){
   // المبلغ
   h+='<div style="margin-bottom:16px;">';
   h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">مبلغ التمويل (SAR)</label>';
-  h+='<input id="calc-amount" type="number" placeholder="مثال: 200000" style="width:100%;background:#F5F3FF;border:1.5px solid #1E2A4A;border-radius:10px;padding:12px 16px;color:#6B21A8;font-size:16px;font-weight:700;outline:none;font-family:Cairo,sans-serif;direction:ltr;" oninput="doCalc()"/>';
+  h+='<input id="calc-amount" type="number" placeholder="مثال: 200000" style="width:100%;background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:10px;padding:12px 16px;color:#6B21A8;font-size:16px;font-weight:700;outline:none;font-family:Cairo,sans-serif;direction:ltr;" oninput="doCalc()"/>';
   h+='</div>';
 
   // الفترة
@@ -1783,7 +1783,7 @@ function renderCalc(){
   h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">فترة السداد</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [3,6,9,12,18,24].forEach(m=>{
-    h+='<button onclick="selCalc(\'period\','+m+',this)" data-calc-period="'+m+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+m+' شهر</button>';
+    h+='<button onclick="selCalc(\'period\','+m+',this)" data-calc-period="'+m+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#F9FAFB;color:#6B7280;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+m+' شهر</button>';
   });
   h+='</div></div>';
 
@@ -1792,7 +1792,7 @@ function renderCalc(){
   h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">نسبة الفائدة السنوية</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [17,19,22,24,26,28,30,32].forEach(r=>{
-    h+='<button onclick="selCalc(\'rate\','+r+',this)" data-calc-rate="'+r+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+r+'%</button>';
+    h+='<button onclick="selCalc(\'rate\','+r+',this)" data-calc-rate="'+r+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#F9FAFB;color:#6B7280;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+r+'%</button>';
   });
   h+='</div></div>';
 
@@ -1801,7 +1801,7 @@ function renderCalc(){
   h+='<label style="font-size:11px;color:#6B21A8;letter-spacing:1px;font-weight:600;display:block;margin-bottom:8px;">الرسوم الإدارية</label>';
   h+='<div style="display:flex;gap:8px;flex-wrap:wrap;">';
   [3,3.5,4,4.5,5].forEach(f=>{
-    h+='<button onclick="selCalc(\'fee\','+f+',this)" data-calc-fee="'+f+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#080F20;color:#4B5563;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+f+'%</button>';
+    h+='<button onclick="selCalc(\'fee\','+f+',this)" data-calc-fee="'+f+'" style="padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:#F9FAFB;color:#6B7280;font-size:12px;font-weight:700;cursor:pointer;font-family:Cairo,sans-serif;">'+f+'%</button>';
   });
   h+='</div></div>';
 
@@ -1850,9 +1850,9 @@ function doCalc(){
     '<div style="background:#fff;border:1px solid #E5E7EB;border-radius:16px;padding:20px;">'+
     '<div style="font-size:12px;color:#4B5563;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid #1E2A4A;">📊 تفاصيل التمويل</div>'+
     '<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">'+
-    calcRow('مبلغ التمويل',amount.toLocaleString('ar-SA',{maximumFractionDigits:0})+' ر.س','#E8EBF4')+
-    calcRow('مدة السداد',period+' شهر','#E8EBF4')+
-    calcRow('نسبة الفائدة',rate+'%','#E8EBF4')+
+    calcRow('مبلغ التمويل',amount.toLocaleString('ar-SA',{maximumFractionDigits:0})+' ر.س','#1A1A2E')+
+    calcRow('مدة السداد',period+' شهر','#1A1A2E')+
+    calcRow('نسبة الفائدة',rate+'%','#1A1A2E')+
     calcRow('القسط الشهري',Math.round(monthlyPay).toLocaleString('ar-SA'),'#00C896')+
     calcRow('هامش الربح',Math.round(profit).toLocaleString('ar-SA'),'#F5A623')+
     calcRow('إجمالي السداد',Math.round(totalPay).toLocaleString('ar-SA'),'#3B9EFF')+
