@@ -3,621 +3,267 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>هلا تمويل — خريطة الغربية</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
+<title>هلا تمويل — خريطة العملاء (الغربية)</title>
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="map_clients_w.js"></script>
 <style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Cairo',sans-serif;direction:rtl;background:#1A1A2E;color:#fff;}
-#topbar{background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;}
-#map{height:calc(100vh - 106px);}
-#controls{background:rgba(107,33,168,0.97);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.1);}
-.ctrl-label{font-size:12px;color:rgba(255,255,255,0.7);white-space:nowrap;}
-select{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 12px;color:#fff;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;}
-select option{background:#3B0764;color:#fff;}
-#count-badge{background:rgba(255,255,255,0.15);border-radius:20px;padding:4px 14px;font-size:12px;color:#86EFAC;font-weight:700;}
-#loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,46,0.85);display:none;align-items:center;justify-content:center;z-index:2000;flex-direction:column;gap:12px;}
-#loading.show{display:flex;}
-.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid #A855F7;border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Action Modal */
-#action-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;}
-#action-modal.show{display:flex;}
-.modal-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;color:#1A1A2E;}
-.modal-title{font-size:16px;font-weight:800;margin-bottom:4px;}
-.modal-sub{font-size:11px;color:#9CA3AF;margin-bottom:20px;}
-.action-q{margin-bottom:16px;}
-.action-q-label{font-size:13px;font-weight:700;margin-bottom:8px;display:block;}
-.action-btns{display:flex;gap:8px;}
-.btn-yes{flex:1;padding:10px;background:#F0FDF4;border:2px solid #E5E7EB;border-radius:10px;color:#166534;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
-.btn-yes.active{background:#166534;color:#fff;border-color:#166534;}
-.btn-no{flex:1;padding:10px;background:#FEF2F2;border:2px solid #E5E7EB;border-radius:10px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
-.btn-no.active{background:#DC2626;color:#fff;border-color:#DC2626;}
-.btn-submit-action{width:100%;padding:13px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:16px;}
-.btn-cancel-modal{width:100%;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:12px;color:#4B5563;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:8px;}
-
-/* Popup */
-.cp{min-width:230px;direction:rtl;font-family:'Cairo',sans-serif;}
-.cp-name{font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:6px;line-height:1.4;}
-.cp-cat{font-size:10px;color:#6B21A8;background:#F5F3FF;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px;}
-.cp-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid #E5E7EB;gap:4px;}
-.cp-row:last-child{border:none;padding-bottom:0;}
-.cp-lbl{color:#9CA3AF;flex-shrink:0;}
-.cp-nums{display:flex;gap:4px;align-items:center;}
-.cp-val{font-weight:700;color:#1A1A2E;font-family:monospace;}
-.btn-call{padding:2px 7px;border-radius:6px;font-size:10px;text-decoration:none;font-weight:700;color:#fff;}
-.btn-cpy{padding:2px 6px;background:#E5E7EB;border:none;border-radius:6px;font-size:10px;cursor:pointer;color:#374151;font-family:'Cairo',sans-serif;}
-.btn-nav{width:100%;padding:8px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;display:block;text-align:center;margin-top:8px;}
-.btn-action{width:100%;padding:8px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:6px;}
-.done-badge{background:#F0FDF4;border:1px solid #22C55E;border-radius:8px;padding:6px 10px;font-size:11px;color:#166534;font-weight:700;text-align:center;margin-top:8px;}
+*{{margin:0;padding:0;box-sizing:border-box;}}
+:root{{
+  --bg:#080F20;--bg2:#0A0F1E;--bg3:#0D1B3E;
+  --border:#1E2A4A;--text:#E8EBF4;--mid:#8DA0B8;--light:#4A6080;
+  --green:#00C896;--purple:#7C3AED;--gold:#F5A623;--red:#F87171;
+}}
+body{{background:var(--bg);color:var(--text);font-family:\'Cairo\',sans-serif;height:100vh;display:flex;flex-direction:column;}}
+#top-bar{{background:var(--bg2);border-bottom:1px solid var(--border);padding:10px 16px;display:flex;align-items:center;gap:12px;flex-shrink:0;}}
+#back-btn{{background:var(--bg3);border:1px solid var(--border);border-radius:8px;padding:6px 14px;color:var(--mid);cursor:pointer;font-family:inherit;font-size:13px;}}
+#map-stats{{display:flex;gap:12px;margin-right:auto;font-size:12px;}}
+.stat-badge{{background:var(--bg3);border:1px solid var(--border);border-radius:20px;padding:4px 12px;color:var(--mid);}}
+.stat-badge span{{color:var(--green);font-weight:700;}}
+#map{{flex:1;}}
+#visit-panel{{position:fixed;bottom:0;left:0;right:0;background:var(--bg2);border-top:2px solid var(--border);padding:16px;transform:translateY(100%);transition:transform 0.3s;z-index:1000;max-height:85vh;overflow-y:auto;border-radius:16px 16px 0 0;}}
+#visit-panel.open{{transform:translateY(0);}}
+.panel-handle{{width:40px;height:4px;background:var(--border);border-radius:2px;margin:0 auto 16px;}}
+.q-section{{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}}
+.q-label{{font-size:12px;color:var(--mid);margin-bottom:10px;line-height:1.5;}}
+.q-title{{font-size:13px;font-weight:700;margin-bottom:8px;color:var(--text);}}
+.yn-btns{{display:grid;grid-template-columns:1fr 1fr;gap:8px;}}
+.yn-btn{{padding:10px;border-radius:10px;border:1.5px solid var(--border);background:transparent;color:var(--mid);font-size:13px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;}}
+.yn-btn.yes.active{{border-color:var(--green);background:#00C89622;color:var(--green);}}
+.yn-btn.no.active{{border-color:var(--red);background:#F8717122;color:var(--red);}}
+.url-input{{width:100%;background:var(--bg);border:1.5px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-size:13px;outline:none;font-family:inherit;direction:ltr;margin-top:8px;}}
+.url-input::placeholder{{color:var(--light);}}
+.url-input:focus{{border-color:var(--green);}}
+.save-btn{{width:100%;padding:14px;background:linear-gradient(135deg,#00C896,#028090);border:none;border-radius:12px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-top:8px;}}
+.close-btn{{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px;width:100%;color:var(--mid);font-size:13px;cursor:pointer;font-family:inherit;margin-top:8px;}}
+.client-info-card{{background:var(--bg3);border:1px solid var(--border);border-radius:12px;padding:14px;margin-bottom:12px;}}
+.client-name{{font-size:16px;font-weight:800;margin-bottom:4px;}}
+.client-meta{{font-size:11px;color:var(--light);line-height:1.8;}}
+.progress-bar-wrap{{background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin-bottom:10px;}}
+.progress-label{{font-size:11px;color:var(--mid);margin-bottom:6px;display:flex;justify-content:space-between;}}
+.progress-bar{{height:8px;background:var(--border);border-radius:4px;overflow:hidden;}}
+.progress-fill{{height:100%;background:linear-gradient(90deg,#00C896,#028090);border-radius:4px;transition:width 0.5s;}}
 </style>
 </head>
 <body>
-<div id="topbar">
-  <div style="display:flex;align-items:center;gap:8px;">
-    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg>
-    <div style="font-size:14px;font-weight:900;color:#fff;">خريطة الغربية 🗺️</div>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <span id="count-badge">اختر موظف</span>
-    <a href="index.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
-  </div>
-</div>
-<div id="controls">
-  <span class="ctrl-label">👤</span>
-  <select id="emp-select" onchange="onEmpChange()">
-    <option value="">— اختر موظف —</option>
-    <option value="W1-JH">W1+W13 — Jabir Mohammed Hassan</option>
-    <option value="W2-HM">W2+W3 — Haitham Mahmoud</option>
-    <option value="W8-MA">W8+W9 — Mustafa Amanullah</option>
-    <option value="W10-AA">W10+W5+W11+W7 — Abdullah Abdulqayyum</option>
-    <option value="W12-SF">W12+W4 — Shadi Fahad Alghamdi</option>
-    <option value="N6-AB">N6+N7+N8 — Abdulaziz Abdulbaqi</option>
-  </select>
-  <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
-  <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
-    <input id="map-entity-search" type="text" placeholder="بحث Entity ID / اسم..." 
-      style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;font-family:monospace;color:#fff;width:180px;outline:none;direction:ltr;"
-      oninput="mapEntitySearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';mapEntitySearch('');}">
-    <button onclick="clearMapSearch()" style="padding:6px 10px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:11px;cursor:pointer;">✕</button>
-    <span id="map-search-result" style="font-size:11px;color:#86EFAC;min-width:60px;"></span>
+<div id="top-bar">
+  <button id="back-btn" onclick="window.location.href=\'index.html\'">← رجوع</button>
+  <div style="font-size:13px;font-weight:700;">🗺️ خريطة العملاء</div>
+  <div id="map-stats" style="margin-right:auto;">
+    <div class="stat-badge">الكل: <span id="total-count">0</span></div>
+    <div class="stat-badge">زيارات اليوم: <span id="today-count" style="color:var(--gold);">0</span></div>
+    <div class="stat-badge">المتبقي: <span id="remain-count">0</span></div>
   </div>
 </div>
 <div id="map"></div>
 
-<!-- Action Modal -->
-<div id="action-modal">
-  <div class="modal-box">
-    <div class="modal-title" id="modal-client-name">اسم العميل</div>
-    <div class="modal-sub" id="modal-client-id"></div>
-
-    <!-- سؤال الزيارة -->
-    <div class="action-q" id="visit-q">
-      <span class="action-q-label">🚶 هل تم زيارة العميل فعلياً؟</span>
-      <div class="action-btns">
-        <button class="btn-yes" id="qv-yes" onclick="setVisit(true)">✅ نعم</button>
-        <button class="btn-no"  id="qv-no"  onclick="setVisit(false)">❌ لا</button>
-      </div>
-    </div>
-
-    <!-- باقي الأسئلة — تظهر بعد تأكيد الزيارة -->
-    <div id="contact-questions" style="display:none;">
-      <div class="action-q">
-        <span class="action-q-label">📞 هل تم التواصل مع العميل؟</span>
-        <div class="action-btns">
-          <button class="btn-yes" id="q1-yes" onclick="setQ(1,true)">✅ نعم</button>
-          <button class="btn-no"  id="q1-no"  onclick="setQ(1,false)">❌ لا</button>
-        </div>
-      </div>
-      <div class="action-q">
-        <span class="action-q-label">💚 هل العميل مهتم؟</span>
-        <div class="action-btns">
-          <button class="btn-yes" id="q2-yes" onclick="setQ(2,true)">✅ نعم</button>
-          <button class="btn-no"  id="q2-no"  onclick="setQ(2,false)">❌ لا</button>
-        </div>
-      </div>
-      <div class="action-q">
-        <span class="action-q-label">💬 هل تم إرسال رسالة واتساب؟</span>
-        <div class="action-btns">
-          <button class="btn-yes" id="q3-yes" onclick="setQ(3,true)">✅ نعم</button>
-          <button class="btn-no"  id="q3-no"  onclick="setQ(3,false)">❌ لا</button>
-        </div>
-      </div>
-    </div>
-
-    <button class="btn-save" onclick="submitAction()">حفظ الإجراء ✓</button>
-    <button class="btn-cancel-modal" onclick="closeModal()">إلغاء</button>
+<div id="visit-panel">
+  <div class="panel-handle"></div>
+  <div class="client-info-card">
+    <div class="client-name" id="vp-name">—</div>
+    <div class="client-meta" id="vp-meta"></div>
   </div>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span>إنجاز زياراتك اليوم</span>
+      <span id="prog-text">0/0</span>
+    </div>
+    <div class="progress-bar"><div class="progress-fill" id="prog-fill" style="width:0%"></div></div>
+  </div>
+  <div class="q-section">
+    <div class="q-title">١. هل العميل مهتم بالتمويل؟</div>
+    <div class="yn-btns">
+      <button class="yn-btn yes" onclick="setQ(\'interested\',true,this)">✅ نعم</button>
+      <button class="yn-btn no" onclick="setQ(\'interested\',false,this)">❌ لا</button>
+    </div>
+  </div>
+  <div class="q-section">
+    <div class="q-title">٢. هل تم شرح خدمة التمويل؟</div>
+    <div class="yn-btns">
+      <button class="yn-btn yes" onclick="setQ(\'explained\',true,this)">✅ نعم</button>
+      <button class="yn-btn no" onclick="setQ(\'explained\',false,this)">❌ لا</button>
+    </div>
+  </div>
+  <div class="q-section">
+    <div class="q-title">٣. صورة الجهاز (مع رقمه)</div>
+    <div class="q-label">ارفع الصورة على Google Drive أو أي سحابة وضع الرابط هنا</div>
+    <input class="url-input" id="q-device-url" placeholder="https://drive.google.com/..." type="url"/>
+  </div>
+  <div class="q-section">
+    <div class="q-title">٤. صورة المحل</div>
+    <input class="url-input" id="q-shop-url" placeholder="https://drive.google.com/..." type="url"/>
+  </div>
+  <div class="q-section">
+    <div class="q-title">٥. هل تم إرسال رسالة التمويل للمسؤول؟</div>
+    <div class="yn-btns">
+      <button class="yn-btn yes" onclick="setQ(\'msg_sent\',true,this)">✅ نعم</button>
+      <button class="yn-btn no" onclick="setQ(\'msg_sent\',false,this)">❌ لا</button>
+    </div>
+  </div>
+  <button class="save-btn" onclick="saveVisit()">💾 حفظ الزيارة</button>
+  <button class="close-btn" onclick="closePanel()">إلغاء</button>
 </div>
-</body>l>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>هلا تمويل — خريطة الغربية</title>
-<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
-<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-<style>
-*{margin:0;padding:0;box-sizing:border-box;}
-body{font-family:'Cairo',sans-serif;direction:rtl;background:#1A1A2E;color:#fff;}
-#topbar{background:linear-gradient(135deg,#6B21A8,#7C3AED);padding:12px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:1000;}
-#map{height:calc(100vh - 106px);}
-#controls{background:rgba(107,33,168,0.97);padding:10px 16px;display:flex;gap:10px;align-items:center;flex-wrap:wrap;border-bottom:1px solid rgba(255,255,255,0.1);}
-.ctrl-label{font-size:12px;color:rgba(255,255,255,0.7);white-space:nowrap;}
-select{background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 12px;color:#fff;font-size:13px;font-family:'Cairo',sans-serif;cursor:pointer;}
-select option{background:#3B0764;color:#fff;}
-#count-badge{background:rgba(255,255,255,0.15);border-radius:20px;padding:4px 14px;font-size:12px;color:#86EFAC;font-weight:700;}
-#loading{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(26,26,46,0.85);display:none;align-items:center;justify-content:center;z-index:2000;flex-direction:column;gap:12px;}
-#loading.show{display:flex;}
-.spinner{width:40px;height:40px;border:4px solid rgba(255,255,255,0.2);border-top:4px solid #A855F7;border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}
-
-/* Action Modal */
-#action-modal{position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.6);z-index:3000;display:none;align-items:center;justify-content:center;padding:20px;}
-#action-modal.show{display:flex;}
-.modal-box{background:#fff;border-radius:20px;padding:24px;width:100%;max-width:380px;color:#1A1A2E;}
-.modal-title{font-size:16px;font-weight:800;margin-bottom:4px;}
-.modal-sub{font-size:11px;color:#9CA3AF;margin-bottom:20px;}
-.action-q{margin-bottom:16px;}
-.action-q-label{font-size:13px;font-weight:700;margin-bottom:8px;display:block;}
-.action-btns{display:flex;gap:8px;}
-.btn-yes{flex:1;padding:10px;background:#F0FDF4;border:2px solid #E5E7EB;border-radius:10px;color:#166534;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
-.btn-yes.active{background:#166534;color:#fff;border-color:#166534;}
-.btn-no{flex:1;padding:10px;background:#FEF2F2;border:2px solid #E5E7EB;border-radius:10px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;}
-.btn-no.active{background:#DC2626;color:#fff;border-color:#DC2626;}
-.btn-submit-action{width:100%;padding:13px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:12px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:16px;}
-.btn-cancel-modal{width:100%;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:12px;color:#4B5563;font-size:13px;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:8px;}
-
-/* Popup */
-.cp{min-width:230px;direction:rtl;font-family:'Cairo',sans-serif;}
-.cp-name{font-size:13px;font-weight:800;color:#1A1A2E;margin-bottom:6px;line-height:1.4;}
-.cp-cat{font-size:10px;color:#6B21A8;background:#F5F3FF;padding:2px 8px;border-radius:8px;display:inline-block;margin-bottom:8px;}
-.cp-row{display:flex;justify-content:space-between;align-items:center;font-size:11px;padding:5px 0;border-bottom:1px solid #E5E7EB;gap:4px;}
-.cp-row:last-child{border:none;padding-bottom:0;}
-.cp-lbl{color:#9CA3AF;flex-shrink:0;}
-.cp-nums{display:flex;gap:4px;align-items:center;}
-.cp-val{font-weight:700;color:#1A1A2E;font-family:monospace;}
-.btn-call{padding:2px 7px;border-radius:6px;font-size:10px;text-decoration:none;font-weight:700;color:#fff;}
-.btn-cpy{padding:2px 6px;background:#E5E7EB;border:none;border-radius:6px;font-size:10px;cursor:pointer;color:#374151;font-family:'Cairo',sans-serif;}
-.btn-nav{width:100%;padding:8px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;text-decoration:none;display:block;text-align:center;margin-top:8px;}
-.btn-action{width:100%;padding:8px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;margin-top:6px;}
-.done-badge{background:#F0FDF4;border:1px solid #22C55E;border-radius:8px;padding:6px 10px;font-size:11px;color:#166534;font-weight:700;text-align:center;margin-top:8px;}
-</style>
-</head>
-<body>
-<div id="topbar">
-  <div style="display:flex;align-items:center;gap:8px;">
-    <svg width="28" height="28" viewBox="0 0 60 60" fill="none"><rect width="60" height="60" rx="14" fill="rgba(255,255,255,0.15)"/><path d="M14 44V16h8v11h16V16h8v28h-8V35H22v9H14z" fill="#C4B5FD"/><circle cx="46" cy="16" r="5" fill="#22C55E"/></svg>
-    <div style="font-size:14px;font-weight:900;color:#fff;">خريطة الغربية 🗺️</div>
-  </div>
-  <div style="display:flex;align-items:center;gap:8px;">
-    <span id="count-badge">اختر موظف</span>
-    <a href="index.html" style="background:rgba(255,255,255,0.12);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:5px 12px;color:#fff;font-size:12px;text-decoration:none;">🏠</a>
-  </div>
-</div>
-<div id="controls">
-  <span class="ctrl-label">👤</span>
-  <select id="emp-select" onchange="onEmpChange()">
-    <option value="">— اختر موظف —</option>
-    <option value="W1-JH">W1+W13 — Jabir Mohammed Hassan</option>
-    <option value="W2-HM">W2+W3 — Haitham Mahmoud</option>
-    <option value="W8-MA">W8+W9 — Mustafa Amanullah</option>
-    <option value="W10-AA">W10+W5+W11+W7 — Abdullah Abdulqayyum</option>
-    <option value="W12-SF">W12+W4 — Shadi Fahad Alghamdi</option>
-    <option value="N6-AB">N6+N7+N8 — Abdulaziz Abdulbaqi</option>
-  </select>
-  <span class="ctrl-label" style="margin-right:4px;">✅ منجز: <span id="done-count" style="color:#86EFAC;font-weight:700;">0</span></span>
-  <div style="display:flex;gap:6px;align-items:center;margin-right:auto;">
-    <input id="map-entity-search" type="text" placeholder="بحث Entity ID / اسم..." 
-      style="background:rgba(255,255,255,0.15);border:1.5px solid rgba(255,255,255,0.3);border-radius:8px;padding:6px 12px;font-size:12px;font-weight:700;font-family:monospace;color:#fff;width:180px;outline:none;direction:ltr;"
-      oninput="mapEntitySearch(this.value)" onkeydown="if(event.key==='Escape'){this.value='';mapEntitySearch('');}">
-    <button onclick="clearMapSearch()" style="padding:6px 10px;background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:8px;color:#fff;font-size:11px;cursor:pointer;">✕</button>
-    <span id="map-search-result" style="font-size:11px;color:#86EFAC;min-width:60px;"></span>
-  </div>
-</div>
-<div id="map"></div>
-
-<!-- Action Modal -->
-<div id="action-modal">
-  <div class="modal-box">
-    <div class="modal-title" id="modal-client-name">اسم العميل</div>
-    <div class="modal-sub" id="modal-client-id"></div>
-    <div class="action-q" id="visit-q">
-      <span class="action-q-label">🚶 هل تم زيارة العميل فعلياً؟</span>
-      <div class="action-btns">
-        <button class="btn-yes" id="qv-yes" onclick="setVisit(true)">✅ نعم</button>
-        <button class="btn-no" id="qv-no" onclick="setVisit(false)">❌ لا</button>
-      </div>
-    </div>
-    <div id="contact-questions" style="display:none;">
-    <div class="action-q">
-      <span class="action-q-label">📞 هل تم التواصل مع العميل؟</span>
-      <div class="action-btns">
-        <button class="btn-yes" id="q1-yes" onclick="setQ(1,true)">✅ نعم</button>
-        <button class="btn-no" id="q1-no" onclick="setQ(1,false)">❌ لا</button>
-      </div>
-    </div>
-    <div class="action-q">
-      <span class="action-q-label">💚 هل العميل مهتم؟</span>
-      <div class="action-btns">
-        <button class="btn-yes" id="q2-yes" onclick="setQ(2,true)">✅ نعم</button>
-        <button class="btn-no" id="q2-no" onclick="setQ(2,false)">❌ لا</button>
-      </div>
-    </div>
-    <div class="action-q">
-      <span class="action-q-label">💬 هل تم إرسال رسالة واتساب؟</span>
-      <div class="action-btns">
-        <button class="btn-yes" id="q3-yes" onclick="setQ(3,true)">✅ نعم</button>
-        <button class="btn-no" id="q3-no" onclick="setQ(3,false)">❌ لا</button>
-      </div>
-    </div>
-    <button class="btn-submit-action" onclick="submitAction()">حفظ الإجراء ✓</button>
-    <button class="btn-cancel-modal" onclick="closeModal()">إلغاء</button>
-  </div>
-</div>
-
-<div id="loading"><div class="spinner"></div><div style="font-size:13px;color:#A855F7;">جاري تحميل البيانات...</div></div>
 
 <script>
-const AR_NAMES_MAP={
-  'W1-JH':'جابر','W2-HM':'هيثم','W8-MA':'مصطفى',
-  'W10-AA':'عبدالله','W12-SF':'شادي','N6-AB':'عبدالعزيز',
-  'WEST-MGR':'عثمان'
-};
-function getMapFirstName(){const code=mapUser?.code||'';return AR_NAMES_MAP[code]||(mapUser?.name||'').split(' ')[0];}
+const DATA_VAR = 'MAP_CLIENTS_W';
+const SITE = 'west';
+const SB = 'https://ggmvlrwbmnuvnnrojrcs.supabase.co';
+const SK = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbXZscndibW51dm5ucm9qcmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTI2MjYsImV4cCI6MjA5MzI4ODYyNn0.fSfgSVe_7nI_XzWY3L25gy86HLAxC0e99RdRdMGD_kY';
+const SH = {{'Content-Type':'application/json',apikey:SK,Authorization:'Bearer '+SK}};
 
-const ZONE_CENTERS={
-  'W1-JH': [21.5433, 39.1728],
-  'W2-HM': [21.4858, 39.1925],
-  'W8-MA': [21.5200, 39.2100],
-  'W10-AA':[21.3891, 39.8579],
-  'W12-SF':[21.5600, 39.1500],
-  'N6-AB': [24.5000, 38.0000],
-};
-const BASE_URL=window.location.href.split('map-w.html')[0].split('?')[0];
+// Load user
+let user = null;
+try {{ user = JSON.parse(localStorage.getItem('hu5')); }} catch(e) {{}}
+if(!user) {{ window.location.href='index.html'; }}
 
-// ── Auth ─────────────────────────────────
-let mapUser=null;
-try{const u=localStorage.getItem('hu5');if(u)mapUser=JSON.parse(u);}catch(e){}
+const ALL_CLIENTS = window[DATA_VAR] || {{}};
+const META = window[DATA_VAR+'_META'] || {{center:[24.7,46.7],zoom:10}};
+const EMP_ZONE = user ? (ALL_CLIENTS[user.code] ? [user.code] : Object.keys(ALL_CLIENTS)) : Object.keys(ALL_CLIENTS);
+const IS_MGR = user && (user.role==='region'||user.role==='supervisor'||user.role==='owner');
 
-// إذا ما في جلسة — وجّهه للرئيسية
-if(!mapUser){
-  document.body.innerHTML='<div style="min-height:100vh;background:linear-gradient(135deg,#6B21A8,#7C3AED);display:flex;align-items:center;justify-content:center;text-align:center;padding:20px;"><div><div style="font-size:52px;margin-bottom:16px;">🔐</div><div style="font-size:18px;font-weight:800;color:#fff;margin-bottom:8px;">يجب تسجيل الدخول أولاً</div><a href="index.html" style="display:inline-block;margin-top:16px;padding:12px 28px;background:rgba(255,255,255,0.2);border:1px solid rgba(255,255,255,0.3);border-radius:12px;color:#fff;font-size:14px;font-weight:700;text-decoration:none;">الذهاب للرئيسية</a></div></div>';
-}
+// Get clients to show
+const myClients = IS_MGR 
+  ? Object.values(ALL_CLIENTS).flat() 
+  : (ALL_CLIENTS[user?.code] || []);
 
-const isSup=mapUser&&(mapUser.role==='supervisor'||mapUser.role==='region');
-const isEmp=mapUser&&mapUser.role==='employee';
+// Colors per employee
+const EMP_COLORS = {{'W1-JH':'#00C896','W2-HM':'#F5A623','W8-MA':'#7C3AED','W10-AA':'#3B9EFF','W12-SF':'#F87171'}};
 
-// خريطة الموظف لزونه فقط
-const EMP_ZONE_MAP={
-  'W1-JH':'W1-JH',
-  'W2-HM':'W2-HM',
-  'W8-MA':'W8-MA',
-  'W10-AA':'W10-AA',
-  'W12-SF':'W12-SF',
-  'N6-AB':'N6-AB'
-};
+// Visits storage
+function getVisits() {{
+  try {{ return JSON.parse(localStorage.getItem('visits_'+SITE) || '{{}}'); }} catch(e) {{ return {{}}; }}
+}}
+function saveVisitLocal(id, data) {{
+  const v = getVisits(); v[id] = data; localStorage.setItem('visits_'+SITE, JSON.stringify(v));
+}}
+function getTodayVisits() {{
+  const today = new Date().toISOString().slice(0,10);
+  return Object.values(getVisits()).filter(v => v.date === today);
+}}
 
-const map=L.map('map').setView([21.54,39.17],11);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OpenStreetMap',maxZoom:19}).addTo(map);
-let markers={};
-let layerGroup=L.layerGroup().addTo(map);
-let currentData=null;
-let currentEmp='';
-let actions={}; // {clientId: {q1,q2,q3}}
-let modalClientId='';
-let answers={visit:null,1:null,2:null,3:null};
-  document.getElementById('contact-questions').style.display='none';
-  if(document.getElementById('qv-yes'))document.getElementById('qv-yes').className='btn-yes';
-  if(document.getElementById('qv-no'))document.getElementById('qv-no').className='btn-no';
+// Map init
+const map = L.map('map').setView([21.5, 39.2], 10);
+L.tileLayer('https://{{s}}.tile.openstreetmap.org/{{z}}/{{x}}/{{y}}.png', {{
+  attribution:'© OpenStreetMap', maxZoom:19
+}}).addTo(map);
 
-// Load actions from localStorage
-function loadActions(emp){
-  try{const a=localStorage.getItem('map_actions_'+emp);return a?JSON.parse(a):{};}catch(e){return{};}
-}
-function saveActions(emp){
-  try{localStorage.setItem('map_actions_'+emp,JSON.stringify(actions));}catch(e){}
-}
+// Markers
+let activeClientId = null;
+let visitData = {{}};
+const visits = getVisits();
+const markers = {{}};
 
-// ── Entity Search (Map) ───────────────────
-let mapSearchTerm = '';
-let allMapMarkers = [];
+function makeIcon(color, visited) {{
+  const fill = visited ? '#00C896' : color;
+  return L.divIcon({{
+    html: `<div style="width:14px;height:14px;border-radius:50%;background:${{fill}};border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,0.4)"></div>`,
+    className:'', iconSize:[14,14], iconAnchor:[7,7]
+  }});
+}}
 
-function mapEntitySearch(val) {
-  mapSearchTerm = val.trim().toUpperCase();
-  applyMapSearch();
-}
+// Draw markers
+const showEmps = IS_MGR ? Object.keys(ALL_CLIENTS) : [user?.code];
+let total = 0;
+showEmps.forEach(code => {{
+  const clients = ALL_CLIENTS[code] || [];
+  const color = EMP_COLORS[code] || '#7C3AED';
+  total += clients.length;
+  clients.forEach(c => {{
+    if(!c.lat || !c.lng) return;
+    const visited = !!visits[c.id];
+    const m = L.marker([c.lat, c.lng], {{icon:makeIcon(color, visited)}}).addTo(map);
+    m.on('click', () => openVisit(c, code, color));
+    markers[c.id] = {{marker:m, code, color, client:c}};
+  }});
+}});
 
-function clearMapSearch() {
-  document.getElementById('map-entity-search').value = '';
-  mapSearchTerm = '';
-  document.getElementById('map-search-result').textContent = '';
-  applyMapSearch();
-}
+// Update stats
+function updateStats() {{
+  const todayV = getTodayVisits();
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('today-count').textContent = todayV.length;
+  document.getElementById('remain-count').textContent = total - Object.keys(getVisits()).length;
+  const myTotal = (ALL_CLIENTS[user?.code]||[]).length;
+  const myToday = todayV.filter(v=>v.agent===user?.code).length;
+  document.getElementById('prog-text').textContent = myToday+'/'+Math.min(5,myTotal);
+  document.getElementById('prog-fill').style.width = Math.min(100, myToday/5*100)+'%';
+}}
+updateStats();
 
-function applyMapSearch() {
-  if (!currentData || !currentData.clients) return;
-  const res = document.getElementById('map-search-result');
-  
-  if (!mapSearchTerm) {
-    // Show all markers
-    if (window._allMarkers) {
-      window._allMarkers.forEach(m => {
-        if(!layerGroup.hasLayer(m.marker))layerGroup.addLayer(m.marker);
-      });
-    }
-    res.textContent = '';
-    return;
-  }
-  
-  let found = 0;
-  if (window._allMarkers) {
-    window._allMarkers.forEach(m => {
-      const c = m.client;
-      const match = (c.id||'').toUpperCase().includes(mapSearchTerm) ||
-                    (c.name||'').toUpperCase().includes(mapSearchTerm) ||
-                    (c.cashier||'').toUpperCase().includes(mapSearchTerm) ||
-                    (c.tid||'').toUpperCase().includes(mapSearchTerm);
-      if (match) {
-        if(!layerGroup.hasLayer(m.marker))layerGroup.addLayer(m.marker);
-        found++;
-        if (found === 1) map.setView(m.marker.getLatLng(), 15);
-      } else {
-        if(layerGroup.hasLayer(m.marker))layerGroup.removeLayer(m.marker);
-      }
-    });
-  }
-  res.textContent = found > 0 ? `${found} نتيجة` : 'لا نتائج';
-  res.style.color = found > 0 ? '#86EFAC' : '#FCA5A5';
-}
-
-function isDone(id){
-  const a=actions[id];
-  return a&&a.q1!==null&&a.q2!==null&&a.q3!==null;
-}
-function updateDoneCount(){
-  if(!currentData)return;
-  const done=currentData.clients.filter(c=>isDone(c.id)).length;
-  document.getElementById('done-count').textContent=done;
-}
-
-function loading(show){document.getElementById('loading').className=show?'show':'';}
-
-function makeIcon(id,color){
-  const done=isDone(id);
-  const c=done?'#22C55E':color||'#6B21A8';
-  const inner=done?'<text x="11" y="15" text-anchor="middle" font-size="9" fill="white">✓</text>':'';
-  return L.divIcon({
-    html:`<svg xmlns="http://www.w3.org/2000/svg" width="22" height="30" viewBox="0 0 22 30">
-      <path d="M11 0C4.9 0 0 4.9 0 11c0 8.3 11 19 11 19S22 19.3 22 11C22 4.9 17.1 0 11 0z" fill="${c}" stroke="${done?'#166534':'rgba(0,0,0,0.2)'}" stroke-width="1"/>
-      <circle cx="11" cy="11" r="5" fill="white"/>${inner}
-    </svg>`,
-    className:'',iconSize:[22,30],iconAnchor:[11,30],popupAnchor:[0,-30]
-  });
-}
-
-function copyNum(n){
-  navigator.clipboard.writeText(n).then(()=>alert('تم نسخ: '+n)).catch(()=>prompt('انسخ الرقم:',n));
-}
-
-function openAction(id){
-  const c=currentData&&currentData.clients.find(x=>x.id===id);
-  if(!c)return;
-  modalClientId=id;
-  answers={visit:null,1:null,2:null,3:null};
-  // Reset visit UI
-  const cq=document.getElementById('contact-questions');
-  if(cq)cq.style.display='none';
-  const qvy=document.getElementById('qv-yes');
-  const qvn=document.getElementById('qv-no');
-  if(qvy)qvy.className='btn-yes';
-  if(qvn)qvn.className='btn-no';
-  // Load existing answers
-  if(actions[id]){
-    answers=Object.assign({visit:null,1:null,2:null,3:null},actions[id]);
-    if(answers.visit!==null){setVisit(answers.visit);}
-  }
-  document.getElementById('modal-client-name').textContent=c.name;
-  document.getElementById('modal-client-id').textContent='ID: '+c.id+' | TID: '+c.tid;
+// Open visit panel
+function openVisit(client, code, color) {{
+  activeClientId = client.id;
+  visitData = {{interested:null, explained:null, msg_sent:null, device_url:'', shop_url:''}};
+  document.getElementById('vp-name').textContent = client.name || 'عميل '+client.id;
+  document.getElementById('vp-meta').innerHTML = 
+    'Cashier ID: '+client.id+' · TID: '+client.tid+'<br>'+
+    'جوال المدير: '+client.manager+' · المالك: '+client.owner+'<br>'+
+    'آخر نشاط: '+client.lastbeat+' · مبيعات: '+(client.total||0).toLocaleString()+' SAR';
   // Reset buttons
-  [1,2,3].forEach(q=>{
-    document.getElementById('q'+q+'-yes').className='btn-yes'+(answers[q]===true?' active':'');
-    document.getElementById('q'+q+'-no').className='btn-no'+(answers[q]===false?' active':'');
-  });
-  document.getElementById('action-modal').className='show';
-}
+  document.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('active'));
+  document.getElementById('q-device-url').value = '';
+  document.getElementById('q-shop-url').value = '';
+  document.getElementById('visit-panel').classList.add('open');
+  // WhatsApp shortcut (kept)
+  map.setView([client.lat, client.lng], 16);
+}}
 
-function closeModal(){document.getElementById('action-modal').className='';}
+function closePanel() {{
+  document.getElementById('visit-panel').classList.remove('open');
+  activeClientId = null;
+}}
 
-function setQ(q,val){
-  answers[q]=val;
-  document.getElementById('q'+q+'-yes').className='btn-yes'+(val===true?' active':'');
-  document.getElementById('q'+q+'-no').className='btn-no'+(val===false?' active':'');
-}
+function setQ(key, val, btn) {{
+  visitData[key] = val;
+  const parent = btn.closest('.yn-btns');
+  parent.querySelectorAll('.yn-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}}
 
+async function saveVisit() {{
+  if(!activeClientId) return;
+  const client = Object.values(ALL_CLIENTS).flat().find(c=>c.id===activeClientId);
+  if(!client) return;
+  
+  visitData.device_url = document.getElementById('q-device-url').value;
+  visitData.shop_url = document.getElementById('q-shop-url').value;
+  
+  const visit = {{
+    ...visitData,
+    id: activeClientId,
+    client_name: client.name,
+    tid: client.tid,
+    agent: user?.code,
+    agent_name: user?.name,
+    date: new Date().toISOString().slice(0,10),
+    ts: new Date().toISOString(),
+    region: SITE,
+  }};
+  
+  // Save locally
+  saveVisitLocal(activeClientId, visit);
+  
+  // Save to Supabase
+  try {{
+    await fetch(SB+'/rest/v1/map_visits', {{
+      method:'POST',
+      headers:{{...SH,Prefer:'return=representation'}},
+      body: JSON.stringify([visit])
+    }});
+  }} catch(e) {{ console.log('Supabase save failed (offline):', e); }}
+  
+  // Update marker color
+  if(markers[activeClientId]) {{
+    markers[activeClientId].marker.setIcon(makeIcon(markers[activeClientId].color, true));
+  }}
+  
+  updateStats();
+  closePanel();
+  alert('✅ تم حفظ الزيارة!');
+}}
 
-function setVisit(val){
-  answers['visit']=val;
-  const qvy=document.getElementById('qv-yes');
-  const qvn=document.getElementById('qv-no');
-  const cq=document.getElementById('contact-questions');
-  if(qvy)qvy.className='btn-yes'+(val===true?' active':'');
-  if(qvn)qvn.className='btn-no'+(val===false?' active':'');
-  if(cq)cq.style.display=val?'block':'none';
-}
-
-function submitAction(){
-  // إذا لم يتم الزيارة — احفظ مباشرة بدون باقي الأسئلة
-  if(answers['visit']===false){
-    actions[modalClientId]={visit:false,q1:null,q2:null,q3:null};
-    saveActions(currentEmp);
-    closeModal();
-    updateMarker(modalClientId);
-    updateDoneCount();
-    map.closePopup();
-    return;
-  }
-  // إذا تم الزيارة — تحقق من الأسئلة الثلاثة
-  if(answers['visit']===null){alert('يرجى الإجابة على سؤال الزيارة');return;}
-  if(answers[1]===null||answers[2]===null||answers[3]===null){alert('يرجى الإجابة على جميع الأسئلة');return;}
-  actions[modalClientId]={visit:true,q1:answers[1],q2:answers[2],q3:answers[3]};
-  saveActions(currentEmp);
-  closeModal();
-  updateMarker(modalClientId);
-  updateDoneCount();
-  map.closePopup();
-}
-
-function updateMarker(id){
-  if(!markers[id])return;
-  const c=currentData.clients.find(x=>x.id===id);
-  if(!c)return;
-  markers[id].setIcon(makeIcon(id,'#6B21A8'));
-}
-
-function buildPopup(c){
-  const done=isDone(c.id);
-  const a=actions[c.id]||{};
-  const wa=getMapFirstName();
-  const waMsg=encodeURIComponent('سلام عليكم معك '+wa+' من قسم مبيعات التمويل بشركة هلا\n\nانت مؤهل مبدئياً للتمويل اذا كنت مهتم بلغني');
-  const cashierNum=String(c.cashier||c.id||'');
-  const ownerNum=String(c.owner||'');
-  const cashierWa='966'+(cashierNum.startsWith('0')?cashierNum.slice(1):cashierNum);
-  const ownerWa=ownerNum?'966'+(ownerNum.startsWith('0')?ownerNum.slice(1):ownerNum):'';
-
-  let h='<div class="cp">';
-  h+='<div class="cp-name">'+(c.name||'—')+'</div>';
-  h+='<div class="cp-cat">'+(c.category||c.filter||'—')+'</div>';
-  h+='<div class="cp-row"><span class="cp-lbl">Cashier ID</span><span class="cp-val">'+(c.id||'—')+'</span></div>';
-  h+='<div class="cp-row"><span class="cp-lbl">TID</span><span class="cp-val">'+(c.tid||'—')+'</span></div>';
-  h+='<div class="cp-row"><span class="cp-lbl">الزون</span><span class="cp-val">'+(c.zone||'—')+'</span></div>';
-  if(cashierNum){
-    h+='<div class="cp-row"><span class="cp-lbl">📞 محاسب</span>';
-    h+='<span class="cp-nums">';
-    h+='<span class="cp-val">'+cashierNum+'</span>';
-    h+='<a href="tel:'+cashierNum+'" class="btn-call" style="background:#166534;">📞</a>';
-    h+='<button class="btn-cpy" onclick="copyNum(\''+cashierNum+'\')">نسخ</button>';
-    h+='</span></div>';
-  }
-  if(ownerNum && ownerNum!==cashierNum){
-    h+='<div class="cp-row"><span class="cp-lbl">👔 مدير</span>';
-    h+='<span class="cp-nums">';
-    h+='<span class="cp-val">'+ownerNum+'</span>';
-    h+='<a href="tel:'+ownerNum+'" class="btn-call" style="background:#6B21A8;">📞</a>';
-    h+='<button class="btn-cpy" onclick="copyNum(\''+ownerNum+'\')">نسخ</button>';
-    h+='</span></div>';
-  }
-  h+='<a class="btn-nav" href="https://www.google.com/maps/dir/?api=1&destination='+c.lat+','+c.lng+'" target="_blank">🗺️ توجيه Google Maps</a>';
-  h+='<div style="display:flex;gap:6px;margin-top:6px;">';
-  if(cashierNum){
-    h+='<a class="btn-nav" style="flex:1;background:#25D366;" href="https://wa.me/'+cashierWa+'?text='+waMsg+'" target="_blank">💬 واتساب محاسب</a>';
-  }
-  if(ownerWa && ownerNum!==cashierNum){
-    h+='<a class="btn-nav" style="flex:1;background:#6B21A8;" href="https://wa.me/'+ownerWa+'?text='+waMsg+'" target="_blank">💬 واتساب مدير</a>';
-  }
-  h+='</div>';
-  h+='<button class="btn-action" onclick="openAction(\''+c.id+'\')">⚡ Take Action</button>';
-  if(done){
-    h+='<div class="done-badge">✅ '+(a.visit===false?'لم يُزار':'تم الإجراء')+' — '+(a.q1?'تواصل ✓':'لا تواصل')+' · '+(a.q2?'مهتم ✓':'غير مهتم')+' · '+(a.q3?'واتساب ✓':'لا واتساب')+'</div>';
-  }
-  h+='</div>';
-  return h;
-}
-
-function renderMarkers(){
-  if(!currentData)return;
-  layerGroup.clearLayers();
-  markers={};
-  window._allMarkers=[];
-  mapSearchTerm='';
-  const srchInput=document.getElementById('map-entity-search');
-  if(srchInput)srchInput.value='';
-  const srchRes=document.getElementById('map-search-result');
-  if(srchRes)srchRes.textContent='';
-  currentData.clients.forEach(c=>{
-    const m=L.marker([c.lat,c.lng],{icon:makeIcon(c.id,'#6B21A8')});
-    m.bindPopup(()=>buildPopup(c),{maxWidth:280,minWidth:240});
-    layerGroup.addLayer(m);
-    markers[c.id]=m;
-    window._allMarkers.push({marker:m,client:c});
-  });
-  document.getElementById('count-badge').textContent=currentData.clients.length.toLocaleString('ar-SA')+' عميل';
-  updateDoneCount();
-}
-
-function onEmpChange(){
-  const emp=document.getElementById('emp-select').value;
-  if(!emp)return;
-  currentEmp=emp;
-  actions=loadActions(emp);
-  loading(true);
-  const varName='EMP_DATA_'+emp.replace(/-/g,'_');
-  if(window[varName]){
-    currentData=window[varName];
-    finishLoad();return;
-  }
-  const fileCode=emp.replace('-','');
-  const script=document.createElement('script');
-  script.src=BASE_URL+'clients_'+fileCode+'.js';
-  script.onload=()=>{currentData=window[varName];finishLoad();};
-  script.onerror=()=>{loading(false);alert('خطأ في تحميل البيانات');};
-  document.head.appendChild(script);
-}
-
-function finishLoad(){
-  if(!currentData){loading(false);return;}
-  const center=ZONE_CENTERS[currentData.zone]||[21.54,39.17];
-  map.setView(center,13);
-  renderMarkers();
-  loading(false);
-}
-
-// ── تهيئة الصفحة حسب الدور ────────────────
-function initMapAccess(){
-  if(!mapUser)return;
-  const sel=document.getElementById('emp-select');
-  const ctrl=document.getElementById('controls');
-  if(isEmp){
-    const empCode=mapUser.code;
-    const empZone=EMP_ZONE_MAP[empCode];
-    if(!empZone){
-      document.body.innerHTML='<div style="padding:40px;text-align:center;color:#fff;background:#1a6b3c;min-height:100vh;"><h2>❌ لا توجد بيانات لهذا الكود</h2></div>';
-      return;
-    }
-    // حذف كل الخيارات وابقاء خياره فقط
-    sel.innerHTML='';
-    const opt=document.createElement('option');
-    opt.value=empCode;
-    opt.textContent='📍 '+mapUser.name;
-    sel.appendChild(opt);
-    sel.value=empCode;
-    sel.disabled=true;
-    sel.style.cssText='opacity:0.85;pointer-events:none;';
-    currentEmp=empCode;
-    actions=loadActions(empCode);
-    loading(true);
-    const varName='EMP_DATA_'+empCode.replace(/-/g,'_');
-    if(window[varName]){currentData=window[varName];finishLoad();return;}
-    const fileCode=empCode.replace(/-/g,'');
-    const script=document.createElement('script');
-    script.src=BASE_URL+'clients_'+fileCode+'.js';
-    script.onload=()=>{currentData=window[varName];finishLoad();};
-    script.onerror=()=>{loading(false);};
-    document.head.appendChild(script);
-  } else {
-    const nameSpan=document.createElement('span');
-    nameSpan.textContent='👤 '+mapUser.name;
-    nameSpan.style.cssText='font-size:12px;color:#86EFAC;font-weight:700;margin-right:8px;';
-    ctrl.prepend(nameSpan);
-  }
-}
-
-// شغّل بعد تحميل الصفحة
-window.addEventListener('load', initMapAccess);
+// Keyboard close
+document.addEventListener('keydown', e => {{ if(e.key==='Escape') closePanel(); }});
 </script>
 </body>
 </html>
-
