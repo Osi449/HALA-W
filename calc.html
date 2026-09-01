@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>حاسبة التمويل — هلا تمويل</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+body{font-family:'Cairo',sans-serif;background:#080F20;color:#E8EBF4;direction:rtl;min-height:100vh;}
+
+#topbar{background:rgba(8,15,32,0.95);backdrop-filter:blur(12px);border-bottom:1px solid #1E2A4A;padding:12px 16px;display:flex;align-items:center;gap:10px;position:sticky;top:0;z-index:100;}
+.back-btn{background:#0D1B3E;border:1px solid #1E2A4A;border-radius:8px;padding:7px 14px;color:#8DA0B8;font-size:13px;cursor:pointer;font-family:inherit;}
+.page-title{font-size:16px;font-weight:800;color:#00C896;}
+
+.content{padding:20px 16px;max-width:500px;margin:0 auto;display:flex;flex-direction:column;gap:16px;}
+
+.card{background:#0A0F1E;border:1px solid #1E2A4A;border-radius:16px;padding:18px;}
+.card-title{font-size:13px;font-weight:800;color:#8DA0B8;margin-bottom:14px;letter-spacing:1px;}
+
+.field-label{font-size:11px;color:#4A6080;margin-bottom:6px;font-weight:700;}
+.amount-input{width:100%;background:#0D1B3E;border:1.5px solid #1E2A4A;border-radius:10px;padding:12px 16px;color:#00C896;font-size:22px;font-weight:900;outline:none;font-family:'Cairo',sans-serif;direction:ltr;text-align:left;}
+.amount-input:focus{border-color:#00C896;}
+
+.chips{display:flex;flex-wrap:wrap;gap:8px;}
+.chip{padding:8px 16px;border-radius:20px;border:1.5px solid #1E2A4A;background:transparent;color:#8DA0B8;font-size:12px;font-weight:700;cursor:pointer;font-family:inherit;transition:all 0.2s;}
+.chip.active{border-color:#00C896;background:rgba(0,200,150,0.1);color:#00C896;}
+.chip.active-purple{border-color:#7C3AED;background:rgba(124,58,237,0.1);color:#A78BFA;}
+.chip.active-gold{border-color:#F5A623;background:rgba(245,166,35,0.1);color:#F5A623;}
+
+.calc-btn{width:100%;padding:16px;background:linear-gradient(135deg,#00C896,#028090);border:none;border-radius:12px;color:#000;font-size:16px;font-weight:900;cursor:pointer;font-family:inherit;margin-top:4px;}
+
+/* RESULT */
+.result-card{background:linear-gradient(135deg,#0D1B3E,#080F20);border:1.5px solid #00C896;border-radius:16px;padding:20px;display:none;}
+.result-card.show{display:block;}
+.result-main{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;}
+.result-item{background:#080F20;border-radius:12px;padding:14px;text-align:center;}
+.result-label{font-size:10px;color:#4A6080;margin-bottom:4px;}
+.result-value{font-size:22px;font-weight:900;}
+.result-green{color:#00C896;}
+.result-purple{color:#A78BFA;}
+.result-gold{color:#F5A623;}
+.result-red{color:#F87171;}
+
+.breakdown{border-top:1px solid #1E2A4A;padding-top:14px;display:flex;flex-direction:column;gap:8px;}
+.breakdown-row{display:flex;justify-content:space-between;align-items:center;font-size:12px;padding:6px 0;border-bottom:1px solid #0D1B3E;}
+.breakdown-row:last-child{border:none;font-weight:800;font-size:13px;}
+.b-label{color:#8DA0B8;}
+.b-val{color:#E8EBF4;font-family:monospace;}
+</style>
+</head>
+<body>
+
+<div id="topbar">
+  <button class="back-btn" onclick="window.location.href='index.html'">← رجوع</button>
+  <div class="page-title">🧮 حاسبة التمويل</div>
+</div>
+
+<div class="content">
+  <!-- Amount -->
+  <div class="card">
+    <div class="card-title">💰 مبلغ التمويل (SAR)</div>
+    <input class="amount-input" id="amount" type="number" placeholder="0" oninput="clearResult()">
+  </div>
+
+  <!-- Period -->
+  <div class="card">
+    <div class="card-title">📅 مدة التمويل</div>
+    <div class="chips" id="periodChips">
+      <button class="chip" onclick="selectChip('period',this,'3')">3 أشهر</button>
+      <button class="chip" onclick="selectChip('period',this,'6')">6 أشهر</button>
+      <button class="chip" onclick="selectChip('period',this,'9')">9 أشهر</button>
+      <button class="chip" onclick="selectChip('period',this,'12')">12 شهر</button>
+      <button class="chip" onclick="selectChip('period',this,'18')">18 شهر</button>
+      <button class="chip" onclick="selectChip('period',this,'24')">24 شهر</button>
+    </div>
+  </div>
+
+  <!-- Rate -->
+  <div class="card">
+    <div class="card-title">📈 نسبة الفائدة (سنوياً)</div>
+    <div class="chips" id="rateChips">
+      <button class="chip" onclick="selectChip('rate',this,'17')">17%</button>
+      <button class="chip" onclick="selectChip('rate',this,'19')">19%</button>
+      <button class="chip" onclick="selectChip('rate',this,'22')">22%</button>
+      <button class="chip" onclick="selectChip('rate',this,'24')">24%</button>
+      <button class="chip" onclick="selectChip('rate',this,'26')">26%</button>
+      <button class="chip" onclick="selectChip('rate',this,'28')">28%</button>
+      <button class="chip" onclick="selectChip('rate',this,'30')">30%</button>
+      <button class="chip" onclick="selectChip('rate',this,'32')">32%</button>
+    </div>
+  </div>
+
+  <!-- Admin fee -->
+  <div class="card">
+    <div class="card-title">🏦 الرسوم الإدارية</div>
+    <div class="chips" id="feeChips">
+      <button class="chip" onclick="selectChip('fee',this,'3')">3%</button>
+      <button class="chip" onclick="selectChip('fee',this,'3.5')">3.5%</button>
+      <button class="chip" onclick="selectChip('fee',this,'4')">4%</button>
+      <button class="chip" onclick="selectChip('fee',this,'4.5')">4.5%</button>
+      <button class="chip" onclick="selectChip('fee',this,'5')">5%</button>
+    </div>
+  </div>
+
+  <button class="calc-btn" onclick="calculate()">احسب الآن ←</button>
+
+  <!-- RESULT -->
+  <div class="result-card" id="resultCard">
+    <div style="font-size:12px;color:#4A6080;margin-bottom:14px;text-align:center;">نتائج الحساب</div>
+    <div class="result-main">
+      <div class="result-item">
+        <div class="result-label">القسط الشهري</div>
+        <div class="result-value result-green" id="resMonthly">—</div>
+        <div style="font-size:10px;color:#4A6080">SAR</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">إجمالي السداد</div>
+        <div class="result-value result-purple" id="resTotal">—</div>
+        <div style="font-size:10px;color:#4A6080">SAR</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">هامش الربح</div>
+        <div class="result-value result-gold" id="resProfit">—</div>
+        <div style="font-size:10px;color:#4A6080">SAR</div>
+      </div>
+      <div class="result-item">
+        <div class="result-label">الرسوم الإدارية</div>
+        <div class="result-value result-red" id="resFee">—</div>
+        <div style="font-size:10px;color:#4A6080">SAR</div>
+      </div>
+    </div>
+    <div class="breakdown">
+      <div class="breakdown-row"><span class="b-label">مبلغ التمويل</span><span class="b-val" id="bAmount">—</span></div>
+      <div class="breakdown-row"><span class="b-label">مدة السداد</span><span class="b-val" id="bPeriod">—</span></div>
+      <div class="breakdown-row"><span class="b-label">نسبة الفائدة (سنوياً)</span><span class="b-val" id="bRate">—</span></div>
+      <div class="breakdown-row"><span class="b-label">هامش الربح الإجمالي</span><span class="b-val" id="bProfit">—</span></div>
+      <div class="breakdown-row"><span class="b-label">الرسوم الإدارية</span><span class="b-val" id="bFee">—</span></div>
+      <div class="breakdown-row">
+        <span class="b-label" style="color:#00C896;font-weight:800;">إجمالي المطلوب سداده</span>
+        <span class="b-val" id="bTotal" style="color:#00C896;font-size:15px;">—</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+let sel = {period:'',rate:'',fee:''};
+
+function selectChip(group, el, val){
+  sel[group] = val;
+  // Remove active from siblings
+  el.parentElement.querySelectorAll('.chip').forEach(c=>{
+    c.classList.remove('active','active-purple','active-gold');
+  });
+  const cls = group==='rate'?'active-purple':group==='fee'?'active-gold':'active';
+  el.classList.add(cls);
+  clearResult();
+}
+
+function clearResult(){
+  document.getElementById('resultCard').classList.remove('show');
+}
+
+function fmt(n){
+  return Math.round(n).toLocaleString('ar-SA');
+}
+
+function calculate(){
+  const amount = parseFloat(document.getElementById('amount').value)||0;
+  const period = parseInt(sel.period)||0;
+  const rate = parseFloat(sel.rate)||0;
+  const fee = parseFloat(sel.fee)||0;
+
+  if(!amount||!period||!rate||!fee){
+    alert('يرجى إدخال جميع البيانات'); return;
+  }
+
+  // Calculate
+  const annualRate = rate/100;
+  const monthlyRate = annualRate/12;
+  const profitAmount = amount * annualRate * (period/12);
+  const totalWithProfit = amount + profitAmount;
+  const monthly = totalWithProfit / period;
+  const feeAmount = amount * (fee/100);
+  const grandTotal = totalWithProfit + feeAmount;
+
+  // Show result
+  document.getElementById('resMonthly').textContent = fmt(monthly);
+  document.getElementById('resTotal').textContent = fmt(grandTotal);
+  document.getElementById('resProfit').textContent = fmt(profitAmount);
+  document.getElementById('resFee').textContent = fmt(feeAmount);
+
+  document.getElementById('bAmount').textContent = fmt(amount)+' SAR';
+  document.getElementById('bPeriod').textContent = period+' شهر';
+  document.getElementById('bRate').textContent = rate+'%';
+  document.getElementById('bProfit').textContent = fmt(profitAmount)+' SAR';
+  document.getElementById('bFee').textContent = fmt(feeAmount)+' SAR';
+  document.getElementById('bTotal').textContent = fmt(grandTotal)+' SAR';
+
+  document.getElementById('resultCard').classList.add('show');
+  document.getElementById('resultCard').scrollIntoView({behavior:'smooth'});
+}
+</script>
+</body>
+</html>
