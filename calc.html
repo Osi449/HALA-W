@@ -119,7 +119,7 @@ body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A
       <div class="b-row"><span class="b-label">هامش الربح</span><span class="b-val" id="bProfit">—</span></div>
       <div class="b-row"><span class="b-label">الرسوم الإدارية</span><span class="b-val" id="bFee">—</span></div>
       <div class="b-row">
-        <span class="b-label" style="color:#86EFAC;font-size:13px;">إجمالي المطلوب سداده</span>
+        <span class="b-label" style="color:#86EFAC;font-size:13px;">إجمالي السداد (بدون رسوم إدارية)</span>
         <span class="b-val" id="bTotal" style="color:#86EFAC;font-size:15px;">—</span>
       </div>
     </div>
@@ -146,9 +146,8 @@ function calculate(){
   const totalWithProfit=amount+profit;
   const monthly=totalWithProfit/period;
   const feeAmt=amount*(fee/100);
-  const grand=totalWithProfit+feeAmt;
   document.getElementById('resMonthly').textContent=fmt(monthly);
-  document.getElementById('resTotal').textContent=fmt(grand);
+  document.getElementById('resTotal').textContent=fmt(totalWithProfit);
   document.getElementById('resProfit').textContent=fmt(profit);
   document.getElementById('resFee').textContent=fmt(feeAmt);
   document.getElementById('bAmount').textContent=fmt(amount)+' SAR';
@@ -156,7 +155,7 @@ function calculate(){
   document.getElementById('bRate').textContent=rate+'%';
   document.getElementById('bProfit').textContent=fmt(profit)+' SAR';
   document.getElementById('bFee').textContent=fmt(feeAmt)+' SAR';
-  document.getElementById('bTotal').textContent=fmt(grand)+' SAR';
+  document.getElementById('bTotal').textContent=fmt(totalWithProfit)+' SAR';
   const rc=document.getElementById('resultCard');
   rc.classList.add('show');
   rc.scrollIntoView({behavior:'smooth'});
