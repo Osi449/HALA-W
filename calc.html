@@ -111,6 +111,11 @@ body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A
         <div class="result-value" id="resFee">—</div>
         <div class="result-sub">SAR</div>
       </div>
+      <div class="result-item" style="grid-column:span 2;background:rgba(255,255,255,0.18);">
+        <div class="result-label">النسبة الشهرية</div>
+        <div class="result-value" id="resMonthlyRate">—</div>
+        <div class="result-sub">% شهرياً</div>
+      </div>
     </div>
     <div class="breakdown">
       <div class="b-row"><span class="b-label">مبلغ التمويل</span><span class="b-val" id="bAmount">—</span></div>
@@ -156,6 +161,8 @@ function calculate(){
   document.getElementById('bProfit').textContent=fmt(profit)+' SAR';
   document.getElementById('bFee').textContent=fmt(feeAmt)+' SAR';
   document.getElementById('bTotal').textContent=fmt(totalWithProfit)+' SAR';
+  const monthlyRate=(rate/12);
+  document.getElementById('resMonthlyRate').textContent=monthlyRate.toFixed(2);
   const rc=document.getElementById('resultCard');
   rc.classList.add('show');
   rc.scrollIntoView({behavior:'smooth'});
