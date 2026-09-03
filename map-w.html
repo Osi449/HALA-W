@@ -227,21 +227,21 @@ function loadMarkers(clientsObj){
 
       const salesFmt = c.total_sales ? Number(c.total_sales).toLocaleString('ar-SA',{maximumFractionDigits:0}) : '—';
       const popup = `
-        <div class="map-popup">
-          <div class="popup-header">
-            <div class="popup-name">${c.name||'—'}</div>
-            <div class="popup-id">ID: ${c.id} · TID: ${c.tid||'—'}</div>
+        <div style="font-family:'Cairo',sans-serif;min-width:240px;">
+          <div style="background:linear-gradient(135deg,#6B21A8,#166534);padding:12px 14px;border-radius:8px 8px 0 0;">
+            <div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:3px;line-height:1.4;">${c.name||'—'}</div>
+            <div style="font-size:10px;color:rgba(255,255,255,0.8);font-family:monospace;">ID: ${c.id} · TID: ${c.tid||'—'}</div>
           </div>
-          <div class="popup-body">
-            <div class="popup-row"><span class="popup-label">آخر نشاط</span><span class="popup-val">${c.last_active||'—'}</span></div>
-            <div class="popup-row"><span class="popup-label">إجمالي المبيعات</span><span class="popup-val">${salesFmt}</span></div>
-            <div class="popup-row"><span class="popup-label">جوال المحاسب</span><span class="popup-val">${c.cashier||'—'}</span></div>
-            <div class="popup-row"><span class="popup-label">جوال المالك</span><span class="popup-val">${c.owner||'—'}</span></div>
-            ${visited?'<div class="popup-row"><span class="popup-label" style="color:#00C896">✅ تمت الزيارة</span></div>':''}
+          <div style="background:#fff;padding:12px 14px;">
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">آخر نشاط</span><span style="color:#1A1A2E;font-weight:600;">${c.last_active||'—'}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">إجمالي المبيعات</span><span style="color:#1A1A2E;font-weight:600;">${salesFmt}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">جوال المحاسب</span><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.cashier||'—'}</span></div>
+            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;"><span style="color:#6B7280;">جوال المالك</span><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.owner||'—'}</span></div>
+            ${visited?'<div style="padding:5px 0;color:#166534;font-size:12px;text-align:center;font-weight:700;">✅ تمت الزيارة</div>':''}
           </div>
-          <div class="popup-actions">
-            ${!visited?`<button class="action-btn btn-visit" onclick="openVisit('${c.id}','${(c.name||'').replace(/'/g,'`')}','${empCode}')">🚶 بدء الزيارة</button>`:'<div style="color:#00C896;text-align:center;font-size:12px;padding:4px">✅ تمت الزيارة</div>'}
-            ${c.cashier?`<button class="action-btn btn-wa" onclick="window.open('https://wa.me/966${c.cashier}','_blank')">💬 واتساب</button>`:''}
+          <div style="background:#F9FAFB;padding:10px 14px;border-radius:0 0 8px 8px;display:flex;flex-direction:column;gap:6px;">
+            ${!visited?`<button onclick="openVisit('${c.id}','${(c.name||'').replace(/'/g,'`')}','${empCode}')" style="width:100%;padding:10px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">🚶 بدء الزيارة</button>`:''}
+            ${c.cashier?`<button onclick="window.open('https://wa.me/966${c.cashier}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب</button>`:''}
           </div>
         </div>`;
 
@@ -338,7 +338,7 @@ function saveVisit(){
 
 // ── LEAFLET DARK POPUP STYLE ────────────────────────
 const style = document.createElement('style');
-style.textContent = `.dark-popup .leaflet-popup-content-wrapper{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:0;overflow:hidden;box-shadow:0 8px 32px rgba(107,33,168,0.15)}.dark-popup .leaflet-popup-tip{background:#fff}.dark-popup .leaflet-popup-content{margin:0;min-width:220px}`;
+style.textContent = `.dark-popup .leaflet-popup-content-wrapper{background:#fff!important;border:1px solid #E5E7EB;border-radius:12px;padding:0!important;overflow:hidden;box-shadow:0 8px 32px rgba(107,33,168,0.15)}.dark-popup .leaflet-popup-tip{background:#fff!important}.dark-popup .leaflet-popup-content{margin:0!important;min-width:240px}`;
 document.head.appendChild(style);
 
 window.addEventListener('load', init);
