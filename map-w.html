@@ -20,14 +20,14 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
 
 /* TOP BAR */
 #topbar{position:fixed;top:0;right:0;left:0;z-index:1000;background:linear-gradient(135deg,#6B21A8,#166534);backdrop-filter:blur(12px);border-bottom:1px solid rgba(255,255,255,0.2);padding:10px 16px;display:flex;align-items:center;gap:10px;}
-.back-btn{background:var(--card2);border:1px solid var(--bdr);border-radius:8px;padding:7px 14px;color:var(--mid);font-size:13px;cursor:pointer;font-family:inherit;}
+.back-btn{background:#F9FAFB;border:1px solid #E5E7EB;border-radius:8px;padding:7px 14px;color:var(--mid);font-size:13px;cursor:pointer;font-family:inherit;}
 .emp-info{flex:1;}
 .emp-name{font-size:14px;font-weight:700;}
 .emp-sub{font-size:11px;color:var(--dim);}
 .counter-badge{background:#22C55E;color:#fff;border-radius:20px;padding:5px 14px;font-size:12px;font-weight:800;}
 
 /* STATS BAR */
-#statsbar{position:fixed;top:56px;right:0;left:0;z-index:999;background:rgba(107,33,168,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.15);padding:8px 16px;display:flex;gap:8px;align-items:center;overflow-x:auto;}
+#statsbar{position:fixed;top:56px;right:0;left:0;z-index:999;background:rgba(107,33,168,0.95);backdrop-filter:blur(8px);border-bottom:1px solid rgba(255,255,255,0.2);padding:8px 16px;display:flex;gap:8px;align-items:center;overflow-x:auto;}
 .stat-chip{background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.2);border-radius:20px;padding:5px 14px;font-size:11px;white-space:nowrap;display:flex;align-items:center;gap:6px;}
 .stat-chip span{font-weight:800;color:var(--green);}
 .progress-bar{flex:1;height:6px;background:var(--bdr);border-radius:3px;overflow:hidden;min-width:80px;}
@@ -338,7 +338,7 @@ function saveVisit(){
 
 // ── LEAFLET DARK POPUP STYLE ────────────────────────
 const style = document.createElement('style');
-style.textContent = `.dark-popup .leaflet-popup-content-wrapper{background:#0A0F1E;border:1px solid #1E2A4A;border-radius:12px;padding:0;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.5)}.dark-popup .leaflet-popup-tip{background:#0A0F1E}.dark-popup .leaflet-popup-content{margin:0;min-width:220px}`;
+style.textContent = `.dark-popup .leaflet-popup-content-wrapper{background:#fff;border:1px solid #E5E7EB;border-radius:12px;padding:0;overflow:hidden;box-shadow:0 8px 32px rgba(107,33,168,0.15)}.dark-popup .leaflet-popup-tip{background:#fff}.dark-popup .leaflet-popup-content{margin:0;min-width:220px}`;
 document.head.appendChild(style);
 
 window.addEventListener('load', init);
