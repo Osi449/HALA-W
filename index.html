@@ -61,7 +61,7 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <p style="font-size:14px;color:rgba(255,255,255,0.65);margin-bottom:36px;text-align:right;line-height:1.8;">متابعة الأداء · طلبات التمويل · ساعات العمل · تحليل المبيعات</p>
 <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">متابعة الأداء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
+<button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">KPI's</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
 <button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
 <button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
 <button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
@@ -146,11 +146,10 @@ const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
 const ALL_S={};Object.values(TEAMS).forEach(t=>{ALL_S[t.sup.code]=t.sup;});
 
 const PF=[
-  {key:'visits',     label:'زيارة غير مزار', icon:'📍', target:10, unit:'زيارة', monthly:210},
-  {key:'nonhala',    label:'Non-Hala',        icon:'🔗', target:5,  unit:'زيارة', monthly:105},
-  {key:'cards',      label:'بزنس كارد',       icon:'🪪', target:30, unit:'كارت',  monthly:630},
-  {key:'finHala',    label:'طلب هلا',         icon:'📄', target:1,  unit:'طلب',   monthly:21},
-  {key:'finNonHala', label:'طلب Non-Hala',    icon:'📋', target:1,  unit:'طلب',   monthly:21},
+  {key:'visits',     label:'الزيارات اليومية',    icon:'📍', target:8,  unit:'زيارة', monthly:168, weight:40},
+  {key:'cards',      label:'توزيع بزنس كارد',     icon:'🪪', target:20, unit:'كارت',  monthly:420, weight:20},
+  {key:'finHala',    label:'رفع طلب تمويل',       icon:'📄', target:1,  unit:'طلب',   monthly:21,  weight:20},
+  {key:'nonhala',    label:'زيارات Non-Hala',     icon:'🔗', target:1,  unit:'زيارة', monthly:21,  weight:20},
 ];
 
 const CSTATS=[{key:'pending',label:'Pending with SV',color:'#B7770D',bg:'#FEF3C7',icon:'⏳'},{key:'pending_ds',label:'Pending with DS',color:'#6B21A8',bg:'#F5F3FF',icon:'📋'},{key:'review',label:'Under Review',color:'#1A5276',bg:'#DBEAFE',icon:'🔍'},{key:'rejected',label:'Rejected',color:'#991B1B',bg:'#FEE2E2',icon:'❌'},{key:'approved',label:'Approved',color:'#065F46',bg:'#D1FAE5',icon:'✅'},{key:'done',label:'Done',color:'#166534',bg:'#A7F3D0',icon:'🏆'}];
