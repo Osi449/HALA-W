@@ -118,12 +118,19 @@ async function dbGet(t,q=''){const r=await fetch(SB+'/rest/v1/'+t+q,{headers:SH}
 async function dbUp(t,b,c){const r=await fetch(SB+'/rest/v1/'+t+'?on_conflict='+c,{method:'POST',headers:{...SH,Prefer:'resolution=merge-duplicates,return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function dbIns(t,b){const r=await fetch(SB+'/rest/v1/'+t,{method:'POST',headers:{...SH,Prefer:'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
 async function dbPatch(t,m,b){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encodeURIComponent(v)).join('&');const r=await fetch(SB+'/rest/v1/'+t+'?'+q,{method:'PATCH',headers:{...SH,Prefer:'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
+
+
+function djb2(s){let h=5381;for(let i=0;i<s.length;i++)h=((h<<5)+h+s.charCodeAt(i))>>>0;return String(h);}
+function sanitize(str){
+  if(!str) return '';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
+}
 async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encodeURIComponent(v)).join('&');await fetch(SB+'/rest/v1/'+t+'?'+q,{method:'DELETE',headers:SH});}
 
 // ── DATA ─────────────────────────────────────────
-const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
+const SPIN='2088298426', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
-const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','W11-KS':'1620','W3-MH':'2311','S3-MM':'1792'};
+const EMP_PINS={'W1-JH':'2088325550','W2-HM':'2088294168','W8-MA':'2088295088','W10-AA':'2088293009','W12-SF':'2088325614','W11-KS':'2088295022','W3-MH':'2088327660','S3-MM':'2088296344'};
 const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'W11-KS':0,'W3-MH':0,'S3-MM':0};
 const EMP_TGT=1100000, RGN_TGT=8200000;
 const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'W11-KS':1100000,'W3-MH':1100000,'S3-MM':1100000};
@@ -712,14 +719,14 @@ function renderEmpList(){
   el.innerHTML=filtered.map(req=>{
     const tc=gCT(req.client_type);
     return '<button class="rcard" onclick="renderCDetail(\''+req.id+'\')">'+
-      '<div style="background:'+tc.color+';padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><span style="color:#fff;font-size:13px;font-weight:700;">'+rTitle(req.client_type)+' — '+(req.data?.client_name||'—')+'</span>'+bH(req.status)+'</div>'+
+      '<div style="background:'+tc.color+';padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><span style="color:#fff;font-size:13px;font-weight:700;">'+rTitle(req.client_type)+' — '+sanitize(req.data?.client_name||'—')+'</span>'+bH(req.status)+'</div>'+
       '<div style="padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:11px;color:#4B5563;">'+(req.data?.cashier_id||'')+(req.data?.zone?' · '+req.data.zone:'')+'</div><div style="font-size:10px;color:#9CA3AF;">'+new Date(req.submitted_at).toLocaleDateString('ar-SA')+'</div></div><div style="font-size:14px;font-weight:700;color:'+tc.color+'">'+(req.data?.offer_amount?Number(req.data.offer_amount).toLocaleString()+' SAR':'—')+'</div></div>'+
       (req.sup_note?'<div style="padding:7px 16px;background:#F0FDF4;border-top:1px solid #E5E7EB;font-size:11px;color:#166534;">🔔 '+req.sup_note+'</div>':'')+
       '</button>';
   }).join('');
 }
 
-function renderCList(){renderEmpList();}
+
 
 function renderCList(){renderCType&&renderCType();}
 
@@ -775,7 +782,7 @@ function renderCDash(){
   else filtered.forEach(req=>{
     const tc=gCT(req.client_type);
     h+='<button class="rcard" onclick="renderCDetail(\''+req.id+'\')">';
-    h+='<div style="background:'+tc.color+';padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><span style="color:#fff;font-size:13px;font-weight:700;">'+rTitle(req.client_type)+' — '+(req.data?.client_name||'—')+'</span>'+bH(req.status)+'</div>';
+    h+='<div style="background:'+tc.color+';padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><span style="color:#fff;font-size:13px;font-weight:700;">'+rTitle(req.client_type)+' — '+sanitize(req.data?.client_name||'—')+'</span>'+bH(req.status)+'</div>';
     h+='<div style="padding:10px 16px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:12px;color:#4B5563;">'+req.agent_name+' · '+(req.data?.zone||'—')+'</div><div style="font-size:10px;color:#9CA3AF;">'+new Date(req.submitted_at).toLocaleDateString('ar-SA')+'</div></div><div style="display:flex;align-items:center;gap:6px;"><div style="font-size:14px;font-weight:700;color:'+tc.color+'">'+(req.data?.offer_amount?Number(req.data.offer_amount).toLocaleString()+' SAR':'—')+'</div><span style="color:#9CA3AF">›</span></div></div>';
     if(req.sup_note)h+='<div style="padding:6px 16px;background:#F0FDF4;border-top:1px solid #E5E7EB;font-size:11px;color:#166534;">🔔 '+req.sup_note+'</div>';
     h+='</button>';
@@ -960,14 +967,8 @@ function loadChunked(key){const n=parseInt(localStorage.getItem(key+'_n')||'0');
 const AN_BASE=(()=>{const p=window.location.pathname;const base=p.substring(0,p.lastIndexOf('/')+1);return window.location.origin+base;})();
 let salesIndexLoaded=false;const salesChunkLoaded={};
 
-async function loadSalesIndex(){
-  if(salesIndexLoaded)return true;
-  return new Promise(r=>{const s=document.createElement('script');s.src=AN_BASE+'sales_index.js';s.onload=()=>{salesIndexLoaded=true;r(true);};s.onerror=()=>r(false);document.head.appendChild(s);});
-}
-async function loadSalesChunk(n){
-  if(salesChunkLoaded[n])return true;
-  return new Promise(r=>{const s=document.createElement('script');s.src=AN_BASE+'sales_'+n+'.js';s.onload=()=>{salesChunkLoaded[n]=true;r(true);};s.onerror=()=>r(false);document.head.appendChild(s);});
-}
+
+
 async function findEntity(eid){
   const ok=await loadSalesIndex();if(!ok||!window.SALES_INDEX)return null;
   const cn=window.SALES_INDEX[eid];if(cn===undefined)return null;
@@ -975,35 +976,9 @@ async function findEntity(eid){
   const cd=window['SALES_CHUNK_'+cn];return cd?cd[eid]:null;
 }
 
-function renderAnalyzer(){
-  try{const h=lLS('hh4',[]);if(h.length)anHist=h;}catch(e){}
-  let h=tbH('محلل المبيعات','📈',null,"showPage('home')");
-  h+='<div style="background:#F5F3FF;border-bottom:1px solid #E5E7EB;padding:14px 20px;">';
-  h+='<div style="display:flex;gap:8px;max-width:680px;margin:0 auto;">';
-  h+='<input id="anq" style="flex:1;background:#fff;border:1.5px solid #DDD6FE;border-radius:10px;padding:11px 16px;font-size:16px;font-weight:700;outline:none;font-family:monospace;letter-spacing:2px;color:#6B21A8;direction:ltr;" placeholder="أدخل Entity ID" onkeydown="if(event.key===\'Enter\')doAnSrch()">';
-  h+='<button onclick="doAnSrch()" style="padding:11px 24px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;">بحث ←</button>';
-  h+='</div><div id="anst" style="font-size:12px;text-align:center;margin-top:8px;color:#6B21A8;">☁️ البيانات على الموقع — لا حاجة لرفع ملف</div>';
-  if(anHist.length)h+='<div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px;max-width:680px;margin:10px auto 0;">'+anHist.map(x=>'<span onclick="document.getElementById(\'anq\').value=\''+x.eid+'\'" style="font-size:10px;padding:3px 10px;border-radius:20px;cursor:pointer;background:#F5F3FF;color:#6B21A8;border:1px solid #DDD6FE;font-family:monospace;">'+x.eid+'</span>').join('')+'</div>';
-  h+='</div><div class="content" id="anres"><div style="text-align:center;padding:60px 20px;"><div style="font-size:52px;margin-bottom:16px;">🔍</div><div style="font-size:15px;font-weight:700;margin-bottom:8px;">ابحث عن عميل بـ Entity ID</div><div style="background:#F5F3FF;border-radius:10px;padding:10px 20px;font-size:12px;color:#6B21A8;display:inline-block;">☁️ 95,674 عميل · يناير 2025 — أبريل 2026</div></div></div>';
-  document.getElementById('analyzer').innerHTML=h;
-}
 
-async function doAnSrch(){
-  const eid=document.getElementById('anq')?.value?.trim();
-  const st=document.getElementById('anst');const res=document.getElementById('anres');
-  if(!eid)return;
-  if(st){st.style.color='#6B21A8';st.textContent='⏳ جاري البحث...';}
-  try{
-    const s=await findEntity(eid);
-    if(!s){if(st){st.style.color='#DC2626';st.textContent='⚠️ رقم العميل غير موجود';}return;}
-    if(st)st.textContent='';
-    const months=Object.entries(s).map(([m,v])=>({month:m,sales:v})).sort((a,b)=>a.month.localeCompare(b.month));
-    const fin=calcFin(months);
-    const hst=[{eid},...anHist.filter(x=>x.eid!==eid)].slice(0,10);
-    anHist=hst;sLS('hh4',hst);
-    if(res)res.innerHTML=anResH(eid,months,{},fin);
-  }catch(e){if(st){st.style.color='#DC2626';st.textContent='خطأ في البحث';}}
-}
+
+
 
 function calcFin(months){
   if(!months?.length)return null;
@@ -1692,7 +1667,7 @@ function renderEmpReport(){
     h+='<div style="border:1px solid #E5E7EB;border-right:4px solid '+emp.color+';border-radius:12px;padding:14px;margin-bottom:12px;">';
     // Header
     h+='<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">';
-    h+='<div><div style="font-size:14px;font-weight:800;color:'+emp.color+';">'+emp.name+'</div>';
+    h+='<div><div style="font-size:14px;font-weight:800;color:'+emp.color+';">'+sanitize(emp.name)+'</div>';
     h+='<div style="font-size:11px;color:#9CA3AF;margin-top:2px;">'+emp.code+' · '+empReqs.length+' طلب</div></div>';
     h+='<div style="text-align:center;background:'+(approvalRate>=70?'#F0FDF4':approvalRate>=50?'#FFFBEB':'#FEF2F2')+';border-radius:10px;padding:8px 14px;">';
     h+='<div style="font-size:20px;font-weight:900;color:'+(approvalRate>=70?'#166534':approvalRate>=50?'#D97706':'#DC2626')+';">'+approvalRate+'%</div>';
