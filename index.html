@@ -1420,7 +1420,7 @@ async function doAnSrch(){
       if(st){st.style.color='#DC2626';st.textContent='⚠️ لا توجد بيانات مبيعات لهذا العميل';}
       return;
     }
-    const months=Object.entries(s).map(([m,v])=>({month:m,sales:v})).sort((a,b)=>a.month.localeCompare(b.month));
+    const months=Object.entries(s).filter(([m])=>m!=='total').map(([m,v])=>({month:m,sales:v})).sort((a,b)=>a.month.localeCompare(b.month));
     const fin=calcFin2(months);
 
     // Save history
