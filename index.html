@@ -184,7 +184,14 @@ let finLog=[],nhClients=[],shiftRec=null,shiftTmr=null,brkActive=false,brkStart=
 let anSales=null,anClients=null,anMeta=null,anHist=[];
 
 // ── UTILS ─────────────────────────────────────────
-const mLbl=s=>{if(!s)return'';const[y,m]=s.split('-');return(MO[m]||m)+' '+y;};
+const mLbl=s=>{
+  if(!s||s==='total') return '';
+  const MAP={'Jan 2025':'يناير 25','Feb 2025':'فبراير 25','Mar 2025':'مارس 25','Apr 2025':'أبريل 25','May 2025':'مايو 25','Jun 2025':'يونيو 25','Jul 2025':'يوليو 25','Aug 2025':'أغسطس 25','Sep 2025':'سبتمبر 25','Oct 2025':'أكتوبر 25','Nov 2025':'نوفمبر 25','Dec 2025':'ديسمبر 25','Jan 2026':'يناير 26','Feb 2026':'فبراير 26','Mar 2026':'مارس 26','Apr 2026':'أبريل 26','May 2026':'مايو 26','Jun 2026':'يونيو 26','Jul 2026':'يوليو 26','Aug 2026':'أغسطس 26','Sep 2026':'سبتمبر 26','Oct 2026':'أكتوبر 26','Nov 2026':'نوفمبر 26','Dec 2026':'ديسمبر 26'};
+  if(MAP[s]) return MAP[s];
+  const[y,m]=s.split('-');
+  const MN=['','يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'];
+  return(MN[parseInt(m)]||s)+' '+(y?y.slice(2):'');
+};
 const fmt=n=>{if(!n&&n!==0)return'—';if(n>=1e6)return(n/1e6).toFixed(2)+'M';if(n>=1000)return(n/1000).toFixed(1)+'K';return n.toFixed(0);};
 const fR=n=>n?n.toLocaleString('ar-SA',{maximumFractionDigits:0})+' ريال':'—';
 const tod=()=>new Date().toISOString().split('T')[0];
