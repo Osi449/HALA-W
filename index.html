@@ -740,7 +740,7 @@ function renderCDetail(id){
   selReq=cReqs.find(r=>r.id===id);if(!selReq)return;
   cNote=selReq.sup_note||'';
   const isSup=user.role==='supervisor'||user.role==='region'||user.role==='owner';
-  const tc=gCT(selReq.client_type),rf=CFIELDS[selReq.client_type]||CFIELDS[tc.key]||CF_C,canEdit=isSup||selReq.status==='pending';
+  const tc=gCT(selReq.client_type),rf=CFIELDS[selReq.client_type]||CFIELDS[tc.key]||CF_C,canEdit=isSup||selReq.status==='pending'||selReq.status==='pending_ds';
   let h='<div style="background:linear-gradient(135deg,'+tc.color+','+tc.color+'CC);padding:14px 20px;display:flex;justify-content:space-between;align-items:center;position:sticky;top:0;z-index:100;"><button class="btn-top" onclick="'+(isSup?'renderCDash()':'renderCMyReqs()')+'">← رجوع</button><span style="color:#fff;font-weight:700;">'+rTitle(selReq.client_type)+'</span></div>';
   h+='<div class="content"><div class="card" style="padding:0;overflow:hidden;">';
   h+='<div style="background:linear-gradient(135deg,'+tc.color+','+tc.color+'CC);padding:16px 20px;display:flex;justify-content:space-between;align-items:center;"><div><div style="font-size:16px;font-weight:800;color:#fff;">'+(selReq.data?.client_name||'—')+'</div><div style="font-size:11px;color:rgba(255,255,255,0.7);margin-top:2px;">'+selReq.agent_name+' · '+(selReq.data?.zone||'')+'</div></div><div style="text-align:right;"><div style="font-size:20px;font-weight:900;color:#fff;">'+(selReq.data?.offer_amount?Number(selReq.data.offer_amount).toLocaleString():'—')+'</div><div style="font-size:10px;color:rgba(255,255,255,0.7);">SAR</div></div></div>';
@@ -748,6 +748,7 @@ function renderCDetail(id){
   if(selReq.sup_note)h+='<div style="background:#F0FDF4;border:1px solid #22C55E;border-radius:12px;padding:12px 16px;"><div style="font-size:11px;color:#166534;font-weight:700;margin-bottom:4px;">🔔 ملاحظة المشرف</div><div style="font-size:13px;">'+selReq.sup_note+'</div></div>';
   if(isSup)h+='<div class="card"><div style="font-size:12px;font-weight:700;margin-bottom:12px;">🔧 تغيير الحالة</div><div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;">'+CSTATS.map(s=>'<button style="padding:7px 14px;border-radius:20px;border:1px solid '+s.color+'44;background:'+(selReq.status===s.key?s.bg:'transparent')+';color:'+s.color+';font-size:11px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doUpdSt(\''+s.key+'\')">'+s.icon+' '+s.label+'</button>').join('')+'</div><textarea id="snote" class="notes" rows="2" dir="rtl" placeholder="ملاحظة للموظف (تظهر له إشعار)...">'+cNote+'</textarea></div>';
   h+='<div class="card"><div style="font-size:11px;font-weight:700;color:#9CA3AF;margin-bottom:12px;">تفاصيل الطلب</div>'+rf.filter(f=>selReq.data?.[f.key]).map(f=>'<div style="border-bottom:1px solid #E5E7EB;padding:9px 0;"><div style="font-size:10px;color:#9CA3AF;margin-bottom:2px;">'+(FL[f.key]||f.label)+'</div><div style="font-size:13px;word-break:break-all;line-height:1.6;">'+(String(selReq.data[f.key]).startsWith('http')?'<a href="'+selReq.data[f.key]+'" target="_blank" style="color:'+tc.color+'">'+selReq.data[f.key]+'</a>':selReq.data[f.key])+'</div></div>').join('')+'</div>';
+  if(!isSup&&selReq.status==='pending_ds')h+='<button style="width:100%;margin-bottom:10px;padding:12px;background:linear-gradient(135deg,#B7770D,#D97706);border:none;border-radius:12px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doSendToSV()">📤 إرسال للمشرف (Pending with SV)</button>';
   if(canEdit)h+='<div style="display:flex;gap:10px;"><button style="flex:1;padding:11px;background:#EFF6FF;border:1px solid #BFDBFE;border-radius:12px;color:#1D4ED8;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="renderCEdit()">✏️ تعديل</button><button style="flex:1;padding:11px;background:#FEF2F2;border:1px solid #FECACA;border-radius:12px;color:#DC2626;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'block\'">🗑️ حذف</button></div>';
   h+='<div id="delc" class="danger-box"><div style="font-size:14px;font-weight:700;color:#DC2626;margin-bottom:8px;">⚠️ تأكيد الحذف</div><div style="font-size:12px;color:#4B5563;margin-bottom:12px;">حذف طلب '+(selReq.data?.client_name||'')+'؟</div><div style="display:flex;gap:10px;"><button style="flex:1;padding:10px;background:#FAFAFA;border:1px solid #E5E7EB;border-radius:10px;color:#4B5563;font-size:13px;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="document.getElementById(\'delc\').style.display=\'none\'">إلغاء</button><button style="flex:1;padding:10px;background:#DC2626;border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:\'Cairo\',sans-serif;" onclick="doDelReq()">حذف نهائي</button></div></div>';
   h+='</div>';
@@ -759,6 +760,10 @@ async function doUpdSt(ns){
   catch(err){alert('خطأ: '+(err?.message||''));}
 }
 async function doDelReq(){try{await dbDel('credit_requests',{id:selReq.id});await loadCredit();renderCDash();}catch(err){alert('خطأ: '+(err?.message||''));}}
+async function doSendToSV(){
+  try{await dbPatch('credit_requests',{id:selReq.id},{status:'pending',last_updated:new Date().toISOString()});await loadCredit();selReq={...selReq,status:'pending'};renderCDetail(selReq.id);}
+  catch(err){alert('خطأ: '+(err?.message||''));}
+}
 
 function renderCEdit(){
   const tc=gCT(selReq.client_type),rf=CFIELDS[selReq.client_type]||CFIELDS[tc.key]||CF_C;
