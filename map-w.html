@@ -210,6 +210,12 @@ function getColor(empCode){
   return EMP_COLORS[empCode] || '#00C896';
 }
 
+function waTo(num){
+  if(!num)return;
+  const nm=(user&&user.name)?user.name:'';
+  const msg='مرحباً، معك '+nm+'، ممثل مبيعات التمويل في هلا للتمويل 👋\nيمكنك الآن التقديم على طلب التمويل خلال دقائق بكل سهولة عبر موقعنا.\nإذا كنت مهتم أو ترغب بمعرفة تفاصيل أكثر، يسعدني تواصلك معي.\nشكراً لك 🌟';
+  window.open('https://wa.me/966'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
 function openGMaps(lat,lng){
   window.open('https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng,'_blank');
 }
@@ -279,8 +285,8 @@ function loadMarkers(clientsObj){
           <div style="background:#F9FAFB;padding:10px 14px;border-radius:0 0 8px 8px;display:flex;flex-direction:column;gap:6px;">
             ${!visited?`<button onclick="openVisit('${c.id}','${(c.name||'').replace(/'/g,'`')}','${empCode}')" style="width:100%;padding:10px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">🚶 بدء الزيارة</button>`:''}
             <button onclick="openGMaps(${c.lat},${c.lng})" style="width:100%;padding:10px;background:linear-gradient(135deg,#2563EB,#1D4ED8);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">🧭 التوجه للعميل</button>
-            ${c.owner?`<button onclick="window.open('https://wa.me/966${c.owner}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المدير</button>`:''}
-            ${c.cashier?`<button onclick="window.open('https://wa.me/966${c.cashier}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#0D9488,#0F766E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المحاسب</button>`:''}
+            ${c.owner?`<button onclick="waTo('${c.owner}')" style="width:100%;padding:10px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المدير</button>`:''}
+            ${c.cashier?`<button onclick="waTo('${c.cashier}')" style="width:100%;padding:10px;background:linear-gradient(135deg,#0D9488,#0F766E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المحاسب</button>`:''}
           </div>
         </div>`;
 
