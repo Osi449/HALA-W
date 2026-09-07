@@ -122,13 +122,20 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
     <!-- Q3 - Device photo -->
     <div>
       <div class="q-label">3️⃣ رابط صورة الجهاز (مع رقمه واضح)</div>
-      <input class="url-input" id="q3url" type="url" placeholder="https://drive.google.com/...">
-      <div class="url-hint">ارفع الصورة على Google Drive أو Imgur وضع الرابط هنا</div>
+      <div style="display:flex;gap:6px;">
+        <input class="url-input" id="q3url" type="url" placeholder="https://files.fm/..." style="flex:1;">
+        <button type="button" onclick="window.open('https://files.fm/','_blank')" style="white-space:nowrap;padding:0 14px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📎 رفع</button>
+      </div>
+      <div class="url-hint">اضغط "رفع" لفتح files.fm، ارفع الصورة، وانسخ رابط المشاركة هنا</div>
     </div>
     <!-- Q4 - Shop photo -->
     <div>
       <div class="q-label">4️⃣ رابط صورة المحل</div>
-      <input class="url-input" id="q4url" type="url" placeholder="https://drive.google.com/...">
+      <div style="display:flex;gap:6px;">
+        <input class="url-input" id="q4url" type="url" placeholder="https://files.fm/..." style="flex:1;">
+        <button type="button" onclick="window.open('https://files.fm/','_blank')" style="white-space:nowrap;padding:0 14px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📎 رفع</button>
+      </div>
+      <div class="url-hint">اضغط "رفع" لفتح files.fm، ارفع الصورة، وانسخ رابط المشاركة هنا</div>
     </div>
     <!-- Q5 -->
     <div>
@@ -203,6 +210,36 @@ function getColor(empCode){
   return EMP_COLORS[empCode] || '#00C896';
 }
 
+function openGMaps(lat,lng){
+  window.open('https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng,'_blank');
+}
+function showToast(msg){
+  let t=document.getElementById('__toast');
+  if(!t){
+    t=document.createElement('div');t.id='__toast';
+    t.style.cssText='position:fixed;bottom:24px;left:50%;transform:translateX(-50%);background:#1A1A2E;color:#fff;padding:10px 18px;border-radius:20px;font-size:13px;font-family:"Cairo",sans-serif;z-index:9999;box-shadow:0 4px 12px rgba(0,0,0,0.3);opacity:0;transition:opacity .25s;pointer-events:none;';
+    document.body.appendChild(t);
+  }
+  t.textContent=msg;t.style.opacity='1';
+  clearTimeout(t.__tm);t.__tm=setTimeout(()=>{t.style.opacity='0';},1800);
+}
+function copyNum(num){
+  if(!num)return;
+  const done=()=>showToast('✅ تم نسخ الرقم: '+num);
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(num).then(done).catch(()=>fallbackCopy(num,done));
+  } else {
+    fallbackCopy(num,done);
+  }
+}
+function fallbackCopy(text,cb){
+  const ta=document.createElement('textarea');
+  ta.value=text;ta.style.position='fixed';ta.style.opacity='0';
+  document.body.appendChild(ta);ta.select();
+  try{document.execCommand('copy');}catch(e){}
+  document.body.removeChild(ta);
+  if(cb)cb();
+}
 function makeIcon(color, visited){
   const c = visited ? '#4ade80' : color;
   const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="32" viewBox="0 0 24 32">
@@ -235,13 +272,15 @@ function loadMarkers(clientsObj){
           <div style="background:#fff;padding:12px 14px;">
             <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">آخر نشاط</span><span style="color:#1A1A2E;font-weight:600;">${c.last_active||'—'}</span></div>
 
-            <div style="display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">جوال المحاسب</span><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.cashier||'—'}</span></div>
-            <div style="display:flex;justify-content:space-between;padding:5px 0;font-size:12px;"><span style="color:#6B7280;">جوال المالك</span><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.owner||'—'}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;border-bottom:1px solid #F3F4F6;font-size:12px;"><span style="color:#6B7280;">جوال المدير</span><span style="display:flex;align-items:center;gap:6px;"><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.owner||'—'}</span>${c.owner?`<button onclick="copyNum('${c.owner}')" style="background:#F3F4F6;border:none;border-radius:6px;padding:3px 7px;cursor:pointer;font-size:11px;">📋</button>`:''}</span></div>
+            <div style="display:flex;justify-content:space-between;align-items:center;padding:5px 0;font-size:12px;"><span style="color:#6B7280;">جوال المحاسب</span><span style="display:flex;align-items:center;gap:6px;"><span style="color:#1A1A2E;font-weight:600;font-family:monospace;">${c.cashier||'—'}</span>${c.cashier?`<button onclick="copyNum('${c.cashier}')" style="background:#F3F4F6;border:none;border-radius:6px;padding:3px 7px;cursor:pointer;font-size:11px;">📋</button>`:''}</span></div>
             ${visited?'<div style="padding:5px 0;color:#166534;font-size:12px;text-align:center;font-weight:700;">✅ تمت الزيارة</div>':''}
           </div>
           <div style="background:#F9FAFB;padding:10px 14px;border-radius:0 0 8px 8px;display:flex;flex-direction:column;gap:6px;">
             ${!visited?`<button onclick="openVisit('${c.id}','${(c.name||'').replace(/'/g,'`')}','${empCode}')" style="width:100%;padding:10px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">🚶 بدء الزيارة</button>`:''}
-            ${c.cashier?`<button onclick="window.open('https://wa.me/966${c.cashier}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب</button>`:''}
+            <button onclick="openGMaps(${c.lat},${c.lng})" style="width:100%;padding:10px;background:linear-gradient(135deg,#2563EB,#1D4ED8);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">🧭 التوجه للعميل</button>
+            ${c.owner?`<button onclick="window.open('https://wa.me/966${c.owner}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#25D366,#128C7E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المدير</button>`:''}
+            ${c.cashier?`<button onclick="window.open('https://wa.me/966${c.cashier}','_blank')" style="width:100%;padding:10px;background:linear-gradient(135deg,#0D9488,#0F766E);border:none;border-radius:8px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">💬 واتساب المحاسب</button>`:''}
           </div>
         </div>`;
 
