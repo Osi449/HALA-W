@@ -1286,10 +1286,16 @@ async function loadCompanyIndex(){
 async function loadEntityInfo(){
   if(anInfoLoaded&&window.ENTITY_INFO)return true;
   if(!window.ENTITY_INFO)window.ENTITY_INFO={};
-  const results=await Promise.all(Array.from({length:9},(_,i)=>_loadScript(AN_BASE+'entity_info_'+i+'.js')));
+  const results=await Promise.all(Array.from({length:12},(_,i)=>_loadScript(AN_BASE+'entity_info_'+i+'.js')));
   anInfoLoaded=true;return results.some(Boolean);
 }
 let anPhoneLoaded=false;
+let anCodeLoaded=false;
+async function loadCodeIndex(){
+  if(anCodeLoaded&&window.CODE_INDEX)return true;
+  const ok=await _loadScript(AN_BASE+'code_index.js');
+  anCodeLoaded=ok;return ok;
+}
 async function loadPhoneIndex(){
   if(anPhoneLoaded&&window.PHONE_INDEX)return true;
   const ok=await _loadScript(AN_BASE+'phone_index.js');
@@ -1320,7 +1326,13 @@ async function resolveSearch(q){
     const cashier=window.TID_INDEX[q];
     if(cashier) return {eid:cashier};
   }
-  // 3. Phone number lookup
+  // 2.5 Device Code lookup
+  await loadCodeIndex();
+  if(window.CODE_INDEX){
+    const cashier=window.CODE_INDEX[q];
+    if(cashier) return {eid:cashier};
+  }
+  // 3. Phone number lookup (cashier mobile or manager/owner number)
   await loadPhoneIndex();
   if(window.PHONE_INDEX){
     const cashier=window.PHONE_INDEX[q];
@@ -1388,7 +1400,7 @@ function renderAnalyzer(){
   h+='<div style="background:#F5F3FF;border-bottom:1px solid #E5E7EB;padding:14px 20px;">';
   h+='<div style="max-width:680px;margin:0 auto;">';
   h+='<div style="display:flex;gap:8px;margin-bottom:8px;">';
-  h+='<input id="anq" style="flex:1;background:#fff;border:1.5px solid #DDD6FE;border-radius:10px;padding:11px 16px;font-size:16px;font-weight:700;outline:none;font-family:monospace;letter-spacing:2px;color:#6B21A8;direction:ltr;" placeholder="Entity ID / TID / رقم الجوال" onkeydown="if(event.key===\'Enter\')doAnSrch()">';
+  h+='<input id="anq" style="flex:1;background:#fff;border:1.5px solid #DDD6FE;border-radius:10px;padding:11px 16px;font-size:16px;font-weight:700;outline:none;font-family:monospace;letter-spacing:2px;color:#6B21A8;direction:ltr;" placeholder="Entity ID / TID / Code / رقم الجوال" onkeydown="if(event.key===\'Enter\')doAnSrch()">';
   h+='<button onclick="doAnSrch()" style="padding:11px 24px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:700;cursor:pointer;">بحث</button>';
   h+='</div>';
   h+='<div id="anst" style="font-size:12px;color:#9CA3AF;min-height:16px;"></div>';
