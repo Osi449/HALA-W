@@ -1521,7 +1521,7 @@ async function buildAnResult(eid,months,info,fin){
       for(const pid of otherMembers){
         const ps=await findByEntity(String(pid));
         if(ps){
-          const pm=Object.entries(ps).map(([m,v])=>({month:m,sales:v})).sort((a,b)=>a.month.localeCompare(b.month));
+          const pm=Object.entries(ps).filter(([m])=>m!=='total').map(([m,v])=>({month:m,sales:v})).sort((a,b)=>a.month.localeCompare(b.month));
           const ptotal=pm.reduce((a,b)=>a+b.sales,0);
           const pinfo=getInfo(String(pid))||{};
           peerData.push({id:pid,months:pm,total:ptotal,info:pinfo,fin:calcFin2(pm)});
