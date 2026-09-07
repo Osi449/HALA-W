@@ -7,6 +7,7 @@
 <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 <script src="map_w.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 :root{
@@ -95,6 +96,57 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
 <!-- MAP -->
 <div id="map" style="margin-top:96px;height:calc(100vh - 96px);"></div>
 
+<!-- FLOATING ACTION BUTTONS -->
+<div style="position:fixed;bottom:24px;left:16px;z-index:1500;display:flex;flex-direction:column;gap:10px;">
+  <button id="mgrBtn" onclick="openMgrPanel()" style="display:none;align-items:center;gap:8px;padding:12px 18px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:30px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 4px 14px rgba(0,0,0,0.35);">📊 زيارات الفريق</button>
+  <button onclick="openNonHala()" style="display:flex;align-items:center;gap:8px;padding:12px 18px;background:linear-gradient(135deg,#D97706,#F59E0B);border:none;border-radius:30px;color:#fff;font-size:13px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;box-shadow:0 4px 14px rgba(0,0,0,0.35);">➕ تسجيل زيارة Non-Hala</button>
+</div>
+
+<!-- NON-HALA SHEET -->
+<div id="nhSheet" style="position:fixed;bottom:0;right:0;left:0;z-index:2100;background:#fff;border-top:2px solid #F59E0B;border-radius:16px 16px 0 0;padding:0;transform:translateY(100%);transition:transform 0.35s cubic-bezier(.4,0,.2,1);max-height:90vh;overflow-y:auto;">
+  <div class="sheet-handle"></div>
+  <div class="sheet-header">
+    <div class="sheet-title" style="color:#D97706;">🏬 تسجيل زيارة Non-Hala</div>
+    <div class="sheet-client">عميل غير مرتبط بموقع هلا</div>
+  </div>
+  <div class="sheet-body">
+    <div>
+      <div class="q-label">رقم السجل (CR)</div>
+      <input class="url-input" id="nhCR" type="text" placeholder="1234567890" style="direction:ltr;">
+    </div>
+    <div>
+      <div class="q-label">رقم العميل</div>
+      <input class="url-input" id="nhClientNum" type="text" placeholder="رقم العميل" style="direction:ltr;">
+    </div>
+    <div>
+      <div class="q-label">اسم المؤسسة</div>
+      <input class="url-input" id="nhName" type="text" placeholder="اسم المؤسسة" style="direction:rtl;">
+    </div>
+    <div>
+      <div class="q-label">هل العميل مهتم بالتمويل؟</div>
+      <div class="q-options">
+        <button class="q-btn" id="nhYes" onclick="setNH('yes')">✅ نعم</button>
+        <button class="q-btn" id="nhNo" onclick="setNH('no')">❌ لا</button>
+      </div>
+    </div>
+    <button class="save-btn" style="background:linear-gradient(135deg,#D97706,#F59E0B);" onclick="saveNonHala()">💾 حفظ وإرسال</button>
+    <button class="cancel-btn" onclick="closeNonHala()">إلغاء</button>
+  </div>
+</div>
+
+<!-- MANAGER PANEL -->
+<div id="mgrPanel" style="position:fixed;inset:0;z-index:2200;background:rgba(0,0,0,0.6);display:none;align-items:center;justify-content:center;padding:20px;">
+  <div style="background:#fff;border-radius:16px;max-width:520px;width:100%;max-height:85vh;overflow-y:auto;padding:20px;">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+      <div style="font-size:16px;font-weight:800;color:#6B21A8;">📊 زيارات الفريق اليوم</div>
+      <button onclick="closeMgrPanel()" style="background:#F3F4F6;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Cairo',sans-serif;">✕</button>
+    </div>
+    <div id="mgrDate" style="font-size:12px;color:#6B7280;margin-bottom:12px;"></div>
+    <div id="mgrContent" style="font-size:13px;color:#1A1A2E;">جاري التحميل...</div>
+    <button onclick="exportTodayExcel()" style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;">⬇️ تحميل Excel لزيارات اليوم</button>
+  </div>
+</div>
+
 <!-- VISIT SHEET -->
 <div id="visitSheet">
   <div class="sheet-handle"></div>
@@ -160,11 +212,17 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
 <script>
 // ── CONFIG ──────────────────────────────────────────
 const SITE_KEY = 'west';
+const REGION_LABEL = 'الغربية';
+const SB='https://ggmvlrwbmnuvnnrojrcs.supabase.co';
+const SK='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImdnbXZscndibW51dm5ucm9qcmNzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzc3MTI2MjYsImV4cCI6MjA5MzI4ODYyNn0.fSfgSVe_7nI_XzWY3L25gy86HLAxC0e99RdRdMGD_kY';
+const SH={'Content-Type':'application/json',apikey:SK,Authorization:'Bearer '+SK};
+async function dbIns(t,b){const r=await fetch(SB+'/rest/v1/'+t,{method:'POST',headers:{...SH,Prefer:'return=representation'},body:JSON.stringify(b)});if(!r.ok)throw new Error(await r.text());return r.json();}
+async function dbGet(t,q=''){const r=await fetch(SB+'/rest/v1/'+t+q,{headers:SH});if(!r.ok)throw new Error(await r.text());return r.json();}
 const EMP_CODES = ["W1-JH", "W2-HM", "W8-MA", "W10-AA", "W12-SF"];
 const EMP_NAMES = {"W1-JH": "Jabir Mohammed Hassan", "W2-HM": "Haitham Mahmoud", "W8-MA": "Mustafa Amanullah", "W10-AA": "Abdullah Abdulrashid", "W12-SF": "Shadi Fahad"};
 const EMP_COLORS = {"W1-JH": "#00C896", "W2-HM": "#7C3AED", "W8-MA": "#F5A623", "W10-AA": "#3B9EFF", "W12-SF": "#F87171"};
 
-let user = null, map = null, markers = {}, visits = {}, currentClient = null;
+let user = null, map = null, markers = {}, visits = {}, currentClient = null, isMgr = false;
 let answers = {};
 
 // ── INIT ────────────────────────────────────────────
@@ -188,7 +246,7 @@ function init(){
   }).addTo(map);
 
   // Get user's clients
-  const isMgr = user.role==='region'||user.role==='supervisor'||user.role==='owner';
+  isMgr = user.role==='region'||user.role==='supervisor'||user.role==='owner';
   document.getElementById('empName').textContent = user.name;
 
   let clientsToShow = {};
@@ -204,6 +262,7 @@ function init(){
 
   loadMarkers(clientsToShow);
   updateStats();
+  if(isMgr) document.getElementById('mgrBtn').style.display='flex';
 }
 
 function getColor(empCode){
@@ -369,6 +428,23 @@ function saveVisit(){
   allVisits[currentClient.id+'_'+user.code+'_'+visit.date] = visit;
   localStorage.setItem(allKey, JSON.stringify(allVisits));
 
+  // Sync to Supabase so the manager can see it from any device
+  dbIns('map_visits',{
+    region: SITE_KEY,
+    emp_code: user.code,
+    emp_name: user.name,
+    visit_type: 'hala',
+    client_id: currentClient.id,
+    client_name: currentClient.name,
+    q1_interested: answers.q1||'',
+    q2_explained: answers.q2||'',
+    device_photo: visit.q3_device_photo,
+    shop_photo: visit.q4_shop_photo,
+    q5_sent_message: answers.q5||'',
+    notes: visit.notes,
+    visit_date: visit.date
+  }).catch(e=>console.error('sync fail',e));
+
   // Update marker
   if(markers[currentClient.id]){
     const {marker, client, empCode} = markers[currentClient.id];
@@ -379,6 +455,121 @@ function saveVisit(){
   updateStats();
   closeSheet();
   alert('✅ تم حفظ الزيارة بنجاح!');
+}
+
+// ── NON-HALA VISIT ───────────────────────────────────
+let nhAnswer = null;
+function openNonHala(){
+  nhAnswer = null;
+  document.getElementById('nhCR').value='';
+  document.getElementById('nhClientNum').value='';
+  document.getElementById('nhName').value='';
+  document.getElementById('nhYes').className='q-btn';
+  document.getElementById('nhNo').className='q-btn';
+  document.getElementById('nhSheet').style.transform='translateY(0)';
+}
+function closeNonHala(){
+  document.getElementById('nhSheet').style.transform='translateY(100%)';
+}
+function setNH(val){
+  nhAnswer = val;
+  document.getElementById('nhYes').className='q-btn'+(val==='yes'?' selected-yes':'');
+  document.getElementById('nhNo').className='q-btn'+(val==='no'?' selected-no':'');
+}
+async function saveNonHala(){
+  const cr = document.getElementById('nhCR').value.trim();
+  const clientNum = document.getElementById('nhClientNum').value.trim();
+  const name = document.getElementById('nhName').value.trim();
+  if(!name){ alert('⚠️ اكتب اسم المؤسسة'); return; }
+  const dateStr = new Date().toISOString().split('T')[0];
+  try{
+    await dbIns('map_visits',{
+      region: SITE_KEY,
+      emp_code: user.code,
+      emp_name: user.name,
+      visit_type: 'nonhala',
+      cr_number: cr,
+      client_number: clientNum,
+      client_name: name,
+      interested: nhAnswer||'',
+      visit_date: dateStr
+    });
+  }catch(e){
+    console.error(e);
+    alert('⚠️ صار خطأ بالإرسال، تأكد من الاتصال وحاول مرة ثانية');
+    return;
+  }
+  // Count it toward this employee's local visit counter
+  const key = 'nh_'+Date.now();
+  visits[key] = {nonhala:true, name, date:dateStr};
+  localStorage.setItem('visits_'+SITE_KEY+'_'+user.code, JSON.stringify(visits));
+  updateStats();
+  closeNonHala();
+  showToast('✅ تم تسجيل زيارة Non-Hala');
+}
+
+// ── MANAGER PANEL ────────────────────────────────────
+async function openMgrPanel(){
+  document.getElementById('mgrPanel').style.display='flex';
+  const today = new Date().toISOString().split('T')[0];
+  document.getElementById('mgrDate').textContent = 'تاريخ اليوم: '+today;
+  const content = document.getElementById('mgrContent');
+  content.textContent = 'جاري التحميل...';
+  try{
+    const rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&visit_date=eq.'+today+'&order=emp_code');
+    if(!rows.length){ content.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:20px 0;">لا توجد زيارات مسجّلة اليوم بعد</div>'; return; }
+    const byEmp = {};
+    rows.forEach(r=>{
+      byEmp[r.emp_code] = byEmp[r.emp_code] || {name:r.emp_name, hala:0, nonhala:0};
+      if(r.visit_type==='nonhala') byEmp[r.emp_code].nonhala++;
+      else byEmp[r.emp_code].hala++;
+    });
+    let h = '<table style="width:100%;border-collapse:collapse;font-size:12px;">';
+    h += '<thead><tr style="background:#F5F3FF;"><th style="padding:6px 8px;text-align:right;">الموظف</th><th style="padding:6px 8px;">Hala</th><th style="padding:6px 8px;">Non-Hala</th><th style="padding:6px 8px;">الإجمالي</th></tr></thead><tbody>';
+    Object.entries(byEmp).forEach(([code,d])=>{
+      h += '<tr style="border-bottom:1px solid #F3F4F6;"><td style="padding:6px 8px;font-weight:700;">'+(d.name||code)+'</td><td style="padding:6px 8px;text-align:center;">'+d.hala+'</td><td style="padding:6px 8px;text-align:center;">'+d.nonhala+'</td><td style="padding:6px 8px;text-align:center;font-weight:800;color:#6B21A8;">'+(d.hala+d.nonhala)+'</td></tr>';
+    });
+    h += '</tbody></table>';
+    content.innerHTML = h;
+  }catch(e){
+    console.error(e);
+    content.innerHTML = '<div style="color:#DC2626;">⚠️ تعذّر تحميل البيانات، تأكد من الاتصال</div>';
+  }
+}
+function closeMgrPanel(){
+  document.getElementById('mgrPanel').style.display='none';
+}
+async function exportTodayExcel(){
+  const today = new Date().toISOString().split('T')[0];
+  let rows;
+  try{
+    rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&visit_date=eq.'+today+'&order=emp_code');
+  }catch(e){
+    alert('⚠️ تعذّر تحميل بيانات الزيارات');
+    return;
+  }
+  if(!rows.length){ alert('لا توجد زيارات لهذا اليوم'); return; }
+  const data = rows.map(r=>({
+    'التاريخ': r.visit_date,
+    'الموظف': r.emp_name||r.emp_code,
+    'كود الموظف': r.emp_code,
+    'نوع الزيارة': r.visit_type==='nonhala'?'Non-Hala':'Hala',
+    'اسم العميل/المؤسسة': r.client_name||'',
+    'رقم العميل (Cashier ID)': r.client_id||'',
+    'رقم السجل (CR)': r.cr_number||'',
+    'رقم العميل (Non-Hala)': r.client_number||'',
+    'مهتم بالتمويل؟': r.visit_type==='nonhala'?(r.interested||''):(r.q1_interested||''),
+    'تم شرح الخدمة؟': r.q2_explained||'',
+    'رابط صورة الجهاز': r.device_photo||'',
+    'رابط صورة المحل': r.shop_photo||'',
+    'تم إرسال رسالة؟': r.q5_sent_message||'',
+    'ملاحظات': r.notes||'',
+    'وقت التسجيل': r.created_at||''
+  }));
+  const ws = XLSX.utils.json_to_sheet(data);
+  const wb = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(wb, ws, 'زيارات اليوم');
+  XLSX.writeFile(wb, 'زيارات_'+REGION_LABEL+'_'+today+'.xlsx');
 }
 
 // ── LEAFLET DARK POPUP STYLE ────────────────────────
