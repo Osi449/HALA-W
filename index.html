@@ -971,6 +971,7 @@ function loadChunked(key){const n=parseInt(localStorage.getItem(key+'_n')||'0');
 
 // ── ANALYZER ─────────────────────────────
 const AN_BASE=(()=>{const p=window.location.pathname;const base=p.substring(0,p.lastIndexOf('/')+1);return window.location.origin+base;})();
+const AN_DATA_V='20260908a';
 let salesIndexLoaded=false;const salesChunkLoaded={};
 
 
@@ -1266,39 +1267,39 @@ async function _loadScript(src){
 
 async function loadSalesIndex(){
   if(anIdxLoaded&&window.SALES_INDEX)return true;
-  const ok=await _loadScript(AN_BASE+'sales_index.js');
+  const ok=await _loadScript(AN_BASE+'sales_index.js?v='+AN_DATA_V);
   anIdxLoaded=ok;return ok;
 }
 async function loadSalesChunk(cn){
   if(window['SALES_CHUNK_'+cn])return true;
-  return _loadScript(AN_BASE+'sales_'+cn+'.js');
+  return _loadScript(AN_BASE+'sales_'+cn+'.js?v='+AN_DATA_V);
 }
 async function loadTidIndex(){
   if(anTidLoaded&&window.TID_INDEX)return true;
-  const ok=await _loadScript(AN_BASE+'tid_index.js');
+  const ok=await _loadScript(AN_BASE+'tid_index.js?v='+AN_DATA_V);
   anTidLoaded=ok;return ok;
 }
 async function loadCompanyIndex(){
   if(anCoLoaded&&window.COMPANY_INDEX)return true;
-  const ok=await _loadScript(AN_BASE+'company_index.js');
+  const ok=await _loadScript(AN_BASE+'company_index.js?v='+AN_DATA_V);
   anCoLoaded=ok;return ok;
 }
 async function loadEntityInfo(){
   if(anInfoLoaded&&window.ENTITY_INFO)return true;
   if(!window.ENTITY_INFO)window.ENTITY_INFO={};
-  const results=await Promise.all(Array.from({length:12},(_,i)=>_loadScript(AN_BASE+'entity_info_'+i+'.js')));
+  const results=await Promise.all(Array.from({length:12},(_,i)=>_loadScript(AN_BASE+'entity_info_'+i+'.js?v='+AN_DATA_V)));
   anInfoLoaded=true;return results.some(Boolean);
 }
 let anPhoneLoaded=false;
 let anCodeLoaded=false;
 async function loadCodeIndex(){
   if(anCodeLoaded&&window.CODE_INDEX)return true;
-  const ok=await _loadScript(AN_BASE+'code_index.js');
+  const ok=await _loadScript(AN_BASE+'code_index.js?v='+AN_DATA_V);
   anCodeLoaded=ok;return ok;
 }
 async function loadPhoneIndex(){
   if(anPhoneLoaded&&window.PHONE_INDEX)return true;
-  const ok=await _loadScript(AN_BASE+'phone_index.js');
+  const ok=await _loadScript(AN_BASE+'phone_index.js?v='+AN_DATA_V);
   anPhoneLoaded=ok;return ok;
 }
 
