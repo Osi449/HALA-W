@@ -269,9 +269,10 @@ function getColor(empCode){
   return EMP_COLORS[empCode] || '#00C896';
 }
 
+const WA_NAME_OVERRIDE={'W10-AA':'Abdullah Sheikh'};
 function waTo(num){
   if(!num)return;
-  const nm=(user&&user.name)?user.name:'';
+  const nm=WA_NAME_OVERRIDE[user&&user.code]||((user&&user.name)?user.name:'');
   const msg='مرحباً، معك '+nm+'، ممثل مبيعات التمويل في هلا للتمويل 👋\nيمكنك الآن التقديم على طلب التمويل خلال دقائق بكل سهولة عبر موقعنا.\nإذا كنت مهتم أو ترغب بمعرفة تفاصيل أكثر، يسعدني تواصلك معي.\nشكراً لك 🌟';
   window.open('https://wa.me/966'+num+'?text='+encodeURIComponent(msg),'_blank');
 }
