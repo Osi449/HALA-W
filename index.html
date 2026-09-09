@@ -917,10 +917,12 @@ async function doReqReset(){
 
 async function doApproveReset(shiftId){
   try{
+    // جلب سجل الشفت قبل حذفه عشان نعرف الموظف صاحبه
+    let sl=null;
+    try{const rows=await dbGet('shift_logs','?id=eq.'+shiftId);sl=rows&&rows[0]||null;}catch(e){}
     // حذف سجل الشفت القديم حتى يبدأ الموظف من صفر
     await dbDel('shift_logs',{id:shiftId});
     // حذف إدخال أداء اليوم للموظف
-    const sl=shifts.find(s=>s.id==shiftId);
     if(sl){
       try{await dbDel('daily_entries',{agent_code:sl.agent_code,entry_date:tod()});}catch(e){}
     }
