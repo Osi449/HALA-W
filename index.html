@@ -453,7 +453,6 @@ async function doSaveT(){
       cards:parseInt(document.getElementById('pf_cards').value)||0,
       sources:0,
       fin_hala:(document.getElementById('pf_finHala')?parseInt(document.getElementById('pf_finHala').value)||0:0),
-      fin_nonhala:(document.getElementById('pf_finNonHala')?parseInt(document.getElementById('pf_finNonHala').value)||0:0),
       notes:document.getElementById('tnotes').value||''};
     await dbUp('daily_entries',p,'agent_code,entry_date');
     await loadEntries();renderTDone(p);
