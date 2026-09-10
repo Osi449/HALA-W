@@ -146,7 +146,7 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
     </div>
     <div id="mgrDate" style="font-size:12px;color:#6B7280;margin-bottom:12px;"></div>
     <div id="mgrContent" style="font-size:13px;color:#1A1A2E;">جاري التحميل...</div>
-    <button onclick="exportTodayExcel()" style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;">⬇️ تحميل Excel لزيارات اليوم</button>
+    <button onclick="exportTodayExcel()" style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;">⬇️ تحميل تقرير الزيارات الكامل (Excel)</button>
   </div>
 </div>
 
@@ -521,13 +521,12 @@ async function saveNonHala(){
 // ── MANAGER PANEL ────────────────────────────────────
 async function openMgrPanel(){
   document.getElementById('mgrPanel').style.display='flex';
-  const today = new Date().toISOString().split('T')[0];
-  document.getElementById('mgrDate').textContent = 'تاريخ اليوم: '+today;
+  document.getElementById('mgrDate').textContent = 'كل الزيارات المسجّلة (كل الفترات)';
   const content = document.getElementById('mgrContent');
   content.textContent = 'جاري التحميل...';
   try{
-    const rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&visit_date=eq.'+today+'&order=emp_code');
-    if(!rows.length){ content.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:20px 0;">لا توجد زيارات مسجّلة اليوم بعد</div>'; return; }
+    const rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&order=emp_code');
+    if(!rows.length){ content.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:20px 0;">لا توجد زيارات مسجّلة بعد</div>'; return; }
     const byEmp = {};
     rows.forEach(r=>{
       byEmp[r.emp_code] = byEmp[r.emp_code] || {name:r.emp_name, hala:0, nonhala:0};
@@ -550,16 +549,32 @@ function closeMgrPanel(){
   document.getElementById('mgrPanel').style.display='none';
 }
 async function exportTodayExcel(){
-  const today = new Date().toISOString().split('T')[0];
   let rows;
   try{
-    rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&visit_date=eq.'+today+'&order=emp_code');
+    rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&order=emp_code,visit_date');
   }catch(e){
     alert('⚠️ تعذّر تحميل بيانات الزيارات');
     return;
   }
-  if(!rows.length){ alert('لا توجد زيارات لهذا اليوم'); return; }
-  const data = rows.map(r=>({
+  if(!rows.length){ alert('لا توجد زيارات مسجّلة'); return; }
+
+  // Sheet 1: performance summary per employee per visit type
+  const byEmp = {};
+  rows.forEach(r=>{
+    byEmp[r.emp_code] = byEmp[r.emp_code] || {name:r.emp_name||r.emp_code, hala:0, nonhala:0};
+    if(r.visit_type==='nonhala') byEmp[r.emp_code].nonhala++;
+    else byEmp[r.emp_code].hala++;
+  });
+  const summaryData = Object.entries(byEmp).map(([code,d])=>({
+    'كود الموظف': code,
+    'اسم الموظف': d.name,
+    'عدد زيارات Hala': d.hala,
+    'عدد زيارات Non-Hala': d.nonhala,
+    'إجمالي الزيارات': d.hala+d.nonhala
+  }));
+
+  // Sheet 2: full visit detail (for review, includes photo links)
+  const detailData = rows.map(r=>({
     'التاريخ': r.visit_date,
     'الموظف': r.emp_name||r.emp_code,
     'كود الموظف': r.emp_code,
@@ -576,10 +591,14 @@ async function exportTodayExcel(){
     'ملاحظات': r.notes||'',
     'وقت التسجيل': r.created_at||''
   }));
-  const ws = XLSX.utils.json_to_sheet(data);
+
   const wb = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(wb, ws, 'زيارات اليوم');
-  XLSX.writeFile(wb, 'زيارات_'+REGION_LABEL+'_'+today+'.xlsx');
+  const ws1 = XLSX.utils.json_to_sheet(summaryData);
+  const ws2 = XLSX.utils.json_to_sheet(detailData);
+  XLSX.utils.book_append_sheet(wb, ws1, 'أداء الموظفين');
+  XLSX.utils.book_append_sheet(wb, ws2, 'تفاصيل الزيارات');
+  const today = new Date().toISOString().split('T')[0];
+  XLSX.writeFile(wb, 'تقرير_زيارات_'+REGION_LABEL+'_'+today+'.xlsx');
 }
 
 // ── LEAFLET DARK POPUP STYLE ────────────────────────
