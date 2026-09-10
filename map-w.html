@@ -144,7 +144,10 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
       <div style="font-size:16px;font-weight:800;color:#6B21A8;">📊 زيارات الفريق اليوم</div>
       <button onclick="closeMgrPanel()" style="background:#F3F4F6;border:none;border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Cairo',sans-serif;">✕</button>
     </div>
-    <div id="mgrDate" style="font-size:12px;color:#6B7280;margin-bottom:12px;"></div>
+    <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+      <label style="font-size:12px;color:#6B7280;">اليوم:</label>
+      <input id="mgrDate" type="date" onchange="loadMgrDay(this.value)" style="flex:1;padding:8px 10px;border:1px solid #E5E7EB;border-radius:8px;font-size:13px;font-family:'Cairo',sans-serif;">
+    </div>
     <div id="mgrContent" style="font-size:13px;color:#1A1A2E;">جاري التحميل...</div>
     <button onclick="exportTodayExcel()" style="width:100%;margin-top:16px;padding:12px;background:linear-gradient(135deg,#166534,#15803D);border:none;border-radius:10px;color:#fff;font-size:14px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;">⬇️ تحميل تقرير الزيارات الكامل (Excel)</button>
   </div>
@@ -521,12 +524,18 @@ async function saveNonHala(){
 // ── MANAGER PANEL ────────────────────────────────────
 async function openMgrPanel(){
   document.getElementById('mgrPanel').style.display='flex';
-  document.getElementById('mgrDate').textContent = 'كل الزيارات المسجّلة (كل الفترات)';
+  const today = new Date().toISOString().split('T')[0];
+  const dateInput = document.getElementById('mgrDate');
+  dateInput.value = today;
+  dateInput.max = today;
+  await loadMgrDay(today);
+}
+async function loadMgrDay(dateStr){
   const content = document.getElementById('mgrContent');
   content.textContent = 'جاري التحميل...';
   try{
-    const rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&order=emp_code');
-    if(!rows.length){ content.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:20px 0;">لا توجد زيارات مسجّلة بعد</div>'; return; }
+    const rows = await dbGet('map_visits','?region=eq.'+SITE_KEY+'&visit_date=eq.'+dateStr+'&order=emp_code');
+    if(!rows.length){ content.innerHTML='<div style="text-align:center;color:#9CA3AF;padding:20px 0;">لا توجد زيارات مسجّلة بهذا اليوم</div>'; return; }
     const byEmp = {};
     rows.forEach(r=>{
       byEmp[r.emp_code] = byEmp[r.emp_code] || {name:r.emp_name, hala:0, nonhala:0};
