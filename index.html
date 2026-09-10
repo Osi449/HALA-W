@@ -64,18 +64,18 @@ input,textarea,select{font-family:'Cairo',sans-serif;outline:none;}
 <p style="font-size:14px;color:rgba(255,255,255,0.65);margin-bottom:36px;text-align:right;line-height:1.8;">متابعة الأداء · طلبات التمويل · ساعات العمل · تحليل المبيعات</p>
 <div style="display:flex;flex-direction:column;gap:12px;width:100%;max-width:500px;">
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="authGo('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">KPI's</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
-<button onclick="authGo('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
-<button onclick="authGo('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
-<button onclick="showPage('analyzer');renderAnalyzer();" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
+<button id="btn_tracker" onclick="goFeature('tracker')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📊</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">KPI's</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">الأهداف اليومية والشهرية</div></button>
+<button id="btn_credit" onclick="goFeature('credit')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">طلبات التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">رفع ومتابعة الطلبات</div></button>
+<button id="btn_shift" onclick="goFeature('shift')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">⏱️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">ساعات العمل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">تسجيل الشفت والبريك</div></button>
+<button id="btn_analyzer" onclick="goFeature('analyzer')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:20px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:8px;">📈</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">محلل المبيعات</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">ترند العميل والتقدير</div></button>
 </div>
 <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-<button onclick="window.location.href='map-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
-<button onclick="window.location.href='mylist-w.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
-<button onclick="window.location.href='calc.html'" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🧮</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">حاسبة التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">احسب القسط والتكلفة</div></button>
+<button id="btn_map" onclick="goFeature('map')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🗺️</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">خريطة العملاء</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء غير المزارين</div></button>
+<button id="btn_mylist" onclick="goFeature('mylist')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">📋</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">My List</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">العملاء المؤهلون للتمويل</div></button>
+<button id="btn_calc" onclick="goFeature('calculator')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:16px 14px;cursor:pointer;text-align:center;"><div style="font-size:28px;margin-bottom:6px;">🧮</div><div style="font-size:13px;font-weight:800;color:#fff;margin-bottom:4px;">حاسبة التمويل</div><div style="font-size:10px;color:rgba(255,255,255,0.55);">احسب القسط والتكلفة</div></button>
 </div>
 </div>
-<button onclick="authGo('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
+<button id="btn_techissue" onclick="goFeature('techissue')" style="background:rgba(255,255,255,0.10);border:1px solid rgba(255,255,255,0.2);border-radius:18px;padding:14px;cursor:pointer;text-align:center;width:100%;display:flex;align-items:center;justify-content:center;gap:12px;"><span style="font-size:24px;">🔧</span><div style="text-align:right;"><div style="font-size:13px;font-weight:800;color:#fff;">المشاكل التقنية</div><div style="font-size:10px;color:rgba(255,255,255,0.5);">الإبلاغ عن مشكلة تقنية</div></div></button>
 <div id="huser" style="display:none;margin-top:16px;background:rgba(255,255,255,0.08);border-radius:12px;padding:8px 16px;font-size:12px;color:rgba(255,255,255,0.7);"></div>
 </div>
 <div style="background:rgba(0,0,0,0.2);border-top:1px solid rgba(255,255,255,0.1);padding:14px 24px;display:flex;justify-content:flex-end;gap:28px;">
@@ -132,11 +132,13 @@ async function dbDel(t,m){const q=Object.entries(m).map(([k,v])=>k+'=eq.'+encode
 // ── DATA ─────────────────────────────────────────
 const SPIN='1965', RGN='WEST-MGR', _OWN='CR7';
 const SUPS=[RGN];
-const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','W11-KS':'1620','W3-MH':'2311','S3-MM':'1792'};
-const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'W11-KS':0,'W3-MH':0,'S3-MM':0};
+const EMP_PINS={'W1-JH':'2133','W2-HM':'1594','W8-MA':'1640','W10-AA':'1470','W12-SF':'2151','W11-KS':'1620','W3-MH':'2311','S3-MM':'1792','N6-AB':'2233'};
+const FIN_INIT={'W1-JH':0,'W2-HM':0,'W8-MA':0,'W10-AA':0,'W12-SF':0,'W11-KS':0,'W3-MH':0,'S3-MM':0,'N6-AB':0};
 const EMP_TGT=1100000, RGN_TGT=8200000;
-const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'W11-KS':1100000,'W3-MH':1100000,'S3-MM':1100000};
+const EMP_TGT_MAP={'W1-JH':500000,'W2-HM':1100000,'W8-MA':1100000,'W10-AA':1100000,'W12-SF':1100000,'W11-KS':1100000,'W3-MH':1100000,'S3-MM':1100000,'N6-AB':0};
 const getEmpTgt=code=>EMP_TGT_MAP[code]||EMP_TGT;
+// موظف بصلاحية محدودة: حاسبة التمويل + محلل المبيعات فقط
+const LIMITED_ACCESS={'N6-AB':['calculator','analyzer']};
 
 const TEAMS={
   w1:{label:'Western',sup:{code:'WEST-MGR',name:'Osman Baboor',color:'#15803D'},
@@ -148,7 +150,8 @@ const TEAMS={
       'W12-SF':{name:'Shadi Fahad Alghamdi',short:'Shadi',color:'#06B6D4'},
       'W11-KS':{name:'Khalil Alsayigh',short:'Khalil',color:'#EC4899'},
       'W3-MH':{name:'Mohammed Hamid',short:'Hamid',color:'#F97316'},
-      'S3-MM':{name:'Marwan Mohammed',short:'Marwan',color:'#06B6D4'}
+      'S3-MM':{name:'Marwan Mohammed',short:'Marwan',color:'#06B6D4'},
+      'N6-AB':{name:'Abdulaziz Abdulbaqi',short:'Abdulaziz',color:'#64748B'}
     }}
 };
 const ALL_M={};Object.values(TEAMS).forEach(t=>Object.assign(ALL_M,t.members));
@@ -226,10 +229,31 @@ function authGo(dest){
   else if(dest==='credit')renderCredit();
   else if(dest==='shift')renderShift();else if(dest==='calculator'){renderCalc();}else if(dest==='techissue')renderTechIssue();else if(dest==='creport')renderEmpReport();
 }
+function goFeature(key){
+  if(user&&LIMITED_ACCESS[user.code]&&!LIMITED_ACCESS[user.code].includes(key)){
+    alert('⚠️ ما عندك صلاحية للوصول لهذه الخاصية');
+    return;
+  }
+  if(key==='analyzer'){showPage('analyzer');renderAnalyzer();}
+  else if(key==='map'){window.location.href='map-w.html';}
+  else if(key==='mylist'){window.location.href='mylist-w.html';}
+  else if(key==='calculator'){window.location.href='calc.html';}
+  else{authGo(key);}
+}
+function applyAccessRestrictions(){
+  const allowed=user?LIMITED_ACCESS[user.code]:null;
+  const btnMap={tracker:'btn_tracker',credit:'btn_credit',shift:'btn_shift',analyzer:'btn_analyzer',map:'btn_map',mylist:'btn_mylist',calculator:'btn_calc',techissue:'btn_techissue'};
+  Object.entries(btnMap).forEach(([key,id])=>{
+    const el=document.getElementById(id);
+    if(!el)return;
+    el.style.display=(!allowed||allowed.includes(key))?'':'none';
+  });
+}
 function updHome(){
   const nb=document.getElementById('hnb'),hu=document.getElementById('huser');
   if(user){nb.innerHTML='<span style="background:rgba(255,255,255,0.15);border-radius:20px;padding:6px 14px;font-size:12px;color:#fff;">'+user.name+'</span> <button onclick="doLogout()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 14px;color:rgba(255,255,255,0.8);font-size:12px;">خروج</button>';hu.style.display='block';hu.textContent='مرحباً '+user.name+' ☁️';}
   else{nb.innerHTML='<button onclick="showPage(\'login\')" style="background:rgba(255,255,255,0.15);border:1px solid rgba(255,255,255,0.3);border-radius:10px;padding:8px 18px;color:#fff;font-size:13px;font-weight:700;">دخول</button>';hu.style.display='none';}
+  applyAccessRestrictions();
 }
 
 // ── LOGIN ──────────────────────────────────────────
