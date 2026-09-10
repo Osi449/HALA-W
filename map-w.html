@@ -233,6 +233,12 @@ function init(){
   const stored = localStorage.getItem('hu5');
   if(!stored){ window.location.href='index.html'; return; }
   user = JSON.parse(stored);
+  const LIMITED_ACCESS={'N6-AB':['calculator','analyzer']};
+  if(LIMITED_ACCESS[user.code] && !LIMITED_ACCESS[user.code].includes('map')){
+    alert('⚠️ ما عندك صلاحية للوصول لخريطة العملاء');
+    window.location.href='index.html';
+    return;
+  }
 
   // Load visits
   const sv = localStorage.getItem('visits_'+SITE_KEY+'_'+user.code);
