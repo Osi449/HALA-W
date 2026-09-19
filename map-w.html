@@ -179,21 +179,19 @@ body{font-family:'Cairo',sans-serif;background:#1a1a1a;color:#E8EBF4;direction:r
     </div>
     <!-- Q3 - Device photo -->
     <div>
-      <div class="q-label">3️⃣ رابط صورة الجهاز (مع رقمه واضح)</div>
-      <div style="display:flex;gap:6px;">
-        <input class="url-input" id="q3url" type="url" placeholder="https://onedrive.live.com/..." style="flex:1;">
-        <button type="button" onclick="window.open('https://onedrive.live.com/','_blank')" style="white-space:nowrap;padding:0 14px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📎 رفع</button>
-      </div>
-      <div class="url-hint">اضغط "رفع" لفتح OneDrive، ارفع الصورة، وانسخ رابط المشاركة هنا (تأكد ضبط الرابط على "أي شخص لديه الرابط")</div>
+      <div class="q-label">3️⃣ صورة الجهاز (مع رقمه واضح)</div>
+      <input type="file" accept="image/*" capture="environment" id="q3file" style="display:none" onchange="handleUpload(this,'q3url','device')">
+      <input class="url-input" id="q3url" type="url" style="display:none">
+      <button type="button" onclick="document.getElementById('q3file').click()" style="width:100%;padding:12px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📷 التقاط/رفع صورة الجهاز</button>
+      <div class="url-hint" id="q3url_status">اضغط لالتقاط صورة أو اختيارها من المعرض</div>
     </div>
     <!-- Q4 - Shop photo -->
     <div>
-      <div class="q-label">4️⃣ رابط صورة المحل</div>
-      <div style="display:flex;gap:6px;">
-        <input class="url-input" id="q4url" type="url" placeholder="https://onedrive.live.com/..." style="flex:1;">
-        <button type="button" onclick="window.open('https://onedrive.live.com/','_blank')" style="white-space:nowrap;padding:0 14px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:8px;color:#fff;font-size:12px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📎 رفع</button>
-      </div>
-      <div class="url-hint">اضغط "رفع" لفتح OneDrive، ارفع الصورة، وانسخ رابط المشاركة هنا (تأكد ضبط الرابط على "أي شخص لديه الرابط")</div>
+      <div class="q-label">4️⃣ صورة المحل</div>
+      <input type="file" accept="image/*" capture="environment" id="q4file" style="display:none" onchange="handleUpload(this,'q4url','shop')">
+      <input class="url-input" id="q4url" type="url" style="display:none">
+      <button type="button" onclick="document.getElementById('q4file').click()" style="width:100%;padding:12px;background:linear-gradient(135deg,#6B21A8,#7C3AED);border:none;border-radius:10px;color:#fff;font-size:13px;font-weight:700;cursor:pointer;font-family:'Cairo',sans-serif;">📷 التقاط/رفع صورة المحل</button>
+      <div class="url-hint" id="q4url_status">اضغط لالتقاط صورة أو اختيارها من المعرض</div>
     </div>
     <!-- Q5 -->
     <div>
@@ -287,6 +285,31 @@ function waTo(num){
   const nm=WA_NAME_OVERRIDE[user&&user.code]||((user&&user.name)?user.name:'');
   const msg='مرحباً، معك '+nm+'، ممثل مبيعات التمويل في هلا للتمويل 👋\nيمكنك الآن التقديم على طلب التمويل خلال دقائق بكل سهولة عبر موقعنا.\nإذا كنت مهتم أو ترغب بمعرفة تفاصيل أكثر، يسعدني تواصلك معي.\nشكراً لك 🌟';
   window.open('https://wa.me/966'+num+'?text='+encodeURIComponent(msg),'_blank');
+}
+async function uploadFileToStorage(file, prefix){
+  const ext = (file.name.split('.').pop()||'jpg').toLowerCase();
+  const path = prefix+'_'+Date.now()+'_'+Math.random().toString(36).slice(2,7)+'.'+ext;
+  const res = await fetch(SB+'/storage/v1/object/attachments/'+path, {
+    method:'POST',
+    headers:{apikey:SK, Authorization:'Bearer '+SK, 'Content-Type': file.type||'application/octet-stream'},
+    body:file
+  });
+  if(!res.ok) throw new Error(await res.text());
+  return SB+'/storage/v1/object/public/attachments/'+path;
+}
+async function handleUpload(input, targetId, label){
+  const file = input.files[0];
+  if(!file) return;
+  const statusEl = document.getElementById(targetId+'_status');
+  if(statusEl) statusEl.textContent = '⏳ جاري الرفع...';
+  try{
+    const url = await uploadFileToStorage(file, label);
+    document.getElementById(targetId).value = url;
+    if(statusEl) statusEl.textContent = '✅ تم الرفع بنجاح';
+  }catch(e){
+    console.error(e);
+    if(statusEl) statusEl.textContent = '⚠️ فشل الرفع، تأكد من الاتصال وحاول مرة ثانية';
+  }
 }
 function openGMaps(lat,lng){
   window.open('https://www.google.com/maps/dir/?api=1&destination='+lat+','+lng,'_blank');
