@@ -151,7 +151,7 @@ async function handleUploadCF(input, key){
     renderCForm();
   }catch(e){
     console.error(e);
-    if(statusEl) statusEl.textContent='⚠️ فشل الرفع، تأكد من الاتصال وحاول مرة ثانية';
+    if(statusEl) statusEl.textContent='⚠️ فشل الرفع: '+(e&&e.message?e.message.slice(0,150):'تأكد من الاتصال');
   }
 }
 async function handleUpload(input, targetId, label){
@@ -165,7 +165,7 @@ async function handleUpload(input, targetId, label){
     if(statusEl) statusEl.textContent = '✅ تم الرفع بنجاح';
   }catch(e){
     console.error(e);
-    if(statusEl) statusEl.textContent = '⚠️ فشل الرفع، تأكد من الاتصال وحاول مرة ثانية';
+    if(statusEl) statusEl.textContent = '⚠️ فشل الرفع: '+(e&&e.message?e.message.slice(0,150):'تأكد من الاتصال');
   }
 }
 
