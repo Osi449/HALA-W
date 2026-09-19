@@ -608,7 +608,7 @@ function selCT(key){cType=key;cFD={};renderCForm();}
 
 function fH(f,color){
   if(f.t==='area')return'<div><label class="field-label" style="color:'+color+'">'+f.label+(f.req?'<span style="color:#DC2626"> ✱</span>':'')+'</label><textarea class="field-input" id="cf_'+f.key+'" rows="3" dir="rtl" oninput="cFD[\''+f.key+'\']=this.value">'+(cFD[f.key]||'')+'</textarea></div>';
-  if(f.t==='url')return'<div><label class="field-label" style="color:'+color+'">'+f.label+(f.req?'<span style="color:#DC2626"> ✱</span>':'')+'</label><div class="url-wrap"><input class="field-input" id="cf_'+f.key+'" type="url" placeholder="https://files.fm/..." dir="ltr" value="'+(cFD[f.key]||'')+'" oninput="cFD[\''+f.key+'\']=this.value"><a href="https://files.fm" target="_blank" class="btn-fm">📎</a></div></div>';
+  if(f.t==='url')return'<div><label class="field-label" style="color:'+color+'">'+f.label+(f.req?'<span style="color:#DC2626"> ✱</span>':'')+'</label><div class="url-wrap"><input class="field-input" id="cf_'+f.key+'" type="url" placeholder="https://onedrive.live.com/..." dir="ltr" value="'+(cFD[f.key]||'')+'" oninput="cFD[\''+f.key+'\']=this.value"><a href="https://onedrive.live.com" target="_blank" class="btn-fm">📎</a></div></div>';
   return'<div><label class="field-label" style="color:'+color+'">'+f.label+(f.req?'<span style="color:#DC2626"> ✱</span>':'')+'</label><input class="field-input" id="cf_'+f.key+'" type="'+f.t+'" dir="'+(f.t==='url'||f.t==='email'?'ltr':'rtl')+'" value="'+(cFD[f.key]||'')+'" oninput="cFD[\''+f.key+'\']=this.value"></div>';
 }
 
@@ -1080,8 +1080,8 @@ function renderTechForm(){
   h+='<div class="card" style="padding:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:12px;">📝 وصف المشكلة</div>';
   h+='<textarea id="ti_desc" placeholder="متى بدأت؟ ماذا يحدث؟ هل جربت إعادة التشغيل؟" style="width:100%;min-height:100px;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;resize:vertical;outline:none;direction:rtl;"></textarea></div>';
   h+='<div class="card" style="padding:16px;"><div style="font-size:14px;font-weight:700;margin-bottom:6px;">📎 صورة المشكلة</div>';
-  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة على files.fm ثم ضع الرابط هنا</div>';
-  h+='<button onclick="window.open(&quot;https://files.fm/&quot;,&quot;_blank&quot;)" style="width:100%;padding:11px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:8px;">📤 رفع على files.fm</button>';
+  h+='<div style="font-size:12px;color:#9CA3AF;margin-bottom:10px;">ارفع الصورة على OneDrive ثم ضع رابط المشاركة هنا</div>';
+  h+='<button onclick="window.open(&quot;https://onedrive.live.com/&quot;,&quot;_blank&quot;)" style="width:100%;padding:11px;background:#6B21A8;border:none;border-radius:10px;font-size:13px;font-weight:700;color:#fff;cursor:pointer;margin-bottom:8px;">📤 رفع على OneDrive</button>';
   h+='<input type="url" id="ti_link" placeholder="الصق رابط الصورة هنا..." style="width:100%;padding:12px;border:1.5px solid #E5E7EB;border-radius:10px;font-size:13px;outline:none;direction:ltr;"></div>';
   h+='<button onclick="submitTI()" style="width:100%;padding:16px;background:#DC2626;border:none;border-radius:14px;font-size:15px;font-weight:800;color:#fff;cursor:pointer;">🔧 إرسال البلاغ</button>';
   h+='<button onclick="renderTechMyList()" style="width:100%;margin-top:8px;padding:13px;background:#fff;border:1px solid #E5E7EB;border-radius:12px;font-size:13px;font-weight:600;color:#374151;cursor:pointer;">📋 بلاغاتي السابقة</button>';
