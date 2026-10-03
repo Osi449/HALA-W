@@ -222,6 +222,7 @@ const GRADE_COLORS={'A':{bg:'#D1FAE5',color:'#166534'},'B':{bg:'#DBEAFE',color:'
 let currentTypeFilter='all';
 let currentFbFilter='all';
 let feedback={}; // entityId -> feedback value
+let notes={}; // entityId -> notes text
 let entitySearchTerm='';
 
 function getClients(){
@@ -261,9 +262,13 @@ function renderList(){
 
   list.innerHTML=filtered.map(c=>{
     const fb=feedback[c.entityId]||'';
+    const nt=notes[c.entityId]||'';
     const catStyle=CAT_COLORS[c.category]||{bg:'#F3F4F6',color:'#4B5563'};
     const gradeStyle=GRADE_COLORS[c.grade]||null;
     const waMsg=encodeURIComponent(waMsgText());
+    const notesBlock = isSup
+      ? `<div class="cc-fb-row"><div class="cc-fb-label">ملاحظات الموظف</div><div style="font-size:12.5px;color:${nt?'#1A1A2E':'#9CA3AF'};background:#FAFAFA;border:1.5px solid #E5E7EB;border-radius:9px;padding:9px 10px;min-height:18px;white-space:pre-wrap;">${sanitize(nt)||'لا توجد ملاحظات'}</div></div>`
+      : `<div class="cc-fb-row"><div class="cc-fb-label">ملاحظات</div><textarea class="fb-select" rows="2" placeholder="اكتب ملاحظة..." onchange="setNotes('${c.entityId}',this.value)">${sanitize(nt)}</textarea></div>`;
     return`<div class="client-card${fbClass(fb)}" id="cc-${c.entityId}">
       <div class="cc-top">
         <div style="flex:1;">
@@ -290,6 +295,7 @@ function renderList(){
           ${FEEDBACK_OPTIONS.map(f=>`<option value="${f}"${fb===f?' selected':''}>${f}</option>`).join('')}
         </select>
       </div>
+      ${notesBlock}
       <div class="cc-actions">
         <a href="tel:${c.cashier}" class="btn-call">📞 محاسب</a>
         <a href="https://wa.me/966${(c.cashier||'').replace(/^\+?966/,'').replace(/^0/,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب محاسب</a>
@@ -310,13 +316,31 @@ async function setFeedback(entityId, value){
   feedback[entityId]=value;
   renderList();
   try{
-    await dbUp('mylist_feedback',{entity_id:entityId,emp_code:mlUser.code,feedback:value,updated_at:new Date().toISOString()},'entity_id');
+    await dbUp('mylist_feedback',{entity_id:entityId,emp_code:mlUser.code,feedback:value,notes:notes[entityId]||null,updated_at:new Date().toISOString()},'entity_id');
   }catch(e){
     console.error(e);
     feedback[entityId]=prev;
     renderList();
     alert('⚠️ تعذّر حفظ الفيدباك، تأكد من الاتصال بالإنترنت وحاول مرة أخرى');
   }
+}
+
+async function setNotes(entityId, value){
+  const prev=notes[entityId];
+  notes[entityId]=value;
+  try{
+    await dbUp('mylist_feedback',{entity_id:entityId,emp_code:mlUser.code,feedback:feedback[entityId]||null,notes:value,updated_at:new Date().toISOString()},'entity_id');
+  }catch(e){
+    console.error(e);
+    notes[entityId]=prev;
+    renderList();
+    alert('⚠️ تعذّر حفظ الملاحظة، تأكد من الاتصال بالإنترنت وحاول مرة أخرى');
+  }
+}
+
+function sanitize(str){
+  if(!str)return'';
+  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#x27;');
 }
 
 // ── Entity Search ─────────────────────────
@@ -344,7 +368,7 @@ async function openMgrPanel(){
   const content=document.getElementById('mgrContent');
   content.textContent='جاري التحميل...';
   try{
-    const rows=await dbGet('mylist_feedback','?select=entity_id,emp_code,feedback,updated_at');
+    const rows=await dbGet('mylist_feedback','?select=entity_id,emp_code,feedback,notes,updated_at');
     const fbMap={};
     rows.forEach(r=>fbMap[r.entity_id]=r);
     const byEmp={};
@@ -376,7 +400,7 @@ function closeMgrPanel(){document.getElementById('mgrPanel').style.display='none
 async function exportMgrExcel(){
   let rows;
   try{
-    rows=await dbGet('mylist_feedback','?select=entity_id,emp_code,feedback,updated_at');
+    rows=await dbGet('mylist_feedback','?select=entity_id,emp_code,feedback,notes,updated_at');
   }catch(e){
     alert('⚠️ تعذّر تحميل البيانات');
     return;
@@ -404,6 +428,7 @@ async function exportMgrExcel(){
         'المنطقة':c.zone,
         'المبلغ المتوقع':c.amount||'',
         'الفيدباك':fb||'لم يُحدَّد',
+        'ملاحظات الموظف':r?(r.notes||''):'',
         'آخر تحديث':r?r.updated_at:''
       });
     });
@@ -426,9 +451,9 @@ async function init(){
   if(!mlUser)return;
   if(isSup)document.getElementById('mgrBtn').style.display='flex';
   try{
-    const q = isSup ? '?select=entity_id,feedback' : '?select=entity_id,feedback&emp_code=eq.'+encodeURIComponent(mlUser.code);
+    const q = isSup ? '?select=entity_id,feedback,notes' : '?select=entity_id,feedback,notes&emp_code=eq.'+encodeURIComponent(mlUser.code);
     const rows=await dbGet('mylist_feedback',q);
-    rows.forEach(r=>{feedback[r.entity_id]=r.feedback;});
+    rows.forEach(r=>{feedback[r.entity_id]=r.feedback;notes[r.entity_id]=r.notes;});
   }catch(e){console.error(e);}
   if(window.MY_LIST){renderList();}
   else{
