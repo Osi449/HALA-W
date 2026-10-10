@@ -9,7 +9,7 @@
 <title>هلا تمويل — My List</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="mylist-team.js?v=20261005a"></script>
+<script src="mylist-team.js?v=20261010a"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
@@ -94,6 +94,7 @@ table.rep td:first-child{text-align:right;font-weight:700;}
       <button class="fbtn" onclick="setTypeFilter('New')" style="color:#065F46;">New</button>
       <button class="fbtn" onclick="setTypeFilter('Renewal')" style="color:#1D4ED8;">Renewal</button>
       <button class="fbtn" onclick="setTypeFilter('Top Up')" style="color:#D97706;">Top Up</button>
+      <button class="fbtn" onclick="setTypeFilter('Decline')" style="color:#DC2626;">Decline</button>
     </div>
   </div>
 
@@ -215,8 +216,8 @@ function fbClass(v){
 })();
 
 // Category badge colors
-const CAT_COLORS={'New':{bg:'#D1FAE5',color:'#065F46'},'Renewal':{bg:'#DBEAFE',color:'#1D4ED8'},'Top Up':{bg:'#FEF3C7',color:'#D97706'}};
-const GRADE_COLORS={'A':{bg:'#D1FAE5',color:'#166534'},'B':{bg:'#DBEAFE',color:'#1D4ED8'},'C':{bg:'#FEF3C7',color:'#D97706'},'D':{bg:'#F3F4F6',color:'#6B7280'}};
+const CAT_COLORS={'New':{bg:'#D1FAE5',color:'#065F46'},'Renewal':{bg:'#DBEAFE',color:'#1D4ED8'},'Top Up':{bg:'#FEF3C7',color:'#D97706'},'Decline':{bg:'#FEE2E2',color:'#DC2626'}};
+const GRADE_COLORS={'A':{bg:'#D1FAE5',color:'#166534'},'B':{bg:'#DBEAFE',color:'#1D4ED8'},'C':{bg:'#FEF3C7',color:'#D97706'},'D':{bg:'#F3F4F6',color:'#6B7280'},'C&D':{bg:'#F3F4F6',color:'#6B7280'}};
 
 // ── State ─────────────────────────────────
 let currentTypeFilter='all';
@@ -224,6 +225,9 @@ let currentFbFilter='all';
 let feedback={}; // entityId -> feedback value
 let notes={}; // entityId -> notes text
 let entitySearchTerm='';
+let showLimit=100;
+const PAGE=100;
+function showMore(){showLimit+=PAGE;renderList();}
 
 function getClients(){
   if(!mlUser||!window.MY_LIST)return[];
@@ -232,12 +236,12 @@ function getClients(){
 }
 
 function setTypeFilter(f){
-  currentTypeFilter=f;
+  currentTypeFilter=f;showLimit=PAGE;
   document.querySelectorAll('#type-filter-bar .fbtn').forEach(b=>b.classList.remove('active'));
   event.target.classList.add('active');
   renderList();
 }
-function setFbFilter(f){currentFbFilter=f;renderList();}
+function setFbFilter(f){currentFbFilter=f;showLimit=PAGE;renderList();}
 
 function renderList(){
   const all=getClients();
@@ -260,7 +264,9 @@ function renderList(){
   const list=document.getElementById('clients-list');
   if(!filtered.length){list.innerHTML='<div style="text-align:center;padding:40px;background:#fff;border-radius:14px;"><div style="font-size:36px;margin-bottom:8px;">📭</div><div style="color:#9CA3AF;">لا يوجد عملاء</div></div>';return;}
 
-  list.innerHTML=filtered.map(c=>{
+  const totalFiltered=filtered.length;
+  const visible=filtered.slice(0,showLimit);
+  list.innerHTML=visible.map(c=>{
     const fb=feedback[c.entityId]||'';
     const nt=notes[c.entityId]||'';
     const catStyle=CAT_COLORS[c.category]||{bg:'#F3F4F6',color:'#4B5563'};
@@ -297,13 +303,13 @@ function renderList(){
       </div>
       ${notesBlock}
       <div class="cc-actions">
-        <a href="tel:${c.cashier}" class="btn-call">📞 محاسب</a>
-        <a href="https://wa.me/966${(c.cashier||'').replace(/^\+?966/,'').replace(/^0/,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب محاسب</a>
-        <a href="tel:${c.owner}" class="btn-call btn-call2">📞 مدير</a>
-        <a href="https://wa.me/966${(c.owner||'').replace(/^\+?966/,'').replace(/^0/,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب مدير</a>
+        ${c.cashier?`<a href="tel:${c.cashier}" class="btn-call">📞 محاسب</a>
+        <a href="https://wa.me/966${(c.cashier||'').replace(/^\+?966/,'').replace(/^0/,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب محاسب</a>`:''}
+        ${c.owner?`<a href="tel:${c.owner}" class="btn-call btn-call2">📞 مدير</a>
+        <a href="https://wa.me/966${(c.owner||'').replace(/^\+?966/,'').replace(/^0/,'')}?text=${waMsg}" target="_blank" class="btn-wa">💬 واتساب مدير</a>`:''}
       </div>
     </div>`;
-  }).join('');
+  }).join('')+(totalFiltered>visible.length?`<button onclick="showMore()" style="width:100%;padding:12px;margin-bottom:10px;background:#F5F3FF;border:1.5px solid #DDD6FE;border-radius:12px;color:#6B21A8;font-size:13px;font-weight:800;cursor:pointer;font-family:'Cairo',sans-serif;">عرض المزيد (${visible.length} من ${totalFiltered})</button>`:'');
 }
 
 async function setFeedback(entityId, value){
@@ -345,7 +351,7 @@ function sanitize(str){
 
 // ── Entity Search ─────────────────────────
 function filterByEntity(val){
-  entitySearchTerm=val.trim().toUpperCase();
+  entitySearchTerm=val.trim().toUpperCase();showLimit=PAGE;
   renderList();
   const res=document.getElementById('entity-search-result');
   if(entitySearchTerm){
