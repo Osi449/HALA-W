@@ -9,7 +9,7 @@
 <title>هلا تمويل — My List</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="mylist-team.js?v=20261012b"></script>
+<script src="mylist-team.js?v=20261012c"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
@@ -403,6 +403,19 @@ async function openMgrPanel(){
     const fbs=Object.entries(fbCount).sort((x,y)=>y[1]-x[1]);
     if(!fbs.length)h+='<div style="color:#6B7280;">لا يوجد فيدباك بعد</div>';
     fbs.forEach(([k,n])=>{const p=pct(n,T.contacted);h+=`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>${k}</span><span style="font-weight:800;">${n} (${p}%)</span></div>${bar(p,FEEDBACK_POS.has(k)?'#16A34A':FEEDBACK_NEG.has(k)?'#DC2626':'#7C3AED')}</div>`;});
+    const INT=new Set(['تم التواصل – العميل مهتم','تم التواصل – سيتم إرسال المستندات','تم التواصل – المستندات ناقصة','تم رفع طلب التمويل بنجاح']);
+    const NINT=new Set(['تم التواصل – العميل غير مهتم','لا يرغب في التواصل']);
+    const cls=v=>INT.has(v)?'i':NINT.has(v)?'n':'o';
+    const byCat={};
+    Object.values(window.MY_LIST||{}).forEach(cl=>cl.forEach(c=>{const r=fbMap[c.entityId];if(!r||!r.feedback)return;const k=c.category||'—';const o=byCat[k]=byCat[k]||{i:0,n:0,o:0};o[cls(r.feedback)]++;}));
+    const tot={i:0,n:0,o:0};Object.values(byEmp).forEach(d=>{});
+    Object.entries(fbCount).forEach(([k,n])=>tot[cls(k)]+=n);
+    const stack=o=>{const t=o.i+o.n+o.o;return `<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;background:#EEE;"><div style="width:${pct(o.i,t)}%;background:#16A34A;"></div><div style="width:${pct(o.n,t)}%;background:#DC2626;"></div><div style="width:${pct(o.o,t)}%;background:#9CA3AF;"></div></div>`;};
+    const line=o=>{const t=o.i+o.n+o.o;return `<div style="display:flex;justify-content:space-between;font-size:12px;margin-top:4px;"><span style="color:#166534;">✅ مهتم ${o.i} (${pct(o.i,t)}%)</span><span style="color:#DC2626;">❌ غير مهتم ${o.n} (${pct(o.n,t)}%)</span><span style="color:#6B7280;">⏳ أخرى ${o.o} (${pct(o.o,t)}%)</span></div>`;};
+    h+='<div style="font-weight:800;color:#6B21A8;margin:14px 0 8px;">🎯 المهتمين وغير المهتمين</div>';
+    h+=`<div style="border:1px solid #E5E7EB;border-radius:12px;padding:10px;margin-bottom:8px;"><div style="font-weight:800;margin-bottom:6px;">الإجمالي (${T.contacted} تواصل)</div>${stack(tot)}${line(tot)}</div>`;
+    ['New','Renewal','Top Up','Decline'].filter(k=>byCat[k]).forEach(k=>{const o=byCat[k];h+=`<div style="border:1px solid #E5E7EB;border-radius:12px;padding:10px;margin-bottom:8px;"><div style="font-weight:800;margin-bottom:6px;">${k} (${o.i+o.n+o.o})</div>${stack(o)}${line(o)}</div>`;});
+    h+='<div style="font-size:11px;color:#6B7280;">مهتم = مهتم / سيتم إرسال المستندات / المستندات ناقصة / تم رفع الطلب. غير مهتم = غير مهتم / لا يرغب في التواصل. أخرى = باقي الفيدباك.</div>';
     h+='<div style="font-weight:800;color:#6B21A8;margin:14px 0 8px;">📋 تفصيل الفيدباك لكل موظف</div><div style="overflow-x:auto;"><table class="rep"><thead><tr><th>الموظف</th><th>بانتظار</th><th>تم التواصل</th><th>نجح 🏆</th></tr></thead><tbody>';
     Object.entries(byEmp).forEach(([code,d])=>{h+=`<tr><td>${d.name}</td><td>${d.pending}</td><td>${d.contacted}</td><td style="font-weight:800;color:#166534;">${d.success}</td></tr>`;});
     h+='</tbody></table></div>';
