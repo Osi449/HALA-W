@@ -9,7 +9,7 @@
 <title>هلا تمويل — My List</title>
 <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js"></script>
-<script src="mylist-team.js?v=20261012a"></script>
+<script src="mylist-team.js?v=20261012b"></script>
 <style>
 *{margin:0;padding:0;box-sizing:border-box;}
 body{font-family:'Cairo',sans-serif;direction:rtl;background:#FAFAFA;color:#1A1A2E;}
@@ -384,11 +384,28 @@ async function openMgrPanel(){
         }
       });
     });
-    let h='<table class="rep"><thead><tr><th>الموظف</th><th>الإجمالي</th><th>بانتظار</th><th>تم التواصل</th><th>نجح 🏆</th></tr></thead><tbody>';
+    const pct=(a,b)=>b?Math.round(a*1000/b)/10:0;
+    const bar=(v,col)=>`<div style="background:#EEE;border-radius:6px;height:10px;overflow:hidden;"><div style="width:${Math.min(v,100)}%;height:100%;background:${col};"></div></div>`;
+    const T={total:0,contacted:0,success:0};
+    const fbCount={};
+    Object.values(window.MY_LIST||{}).forEach(cl=>cl.forEach(c=>{const r=fbMap[c.entityId];if(r&&r.feedback)fbCount[r.feedback]=(fbCount[r.feedback]||0)+1;}));
+    let h='<div style="font-weight:800;color:#6B21A8;margin:4px 0 8px;">👥 أداء كل موظف</div>';
     Object.entries(byEmp).forEach(([code,d])=>{
-      h+=`<tr><td>${d.name}</td><td>${d.total}</td><td>${d.pending}</td><td>${d.contacted}</td><td style="font-weight:800;color:#166534;">${d.success}</td></tr>`;
+      T.total+=d.total;T.contacted+=d.contacted;T.success+=d.success;
+      const pc=pct(d.contacted,d.total),ps=pct(d.success,d.total);
+      h+=`<div style="border:1px solid #E5E7EB;border-radius:12px;padding:10px;margin-bottom:8px;">
+        <div style="display:flex;justify-content:space-between;font-weight:800;"><span>${d.name}</span><span style="color:#6B7280;font-weight:600;">${d.total} عميل</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:12px;margin-top:6px;"><span>📞 تواصل ${d.contacted} (${pc}%)</span><span style="color:#166534;">🏆 حقق ${d.success} (${ps}%)</span></div>
+        <div style="margin-top:6px;">${bar(pc,'#7C3AED')}</div><div style="margin-top:4px;">${bar(ps,'#16A34A')}</div></div>`;
     });
-    h+='</tbody></table>';
+    h+=`<div style="background:#F5F3FF;border-radius:12px;padding:10px;margin:10px 0;font-weight:800;">الإجمالي: ${T.total} عميل — تواصل ${T.contacted} (${pct(T.contacted,T.total)}%) — حقق ${T.success} (${pct(T.success,T.total)}%)</div>`;
+    h+='<div style="font-weight:800;color:#6B21A8;margin:14px 0 8px;">📊 توزيع الفيدباك (من إجمالي التواصل)</div>';
+    const fbs=Object.entries(fbCount).sort((x,y)=>y[1]-x[1]);
+    if(!fbs.length)h+='<div style="color:#6B7280;">لا يوجد فيدباك بعد</div>';
+    fbs.forEach(([k,n])=>{const p=pct(n,T.contacted);h+=`<div style="margin-bottom:8px;"><div style="display:flex;justify-content:space-between;font-size:12px;"><span>${k}</span><span style="font-weight:800;">${n} (${p}%)</span></div>${bar(p,FEEDBACK_POS.has(k)?'#16A34A':FEEDBACK_NEG.has(k)?'#DC2626':'#7C3AED')}</div>`;});
+    h+='<div style="font-weight:800;color:#6B21A8;margin:14px 0 8px;">📋 تفصيل الفيدباك لكل موظف</div><div style="overflow-x:auto;"><table class="rep"><thead><tr><th>الموظف</th><th>بانتظار</th><th>تم التواصل</th><th>نجح 🏆</th></tr></thead><tbody>';
+    Object.entries(byEmp).forEach(([code,d])=>{h+=`<tr><td>${d.name}</td><td>${d.pending}</td><td>${d.contacted}</td><td style="font-weight:800;color:#166534;">${d.success}</td></tr>`;});
+    h+='</tbody></table></div>';
     content.innerHTML=h;
   }catch(e){
     console.error(e);
